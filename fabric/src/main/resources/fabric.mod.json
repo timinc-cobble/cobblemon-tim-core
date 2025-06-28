@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "${modId}",
+  "version": "${modCobblemonVersion}-faabric-${modMyVersion}",
+  "name": "${modName}",
+  "description": "${modDescription}",
+  "authors": [
+    "${modAuthor}"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {},
+  "depends": {
+    "java": ">=21",
+    "minecraft": "1.21.1",
+    "fabric": "*",
+    "cobblemon": ">=1.7.0 <1.8.0"
+  }
+}
