@@ -19,4 +19,4 @@ jobs:
           curseforge-id: 1295910
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-          files: *.jar
+          files: (*).jar
