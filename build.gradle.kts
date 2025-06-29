@@ -26,6 +26,12 @@ allprojects {
         useJUnitPlatform()
     }
 
+    tasks.register("printVersion") {
+        doLast {
+            println(project.version)
+        }
+    }
+
     java {
         withSourcesJar()
     }
