@@ -15,13 +15,14 @@ v1.7-PR1
 ## Features
 
 - Adds an abstract mod class that can be loaded across loaders.
-    - Automatically handle loading of commands regardless of loader.
+  - Automatically handle loading of commands regardless of loader.
 - Adds a debugger that can be used to optionally give info back. Make your mods sing to your users!
 - Adds a config loader that reloads with a automatically-created custom command.
 
 ## Dependencies
 
-- Cobblemon
+- [Cobblemon](https://www.notion.so/Cobblemon-22157e0d4afd80a49896c70a775a3c7f?pvs=21)
+- [Fabric Language Kotlin](https://www.notion.so/Fabric-Language-Kotlin-22157e0d4afd80b69919e8540208081b?pvs=21)/[Kotlin for Forge](https://www.notion.so/Kotlin-For-Forge-22157e0d4afd80799f2dd0a63e8ecdbb?pvs=21)
 
 ### Fabric Version
 
