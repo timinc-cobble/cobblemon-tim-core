@@ -11,9 +11,9 @@
   "environment": "*",
   "depends": {
     "java": ">=21",
-    "minecraft": "1.21.1",
+    "minecraft": "${minecraft_version}",
     "fabric": "*",
-    "cobblemon": ">=1.7.0 <1.8.0"
+    "cobblemon": "${cobblemon_version}"
   },
   "contact": {
     "homepage": "${modDiscord}",
