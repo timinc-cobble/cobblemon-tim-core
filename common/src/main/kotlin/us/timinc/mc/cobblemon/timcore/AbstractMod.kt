@@ -1,5 +1,6 @@
 package us.timinc.mc.cobblemon.timcore
 
+import com.cobblemon.mod.common.api.permission.PermissionLevel
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.literal
@@ -22,8 +23,8 @@ abstract class AbstractMod<T : AbstractConfig>(
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun registerCommand(cmd: LiteralArgumentBuilder<CommandSourceStack>) {
-        commands.add(cmd)
+    fun registerCommand(cmd: LiteralArgumentBuilder<CommandSourceStack>, noPrefix: Boolean = false) {
+        commands.add(if (noPrefix) cmd else literal(modId).then(cmd))
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
@@ -32,11 +33,11 @@ abstract class AbstractMod<T : AbstractConfig>(
     }
 
     private val reloadConfigCommand: LiteralArgumentBuilder<CommandSourceStack> =
-        literal(modId).then(literal("reload").executes {
+        literal("reload").requires { it.hasPermission(PermissionLevel.ALL_COMMANDS.numericalValue) }.executes {
             reloadConfig()
             it.source.player?.sendSystemMessage(Component.literal("Config reloaded."))
             0
-        })
+        }
 
     init {
         registerCommand(reloadConfigCommand)
