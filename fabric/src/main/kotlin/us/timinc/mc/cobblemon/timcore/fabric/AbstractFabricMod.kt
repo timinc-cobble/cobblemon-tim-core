@@ -11,6 +11,7 @@ abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val m
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             registerCommands(dispatcher)
         }
+        mod.wrapUp()
     }
 
     private fun registerCommands(dispatcher: CommandDispatcher<CommandSourceStack>) {

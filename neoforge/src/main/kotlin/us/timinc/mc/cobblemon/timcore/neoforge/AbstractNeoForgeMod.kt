@@ -9,6 +9,7 @@ import us.timinc.mc.cobblemon.timcore.AbstractMod
 abstract class AbstractNeoForgeMod(@Suppress("MemberVisibilityCanBePrivate") val mod: AbstractMod<*>) {
     init {
         NeoForge.EVENT_BUS.addListener(::registerCommands)
+        mod.wrapUp()
     }
 
     private fun registerCommands(e: RegisterCommandsEvent) {

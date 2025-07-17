@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "us.timinc.mc.cobblemon.timcore.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "mixins": [
+    "CancelThrownPokeballInBattle"
+  ]
+}

@@ -37,6 +37,10 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${property("junit_version")}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
+
+    modImplementation("io.wispforest:owo-lib:${property("owo_version")}")
+    annotationProcessor("io.wispforest:owo-lib:${property("owo_version")}")
+    include("io.wispforest:owo-sentinel:${property("owo_version")}")
 }
 
 tasks.getByName<Test>("test") {

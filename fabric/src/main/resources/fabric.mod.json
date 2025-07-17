@@ -20,5 +20,9 @@
     "issues": "${modIssues}",
     "sources": "${modSource}"
   },
-  "icon": "${modId}_small.png"
+  "mixins": [
+    "mixins.tim_core.json"
+  ],
+  "icon": "${modId}_small.png",
+  "accessWidener" : "${modId}.accesswidener"
 }
