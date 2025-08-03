@@ -23,6 +23,5 @@
   "mixins": [
     "mixins.tim_core.json"
   ],
-  "icon": "${modId}_small.png",
-  "accessWidener" : "${modId}.accesswidener"
+  "icon": "${modId}_small.png"
 }
