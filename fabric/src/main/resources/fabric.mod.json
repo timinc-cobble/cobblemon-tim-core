@@ -23,5 +23,13 @@
   "mixins": [
     "mixins.tim_core.json"
   ],
-  "icon": "${modId}_small.png"
+  "icon": "${modId}_small.png",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "us.timinc.mc.cobblemon.timcore.fabric.FabricTimCore"
+      }
+    ]
+  }
 }
