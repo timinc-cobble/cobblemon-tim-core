@@ -13,6 +13,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
     class Config : AbstractConfig() {
         val expAllMultiplier: Float = 1.0F
         val enableExpAll: Boolean = true
+        val forceExpAll: Boolean = false
     }
 
     object Tags {
