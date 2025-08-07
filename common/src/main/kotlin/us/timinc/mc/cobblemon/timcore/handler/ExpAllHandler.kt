@@ -7,7 +7,7 @@ import us.timinc.mc.cobblemon.timcore.AbstractHandler
 import us.timinc.mc.cobblemon.timcore.TimCore.config
 import us.timinc.mc.cobblemon.timcore.TimCore.debugger
 import us.timinc.mc.cobblemon.timcore.getIdentifier
-import us.timinc.mc.cobblemon.timcore.hasExpAll
+import us.timinc.mc.cobblemon.timcore.hasExpAllFor
 
 object ExpAllHandler : AbstractHandler<BattleVictoryEvent>() {
     override fun handle(evt: BattleVictoryEvent) {
@@ -25,7 +25,7 @@ object ExpAllHandler : AbstractHandler<BattleVictoryEvent>() {
                     caseDebugger.debug("Not player-owned, skipping.")
                     continue
                 }
-                if (!owner.hasExpAll()) {
+                if (!owner.hasExpAllFor(winningPokemon.effectedPokemon)) {
                     caseDebugger.debug("Player ${owner.name} does not have an ExpAll, skipping.")
                     continue
                 }
