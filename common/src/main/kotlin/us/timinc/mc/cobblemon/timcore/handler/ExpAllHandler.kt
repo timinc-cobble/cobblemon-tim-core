@@ -41,7 +41,11 @@ object ExpAllHandler : AbstractHandler<BattleVictoryEvent>() {
                             caseDebugger.debug("Holding ExpShare, skipping as exp already given by Cobblemon.")
                             continue
                         }
-                        val experience = Cobblemon.experienceCalculator.calculate(winningPokemon, losingPokemon, config.expAllMultiplier.toDouble())
+                        val experience = Cobblemon.experienceCalculator.calculate(
+                            winningPokemon,
+                            losingPokemon,
+                            config.expAllMultiplier.toDouble()
+                        )
                         if (experience <= 0) {
                             caseDebugger.debug("Calculated experience less than or equal to 0, skipping.")
                             continue

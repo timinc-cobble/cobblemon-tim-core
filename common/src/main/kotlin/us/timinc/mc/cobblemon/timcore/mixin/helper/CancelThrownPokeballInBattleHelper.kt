@@ -4,7 +4,6 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokeball.ThrownPokeballHitEvent
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import net.minecraft.server.level.ServerPlayer
 
 object CancelThrownPokeballInBattleHelper {
     fun checkForCancel(pokeBallEntity: EmptyPokeBallEntity, pokemonEntity: PokemonEntity): Boolean {
