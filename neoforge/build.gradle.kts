@@ -36,7 +36,7 @@ dependencies {
 
     modImplementation("com.cobblemon:neoforge:${property("cobblemon_version")}") { isTransitive = false }
     //Needed for cobblemon
-    forgeRuntimeLibrary("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
+    implementation("thedarkcolour:kotlinforforge-neoforge:${property("kotlin_for_forge_version")}") {
         exclude("net.neoforged.fancymodloader", "loader")
     }
 

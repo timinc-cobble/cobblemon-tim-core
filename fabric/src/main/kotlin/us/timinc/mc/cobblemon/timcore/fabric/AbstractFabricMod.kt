@@ -3,7 +3,9 @@ package us.timinc.mc.cobblemon.timcore.fabric
 import com.mojang.brigadier.CommandDispatcher
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.server.packs.PackType
 import us.timinc.mc.cobblemon.timcore.AbstractMod
 
 abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val mod: AbstractMod<*>) : ModInitializer {
@@ -11,10 +13,19 @@ abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val m
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             registerCommands(dispatcher)
         }
+        registerReloadListeners()
         mod.wrapUp()
     }
 
     private fun registerCommands(dispatcher: CommandDispatcher<CommandSourceStack>) {
         mod.commands.forEach(dispatcher::register)
+    }
+
+    private fun registerReloadListeners() {
+        mod.reloadListeners.forEach { listener ->
+            ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(
+                FabricReloadListener(listener, this)
+            )
+        }
     }
 }

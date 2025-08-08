@@ -20,8 +20,15 @@ abstract class AbstractMod<T : AbstractConfig>(
 
     @Suppress("MemberVisibilityCanBePrivate")
     lateinit var config: T
+
+    @Suppress("MemberVisibilityCanBePrivate")
     val commands: MutableList<LiteralArgumentBuilder<CommandSourceStack>> = mutableListOf()
+
+    @Suppress("MemberVisibilityCanBePrivate")
     val customPokemonProperties: MutableList<CustomPokemonPropertyType<*>> = mutableListOf()
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    val reloadListeners: MutableList<AbstractReloadListener> = mutableListOf()
 
     init {
         reloadConfig()
@@ -37,6 +44,12 @@ abstract class AbstractMod<T : AbstractConfig>(
     fun <R : CustomPokemonProperty, T : CustomPokemonPropertyType<R>> registerCustomPokemonProperty(prop: T): T {
         customPokemonProperties.add(prop)
         return prop
+    }
+
+    @Suppress("unused")
+    fun <T : AbstractReloadListener> registerReloadListener(listener: T): T {
+        reloadListeners.add(listener)
+        return listener
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
