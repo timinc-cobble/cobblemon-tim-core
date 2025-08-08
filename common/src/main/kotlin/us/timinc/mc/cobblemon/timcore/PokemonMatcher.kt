@@ -8,28 +8,55 @@ data class PokemonMatcher(
     val properties: String = "",
     val labels: List<String> = emptyList(),
     val anyLabel: Boolean = false,
+    val persistentData: Map<String, String> = emptyMap(),
+    val anyPersistentData: Boolean = false,
     val buckets: List<String> = emptyList(),
     val matchOne: Boolean = false,
 ) {
-    fun matches(pokemon: Pokemon): Boolean =
-        if (matchOne) propsMatch(pokemon) || labelsMatch(pokemon) || bucketMatches(pokemon) else propsMatch(pokemon) && labelsMatch(
-            pokemon
-        ) && bucketMatches(pokemon)
+    private val parsedProps by lazy {
+        properties.takeIf { it.isNotBlank() }?.let(PokemonProperties::parse)
+    }
 
-    private fun propsMatch(pokemon: Pokemon) = PokemonProperties.parse(properties).matches(pokemon)
-    private fun labelsMatch(pokemon: Pokemon) =
-        if (anyLabel) pokemon.form.labels.any(labels::contains) else pokemon.form.labels.containsAll(labels)
+    private val labelSet = labels.toSet()
+    private val bucketSet = buckets.toSet()
 
-    private fun bucketMatches(pokemon: Pokemon): Boolean {
+    fun matches(pokemon: Pokemon): Boolean {
+        val predicates = buildList<(Pokemon) -> Boolean> {
+            if (parsedProps != null) add { p -> parsedProps!!.matches(p) }
+            if (labelSet.isNotEmpty()) add(::labelsMatch)
+            if (persistentData.isNotEmpty()) add(::persistentDataMatch)
+            if (bucketSet.isNotEmpty()) add(::bucketMatch)
+        }
+
+        if (predicates.isEmpty()) return true
+
+        return if (matchOne) predicates.any { it(pokemon) } else predicates.all { it(pokemon) }
+    }
+
+    private fun labelsMatch(pokemon: Pokemon): Boolean {
+        val pokeLabels = pokemon.form.labels
+        return if (anyLabel) pokeLabels.any(labelSet::contains) else pokeLabels.containsAll(labelSet)
+    }
+
+    private fun persistentDataMatch(pokemon: Pokemon): Boolean {
+        val pd = pokemon.persistentData
+        return if (anyPersistentData) {
+            persistentData.entries.any { (k, v) -> pd.getOrNull(k)?.toString() == v }
+        } else {
+            persistentData.entries.all { (k, v) -> pd.getOrNull(k)?.toString() == v }
+        }
+    }
+
+    private fun bucketMatch(pokemon: Pokemon): Boolean {
         val spawnedInBucket = pokemon.getBucket()
         if (spawnedInBucket == null) {
-            val identifier = pokemon.getIdentifier()
             debugger.debug(
-                "Could not determine spawn bucket of $identifier. Typical reasons include unnatural spawn, spawned before Tim Core installation, or data erased by another mod.",
+                "Could not determine spawn bucket of ${pokemon.getIdentifier()}. " +
+                        "Common reasons: unnatural spawn, pre-TimCore spawn, or data erased by another mod.",
                 true
             )
             return false
         }
-        return buckets.contains(spawnedInBucket)
+        return spawnedInBucket in bucketSet
     }
 }
