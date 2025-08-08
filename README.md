@@ -34,9 +34,13 @@ v1.6.1-1.3.0
 
 [ExpAll Logic](https://www.notion.so/ExpAll-Logic-24957e0d4afd8190aa39f0296beec5eb?pvs=21)
 
-[Config Options](https://www.notion.so/Config-Options-24957e0d4afd81fea1f7c97184cbe30a?pvs=21)
-
 [Spawning Buckets](https://www.notion.so/Spawning-Buckets-24957e0d4afd809abdded522adecaff2?pvs=21)
+
+[PokemonMatcher](https://www.notion.so/PokemonMatcher-24957e0d4afd808fade8c48e605062e4?pvs=21)
+
+## Player Help
+
+[Config Options](https://www.notion.so/Config-Options-24957e0d4afd81fea1f7c97184cbe30a?pvs=21)
 
 ## Dependencies
 
