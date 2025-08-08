@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.6.1-1.1.0
+v1.6.1-1.3.0
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
@@ -14,23 +14,29 @@ v1.6.1-1.1.0
 
 ## Features
 
-[AbstractMod](https://www.notion.so/AbstractMod-22557e0d4afd804bba9ff4b3f59b453c?pvs=21)
+[AbstractMod](https://www.notion.so/AbstractMod-24957e0d4afd81d197b0c5a654c5de6e?pvs=21)
 
-[AbstractConfig](https://www.notion.so/AbstractConfig-22557e0d4afd803eb1eed3eba55b87ed?pvs=21)
+[AbstractConfig](https://www.notion.so/AbstractConfig-24957e0d4afd8113953bd14a50e77a23?pvs=21)
 
-[AbstractHandler](https://www.notion.so/AbstractHandler-22557e0d4afd800bb713d742681f716a?pvs=21)
+[AbstractHandler](https://www.notion.so/AbstractHandler-24957e0d4afd81e49c48db185143b752?pvs=21)
 
-[ConfigBuilder](https://www.notion.so/ConfigBuilder-22557e0d4afd8025a6ecd1c858573043?pvs=21)
+[ConfigBuilder](https://www.notion.so/ConfigBuilder-24957e0d4afd810b9445f741a829e6b3?pvs=21)
 
-[Debugger](https://www.notion.so/Debugger-22657e0d4afd8080b574e41abae7a52c?pvs=21)
+[Debugger](https://www.notion.so/Debugger-24957e0d4afd81368316d0195e9de861?pvs=21)
 
-[PokemonExtensions](https://www.notion.so/PokemonExtensions-22657e0d4afd80d584b3e65735a97a4f?pvs=21)
+[PokemonExtensions](https://www.notion.so/PokemonExtensions-24957e0d4afd812088f0e91c513eda83?pvs=21)
 
-[TimCoreEvents](https://www.notion.so/TimCoreEvents-22657e0d4afd80849bb8cc5de542a17b?pvs=21)
+[TimCoreEvents](https://www.notion.so/TimCoreEvents-24957e0d4afd8174b65fd29f7c63dad3?pvs=21)
 
-[CustomBooleanProperty](https://www.notion.so/CustomBooleanProperty-22857e0d4afd80f4887cd3ddd3a5cb47?pvs=21)
+[Custom Pokémon Properties](https://www.notion.so/Custom-Pok-mon-Properties-24957e0d4afd817db03df256f1383bc6?pvs=21)
 
-[Holdings](https://www.notion.so/Holdings-22857e0d4afd801fa00bdb36bcbf400c?pvs=21)
+[Holdings](https://www.notion.so/Holdings-24957e0d4afd81e6ba56d8b706150122?pvs=21)
+
+[ExpAll Logic](https://www.notion.so/ExpAll-Logic-24957e0d4afd8190aa39f0296beec5eb?pvs=21)
+
+[Config Options](https://www.notion.so/Config-Options-24957e0d4afd81fea1f7c97184cbe30a?pvs=21)
+
+[Spawning Buckets](https://www.notion.so/Spawning-Buckets-24957e0d4afd809abdded522adecaff2?pvs=21)
 
 ## Dependencies
 
