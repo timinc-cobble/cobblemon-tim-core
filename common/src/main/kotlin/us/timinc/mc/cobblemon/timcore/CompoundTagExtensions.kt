@@ -13,3 +13,4 @@ fun CompoundTag.getStringOrNull(key: String) = if (this.contains(key)) this.getS
 fun CompoundTag.getCompoundOrNull(key: String) = if (this.contains(key)) this.getCompound(key) else null
 fun CompoundTag.getListOrNull(key: String, i: Int) = if (this.contains(key)) this.getList(key, i) else null
 fun CompoundTag.getBooleanOrNull(key: String) = if (this.contains(key)) this.getBoolean(key) else null
+fun CompoundTag.getOrNull(key: String) = if (this.contains(key)) this.get(key) else null
