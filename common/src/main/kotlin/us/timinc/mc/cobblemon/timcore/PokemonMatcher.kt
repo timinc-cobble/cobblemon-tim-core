@@ -20,6 +20,7 @@ data class PokemonMatcher(
 
     @Transient
     private val labelSet = labels.toSet()
+
     @Transient
     private val bucketSet = buckets.toSet()
 
