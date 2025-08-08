@@ -13,11 +13,14 @@ data class PokemonMatcher(
     val buckets: List<String> = emptyList(),
     val matchOne: Boolean = false,
 ) {
+    @delegate:Transient
     private val parsedProps by lazy {
         properties.takeIf { it.isNotBlank() }?.let(PokemonProperties::parse)
     }
 
+    @Transient
     private val labelSet = labels.toSet()
+    @Transient
     private val bucketSet = buckets.toSet()
 
     fun matches(pokemon: Pokemon): Boolean {
