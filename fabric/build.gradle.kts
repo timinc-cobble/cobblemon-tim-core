@@ -40,7 +40,6 @@ dependencies {
 
     modImplementation("io.wispforest:owo-lib:${property("owo_version")}")
     annotationProcessor("io.wispforest:owo-lib:${property("owo_version")}")
-    include("io.wispforest:owo-sentinel:${property("owo_version")}")
 }
 
 tasks.getByName<Test>("test") {
