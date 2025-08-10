@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.6.1-1.4.0
+v1.6.1-1.5.0
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
@@ -14,35 +14,37 @@ v1.6.1-1.4.0
 
 ## Features
 
-[AbstractMod](https://www.notion.so/AbstractMod-24957e0d4afd81899cebca5d72a2c692?pvs=21)
+[AbstractMod](https://www.notion.so/AbstractMod-24b57e0d4afd81da9b20ef30b8db8bde?pvs=21)
 
-[AbstractConfig](https://www.notion.so/AbstractConfig-24957e0d4afd81859966cc5bac96c931?pvs=21)
+[AbstractConfig](https://www.notion.so/AbstractConfig-24b57e0d4afd819c933fec0824dede76?pvs=21)
 
-[AbstractHandler](https://www.notion.so/AbstractHandler-24957e0d4afd817dab3edee408718814?pvs=21)
+[ConfigBuilder](https://www.notion.so/ConfigBuilder-24b57e0d4afd811e9c34ce4d36ff523d?pvs=21)
 
-[ConfigBuilder](https://www.notion.so/ConfigBuilder-24957e0d4afd81bf9524d89d67cea536?pvs=21)
+[Overridable Options](https://www.notion.so/Overridable-Options-24b57e0d4afd80a49b4ef7613e81729f?pvs=21)
 
-[Debugger](https://www.notion.so/Debugger-24957e0d4afd81bcb330f77e6dc4e4df?pvs=21)
+[AbstractHandler](https://www.notion.so/AbstractHandler-24b57e0d4afd8166bc6fd454d6cb225c?pvs=21)
 
-[PokemonExtensions](https://www.notion.so/PokemonExtensions-24957e0d4afd81b582d5e4b57c4ddf6d?pvs=21)
+[Debugger](https://www.notion.so/Debugger-24b57e0d4afd815aa39ee27eeb9f42e7?pvs=21)
 
-[TimCoreEvents](https://www.notion.so/TimCoreEvents-24957e0d4afd8150977afb26fae2fa7f?pvs=21)
+[PokemonExtensions](https://www.notion.so/PokemonExtensions-24b57e0d4afd81238059ccb7dec7b7b2?pvs=21)
 
-[Custom Pokémon Properties](https://www.notion.so/Custom-Pok-mon-Properties-24957e0d4afd81efb9a0e9205d5d91fe?pvs=21)
+[TimCoreEvents](https://www.notion.so/TimCoreEvents-24b57e0d4afd8114b9b9f896d5a35e18?pvs=21)
 
-[Holdings](https://www.notion.so/Holdings-24957e0d4afd815daf90fef6fee2a1ed?pvs=21)
+[Custom Pokémon Properties](https://www.notion.so/Custom-Pok-mon-Properties-24b57e0d4afd81d58866df9c97e20f14?pvs=21)
 
-[ExpAll Logic](https://www.notion.so/ExpAll-Logic-24957e0d4afd81e1860aee7b5835d543?pvs=21)
+[Holdings](https://www.notion.so/Holdings-24b57e0d4afd81a9895fe2eae3fb0c3f?pvs=21)
 
-[Spawning Buckets](https://www.notion.so/Spawning-Buckets-24957e0d4afd81aeb984f93102cdd219?pvs=21)
+[ExpAll Logic](https://www.notion.so/ExpAll-Logic-24b57e0d4afd8177a07fc1968e8a8f34?pvs=21)
 
-[`PokemonMatcher`](https://www.notion.so/PokemonMatcher-24957e0d4afd814e9e1dd94fa4297c1a?pvs=21)
+[Spawning Buckets](https://www.notion.so/Spawning-Buckets-24b57e0d4afd817ba24ae041ed89e463?pvs=21)
 
-[`ResourceReloadListeners`](https://www.notion.so/ResourceReloadListeners-24957e0d4afd80348ea3f2d0dc136d74?pvs=21)
+[`PokemonMatcher`](https://www.notion.so/PokemonMatcher-24b57e0d4afd813f9b9adefbac6b1600?pvs=21)
+
+[`ResourceReloadListeners`](https://www.notion.so/ResourceReloadListeners-24b57e0d4afd8172ac20c9e8b18797c3?pvs=21)
 
 ## Player Help
 
-[Config Options](https://www.notion.so/Config-Options-24957e0d4afd81deab58f285c6f5d010?pvs=21)
+[Config Options](https://www.notion.so/Config-Options-24b57e0d4afd815ea354d4485008dcd0?pvs=21)
 
 ## Dependencies
 
