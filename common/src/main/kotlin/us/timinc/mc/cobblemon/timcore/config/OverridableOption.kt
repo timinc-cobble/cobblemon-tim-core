@@ -9,9 +9,9 @@ abstract class OverridableOption<ValueType, ContextType>(
 ) {
     data class PokemonOption<ValueType>(override val value: ValueType, override val overrides: Map<String, ValueType> = emptyMap()) :
         OverridableOption<ValueType, Pokemon>(value, overrides) {
-        override fun getValue(context: Pokemon): ValueType =
+        override fun getContextValue(context: Pokemon): ValueType =
             overrides.entries.find { (k) -> PokemonProperties.parse(k).matches(context) }?.value ?: value
     }
 
-    abstract fun getValue(context: ContextType): ValueType
+    abstract fun getContextValue(context: ContextType): ValueType
 }
