@@ -4,3 +4,4 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 
 fun Pokemon.getIdentifier() = "${getDisplayName().string}[${uuid}]"
 fun Pokemon.getBucket() = this.persistentData.getStringOrNull(TimCore.DataKeys.SPAWNED_IN_BUCKET)
+fun Pokemon.immuneToQuickBall() = this.persistentData.contains(TimCore.DataKeys.ALREADY_HIT_WITH_QUICK_BALL)
