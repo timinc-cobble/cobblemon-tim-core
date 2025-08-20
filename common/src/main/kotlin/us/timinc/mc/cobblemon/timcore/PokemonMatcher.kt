@@ -2,6 +2,8 @@ package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import us.timinc.mc.cobblemon.timcore.TimCore.debugger
 
 data class PokemonMatcher(
@@ -13,6 +15,21 @@ data class PokemonMatcher(
     val buckets: List<String> = emptyList(),
     val matchOne: Boolean = false,
 ) {
+    companion object {
+        val CODEC: Codec<PokemonMatcher> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Codec.STRING.optionalFieldOf("properties", "").forGetter { it.properties },
+                Codec.STRING.listOf().optionalFieldOf("labels", emptyList()).forGetter { it.labels },
+                Codec.BOOL.optionalFieldOf("anyLabel", false).forGetter { it.anyLabel },
+                Codec.unboundedMap(Codec.STRING, Codec.STRING).optionalFieldOf("persistentData", emptyMap())
+                    .forGetter { it.persistentData },
+                Codec.BOOL.optionalFieldOf("anyPersistentData", false).forGetter { it.anyPersistentData },
+                Codec.STRING.listOf().optionalFieldOf("buckets", emptyList()).forGetter { it.buckets },
+                Codec.BOOL.optionalFieldOf("matchOne", false).forGetter { it.matchOne }
+            ).apply(instance, ::PokemonMatcher)
+        }
+    }
+
     @delegate:Transient
     private val parsedProps by lazy {
         properties.takeIf { it.isNotBlank() }?.let(PokemonProperties::parse)
