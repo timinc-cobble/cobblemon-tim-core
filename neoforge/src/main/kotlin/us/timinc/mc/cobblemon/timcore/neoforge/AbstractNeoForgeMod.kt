@@ -2,7 +2,6 @@ package us.timinc.mc.cobblemon.timcore.neoforge
 
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent

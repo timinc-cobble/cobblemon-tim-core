@@ -33,7 +33,7 @@ abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val m
             v.item?.let { registerItem(k, it) }
         }
         mod.blocks.values.map { it.tab }.toSet().forEach { tabToAddTo ->
-            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register {addingTab ->
+            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register { addingTab ->
                 for (container in mod.blocks.values) {
                     if (container.tab != tabToAddTo) continue
                     container.item?.let { addingTab.accept(it) }
