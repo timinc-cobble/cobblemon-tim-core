@@ -10,6 +10,8 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.literal
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
 
 abstract class AbstractMod<T : AbstractConfig>(
     @Suppress("MemberVisibilityCanBePrivate") val modId: String,
@@ -29,6 +31,9 @@ abstract class AbstractMod<T : AbstractConfig>(
 
     @Suppress("MemberVisibilityCanBePrivate")
     val reloadListeners: MutableList<AbstractReloadListener> = mutableListOf()
+
+    val items: MutableMap<ResourceLocation, ItemContainer<out Item>> = mutableMapOf()
+    val blocks: MutableMap<ResourceLocation, BlockContainer<out Block>> = mutableMapOf()
 
     init {
         reloadConfig()
@@ -50,6 +55,17 @@ abstract class AbstractMod<T : AbstractConfig>(
     fun <T : AbstractReloadListener> registerReloadListener(listener: T): T {
         reloadListeners.add(listener)
         return listener
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun <T : Item> registerItem(name: String, container: ItemContainer<T>): ItemContainer<T> {
+        items[modResource(name)] = container
+        return container
+    }
+
+    fun <T : Block> registerBlock(name: String, container: BlockContainer<T>): BlockContainer<T> {
+        blocks[modResource(name)] = container
+        return container
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
