@@ -3,7 +3,6 @@ package us.timinc.mc.cobblemon.timcore.fabric
 import com.mojang.brigadier.CommandDispatcher
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.core.Registry
