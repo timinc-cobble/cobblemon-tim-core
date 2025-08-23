@@ -20,26 +20,28 @@ abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val m
             registerCommands(dispatcher)
         }
         mod.items.entries.forEach { (k, v) -> registerItem(k, v.item) }
-        mod.items.values.map { it.tab }.toSet().forEach { tabToAddTo ->
-            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register { addingTab ->
-                for (container in mod.items.values) {
-                    if (container.tab != tabToAddTo) continue
-                    addingTab.accept(container.item)
-                }
-            }
-        }
         mod.blocks.entries.forEach { (k, v) ->
             registerBlock(k, v.block)
             v.item?.let { registerItem(k, it) }
         }
-        mod.blocks.values.map { it.tab }.toSet().forEach { tabToAddTo ->
-            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register { addingTab ->
-                for (container in mod.blocks.values) {
-                    if (container.tab != tabToAddTo) continue
-                    container.item?.let { addingTab.accept(it) }
-                }
-            }
-        }
+
+//        TODO: Figure out why adding items to creative tabs is breaking on Fabric.
+//        mod.items.values.map { it.tab }.toSet().forEach { tabToAddTo ->
+//            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register { addingTab ->
+//                for (container in mod.items.values) {
+//                    if (container.tab != tabToAddTo) continue
+//                    addingTab.accept(container.item)
+//                }
+//            }
+//        }
+//        mod.blocks.values.map { it.tab }.toSet().forEach { tabToAddTo ->
+//            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register { addingTab ->
+//                for (container in mod.blocks.values) {
+//                    if (container.tab != tabToAddTo) continue
+//                    container.item?.let { addingTab.accept(it) }
+//                }
+//            }
+//        }
         registerReloadListeners()
         mod.wrapUp()
     }
