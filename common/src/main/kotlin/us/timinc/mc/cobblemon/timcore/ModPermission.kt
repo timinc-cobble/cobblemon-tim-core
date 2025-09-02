@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation
 data class ModPermission(
     private val node: String,
     override val level: PermissionLevel,
-    val mod: AbstractMod<*>
+    val mod: AbstractMod<*>,
 ) : Permission {
     override val identifier: ResourceLocation = mod.modResource(node)
 
