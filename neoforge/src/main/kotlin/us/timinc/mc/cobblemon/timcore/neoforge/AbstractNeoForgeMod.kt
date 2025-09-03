@@ -50,7 +50,7 @@ abstract class AbstractNeoForgeMod(@Suppress("MemberVisibilityCanBePrivate") val
 
     private fun registerCommands(e: RegisterCommandsEvent) {
         val dispatcher = e.dispatcher
-        mod.commands.forEach(dispatcher::register)
+        mod.commands.forEach { cmdContainer -> dispatcher.register(cmdContainer.built) }
     }
 
     private fun registerReloadListeners(e: AddReloadListenerEvent) {

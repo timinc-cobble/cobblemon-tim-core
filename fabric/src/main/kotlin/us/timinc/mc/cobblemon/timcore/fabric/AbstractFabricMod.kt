@@ -54,7 +54,9 @@ abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val m
     }
 
     private fun registerCommands(dispatcher: CommandDispatcher<CommandSourceStack>) {
-        mod.commands.forEach(dispatcher::register)
+        mod.commands.forEach { cmdContainer ->
+            dispatcher.register(cmdContainer.built)
+        }
     }
 
     private fun registerReloadListeners() {

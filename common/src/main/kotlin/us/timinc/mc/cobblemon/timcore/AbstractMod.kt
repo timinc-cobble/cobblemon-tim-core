@@ -1,17 +1,13 @@
 package us.timinc.mc.cobblemon.timcore
 
-import com.cobblemon.mod.common.api.permission.PermissionLevel
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.platform.events.PlatformEvents
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import net.minecraft.commands.CommandSourceStack
-import net.minecraft.commands.Commands.literal
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
 
 abstract class AbstractMod<T : AbstractConfig>(
     @Suppress("MemberVisibilityCanBePrivate") val modId: String,
@@ -24,7 +20,7 @@ abstract class AbstractMod<T : AbstractConfig>(
     lateinit var config: T
 
     @Suppress("MemberVisibilityCanBePrivate")
-    val commands: MutableList<LiteralArgumentBuilder<CommandSourceStack>> = mutableListOf()
+    val commands: MutableList<AbstractCommand<*>> = mutableListOf()
 
     @Suppress("MemberVisibilityCanBePrivate")
     val customPokemonProperties: MutableList<CustomPokemonPropertyType<*>> = mutableListOf()
@@ -41,8 +37,9 @@ abstract class AbstractMod<T : AbstractConfig>(
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun registerCommand(cmd: LiteralArgumentBuilder<CommandSourceStack>, noPrefix: Boolean = false) {
-        commands.add(if (noPrefix) cmd else literal(modId).then(cmd))
+    fun <T> registerCommand(command: AbstractCommand<T>): AbstractCommand<T> {
+        commands.add(command)
+        return command
     }
 
     @Suppress("unused")
@@ -73,13 +70,6 @@ abstract class AbstractMod<T : AbstractConfig>(
         config = ConfigBuilder.load(configClass, modId)
     }
 
-    private val reloadConfigCommand: LiteralArgumentBuilder<CommandSourceStack> =
-        literal("reload").requires { it.hasPermission(PermissionLevel.ALL_COMMANDS.numericalValue) }.executes {
-            reloadConfig()
-            it.source.player?.sendSystemMessage(Component.literal("Config reloaded."))
-            0
-        }
-
     fun wrapUp() {
         var initialized = false
         PlatformEvents.SERVER_STARTED.subscribe { evt ->
@@ -95,6 +85,6 @@ abstract class AbstractMod<T : AbstractConfig>(
     fun modResource(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(modId, name)
 
     init {
-        registerCommand(reloadConfigCommand)
+        registerCommand(ConfigReloadCommand(this))
     }
 }
