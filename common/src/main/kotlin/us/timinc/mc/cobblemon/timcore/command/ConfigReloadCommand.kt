@@ -14,9 +14,6 @@ class ConfigReloadCommand(val mod: AbstractMod<*>) : AbstractCommand.NoData(
     PermissionLevel.ALL_COMMANDS,
     mod
 ) {
-    override fun define(): LiteralArgumentBuilder<CommandSourceStack> =
-        literal("reload")
-
     override fun runWithoutData(rawContext: CommandContext<CommandSourceStack>): Int {
         mod.reloadConfig()
         giveFeedback(Component.literal("Config reloaded."), rawContext)
