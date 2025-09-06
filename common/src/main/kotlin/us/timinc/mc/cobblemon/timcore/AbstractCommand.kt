@@ -45,7 +45,7 @@ abstract class AbstractCommand<T>(
 
         var tail: ArgumentBuilder<CommandSourceStack, *> = args.last().permission(permission).executes(::execute) as ArgumentBuilder<CommandSourceStack, *>
 
-        for (arg in args.reversed().slice(1..<args.size)) {
+        for (arg in args.reversed().drop(1)) {
             tail = arg.then(tail) as ArgumentBuilder<CommandSourceStack, *>
         }
 
