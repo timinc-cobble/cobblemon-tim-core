@@ -40,17 +40,20 @@ abstract class AbstractCommand<T>(
     val built: LiteralArgumentBuilder<CommandSourceStack> by lazy {
         if (args.isEmpty()) {
             val defined = Commands.literal(name).permission(permission).executes(::execute)
-            return@lazy if (noPrefix) defined else LiteralArgumentBuilder.literal<CommandSourceStack>(mod.modId).then(defined)
+            return@lazy if (noPrefix) defined else LiteralArgumentBuilder.literal<CommandSourceStack>(mod.modId)
+                .then(defined)
         }
 
-        var tail: ArgumentBuilder<CommandSourceStack, *> = args.last().permission(permission).executes(::execute) as ArgumentBuilder<CommandSourceStack, *>
+        var tail: ArgumentBuilder<CommandSourceStack, *> =
+            args.last().permission(permission).executes(::execute) as ArgumentBuilder<CommandSourceStack, *>
 
         for (arg in args.reversed().drop(1)) {
             tail = arg.then(tail) as ArgumentBuilder<CommandSourceStack, *>
         }
 
         val defined = Commands.literal(name).then(tail)
-        return@lazy if (noPrefix) defined else LiteralArgumentBuilder.literal<CommandSourceStack>(mod.modId).then(defined)
+        return@lazy if (noPrefix) defined else LiteralArgumentBuilder.literal<CommandSourceStack>(mod.modId)
+            .then(defined)
     }
 
     abstract fun run(commandContext: T, rawContext: CommandContext<CommandSourceStack>): Int

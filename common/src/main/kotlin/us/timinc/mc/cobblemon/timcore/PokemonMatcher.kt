@@ -4,7 +4,6 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import us.timinc.mc.cobblemon.timcore.TimCore.debugger
 
 data class PokemonMatcher(
     val properties: String = "",

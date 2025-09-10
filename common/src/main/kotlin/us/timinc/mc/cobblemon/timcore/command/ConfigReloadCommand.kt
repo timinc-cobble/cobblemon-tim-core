@@ -1,10 +1,8 @@
 package us.timinc.mc.cobblemon.timcore.command
 
 import com.cobblemon.mod.common.api.permission.PermissionLevel
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.commands.Commands.literal
 import net.minecraft.network.chat.Component
 import us.timinc.mc.cobblemon.timcore.AbstractCommand
 import us.timinc.mc.cobblemon.timcore.AbstractMod
