@@ -13,6 +13,7 @@ data class PokemonMatcher(
     val persistentData: Map<String, String> = emptyMap(),
     val anyPersistentData: Boolean = false,
     val buckets: List<String> = emptyList(),
+    val forms: List<String> = emptyList(),
     val matchOne: Boolean = false,
 ) {
     companion object {
@@ -25,6 +26,7 @@ data class PokemonMatcher(
                     .forGetter { it.persistentData },
                 Codec.BOOL.optionalFieldOf("anyPersistentData", false).forGetter { it.anyPersistentData },
                 Codec.STRING.listOf().optionalFieldOf("buckets", emptyList()).forGetter { it.buckets },
+                Codec.STRING.listOf().optionalFieldOf("forms", emptyList()).forGetter { it.forms },
                 Codec.BOOL.optionalFieldOf("matchOne", false).forGetter { it.matchOne }
             ).apply(instance, ::PokemonMatcher)
         }
@@ -47,6 +49,7 @@ data class PokemonMatcher(
             if (labelSet.isNotEmpty()) add(::labelsMatch)
             if (persistentData.isNotEmpty()) add(::persistentDataMatch)
             if (bucketSet.isNotEmpty()) add(::bucketMatch)
+            if (forms.isNotEmpty()) add(::formsMatch)
         }
 
         if (predicates.isEmpty()) return true
@@ -69,15 +72,11 @@ data class PokemonMatcher(
     }
 
     private fun bucketMatch(pokemon: Pokemon): Boolean {
-        val spawnedInBucket = pokemon.getBucket()
-        if (spawnedInBucket == null) {
-            debugger.debug(
-                "Could not determine spawn bucket of ${pokemon.getIdentifier()}. " +
-                        "Common reasons: unnatural spawn, pre-TimCore spawn, or data erased by another mod.",
-                true
-            )
-            return false
-        }
+        val spawnedInBucket = pokemon.getBucket() ?: return false
         return spawnedInBucket in bucketSet
+    }
+
+    private fun formsMatch(pokemon: Pokemon): Boolean {
+        return forms.contains(pokemon.form.name)
     }
 }
