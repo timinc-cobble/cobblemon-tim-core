@@ -44,14 +44,16 @@ abstract class AbstractCommand<T>(
                 .then(defined)
         }
 
+        @Suppress("UNCHECKED_CAST")
         var tail: ArgumentBuilder<CommandSourceStack, *> =
-            args.last().permission(permission).executes(::execute) as ArgumentBuilder<CommandSourceStack, *>
+            args.last().executes(::execute) as ArgumentBuilder<CommandSourceStack, *>
 
         for (arg in args.reversed().drop(1)) {
+            @Suppress("UNCHECKED_CAST")
             tail = arg.then(tail) as ArgumentBuilder<CommandSourceStack, *>
         }
 
-        val defined = Commands.literal(name).then(tail)
+        val defined = Commands.literal(name).permission(permission).then(tail)
         return@lazy if (noPrefix) defined else LiteralArgumentBuilder.literal<CommandSourceStack>(mod.modId)
             .then(defined)
     }
