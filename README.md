@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.6.1-1.9.0
+v1.6.1-1.9.0 - v1.6.1-1.9.1
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
@@ -38,9 +38,9 @@ v1.6.1-1.9.0
 
 [Spawning Buckets](https://www.notion.so/Spawning-Buckets-26a57e0d4afd81f496c3fe7502a5d236?pvs=21)
 
-[PokemonMatcher](https://www.notion.so/PokemonMatcher-26a57e0d4afd81e88a7ecfd578890ac7?pvs=21)
+[`PokemonMatcher`](https://www.notion.so/PokemonMatcher-26a57e0d4afd81e88a7ecfd578890ac7?pvs=21)
 
-[ResourceReloadListeners](https://www.notion.so/ResourceReloadListeners-26a57e0d4afd81968e6bd81c2ef9f77b?pvs=21)
+[`ResourceReloadListeners`](https://www.notion.so/ResourceReloadListeners-26a57e0d4afd81968e6bd81c2ef9f77b?pvs=21)
 
 [Block & Item Registration](https://www.notion.so/Block-Item-Registration-26a57e0d4afd8106922bc215de1e2456?pvs=21)
 
@@ -53,6 +53,10 @@ v1.6.1-1.9.0
 ## Dependencies
 
 - [Cobblemon](https://www.notion.so/Cobblemon-22157e0d4afd80a49896c70a775a3c7f?pvs=21)
+
+## Known Issues
+
+- v1.6.1-1.9.0 put the permission checks for commands before the execution of the command, allowing players to type out the entirety of the command w/autocomplete, but not execute it if they didn’t have the permissions. That’s a bit annoying, so v1.6.1-1.9.1 moved it to the start.
 
 ## Roadmap
 
