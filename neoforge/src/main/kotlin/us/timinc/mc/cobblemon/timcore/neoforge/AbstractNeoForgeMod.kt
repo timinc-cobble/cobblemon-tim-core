@@ -1,17 +1,33 @@
 package us.timinc.mc.cobblemon.timcore.neoforge
 
+import com.mojang.brigadier.arguments.ArgumentType
+import net.minecraft.commands.synchronization.ArgumentTypeInfo
+import net.minecraft.commands.synchronization.ArgumentTypeInfos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
+import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.RegisterEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import us.timinc.mc.cobblemon.timcore.AbstractMod
+import us.timinc.mc.cobblemon.timcore.CommandArgumentContainer
 
 abstract class AbstractNeoForgeMod(@Suppress("MemberVisibilityCanBePrivate") val mod: AbstractMod<*>) {
+    private val commandArgumentTypes = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, mod.modId)
+
     init {
+        fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>>
+                CommandArgumentContainer<A, T>.register() {
+            commandArgumentTypes.register(identifier.path) { _ ->
+                ArgumentTypeInfos.registerByClass(argumentClass, info)
+            }
+        }
+        mod.commandArguments.values.forEach { it.register() }
+        commandArgumentTypes.register(MOD_BUS)
         NeoForge.EVENT_BUS.addListener(::registerCommands)
         NeoForge.EVENT_BUS.addListener(::registerReloadListeners)
         MOD_BUS.addListener(::registerItems)
