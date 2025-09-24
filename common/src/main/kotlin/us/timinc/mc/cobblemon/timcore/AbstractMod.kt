@@ -4,6 +4,8 @@ import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.mojang.brigadier.arguments.ArgumentType
+import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
@@ -21,6 +23,14 @@ abstract class AbstractMod<T : AbstractConfig>(
 
     @Suppress("MemberVisibilityCanBePrivate")
     val commands: MutableList<AbstractCommand<*>> = mutableListOf()
+
+    val commandArguments = mutableMapOf<ResourceLocation,
+            CommandArgumentContainer<out ArgumentType<*>, out ArgumentTypeInfo.Template<out ArgumentType<*>>>>()
+
+    fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>>
+            registerCommandArgument(container: CommandArgumentContainer<A, T>) {
+        commandArguments[container.identifier] = container
+    }
 
     @Suppress("MemberVisibilityCanBePrivate")
     val customPokemonProperties: MutableList<CustomPokemonPropertyType<*>> = mutableListOf()

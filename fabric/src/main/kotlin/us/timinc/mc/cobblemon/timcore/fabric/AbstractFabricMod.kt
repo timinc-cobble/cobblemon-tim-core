@@ -1,10 +1,13 @@
 package us.timinc.mc.cobblemon.timcore.fabric
 
 import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.arguments.ArgumentType
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
@@ -12,9 +15,17 @@ import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import us.timinc.mc.cobblemon.timcore.AbstractMod
+import us.timinc.mc.cobblemon.timcore.CommandArgumentContainer
 
 abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val mod: AbstractMod<*>) : ModInitializer {
     init {
+        fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>>
+                CommandArgumentContainer<A, T>.register() {
+            ArgumentTypeRegistry.registerArgumentType(
+                identifier, argumentClass, info
+            )
+        }
+        mod.commandArguments.values.forEach { it.register() }
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             registerCommands(dispatcher)
         }
