@@ -8,6 +8,8 @@ import com.cobblemon.mod.common.pokemon.properties.StringProperty
 @Suppress("Unused", "MemberVisibilityCanBePrivate")
 class CustomStringProperty(override val keys: Iterable<String>, val examples: Set<String>) :
     CustomPokemonPropertyType<StringProperty> {
+    constructor(key: String, examples: Set<String> = setOf()) : this(setOf(key), examples)
+
     override val needsKey: Boolean = true
     override fun examples(): Collection<String> = examples
 
