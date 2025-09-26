@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.6.1-1.9.4
+v1.6.1-1.9.4 - v1.6.1-1.9.5
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
@@ -55,6 +55,10 @@ v1.6.1-1.9.4
 ## Dependencies
 
 - [Cobblemon](https://www.notion.so/Cobblemon-22157e0d4afd80a49896c70a775a3c7f?pvs=21)
+
+## Known Issues
+
+- v1.6.1-1.9.4 only had a basic, tight constructor for CustomStringProperty and I wanted something looser, so v1.6.1-1.9.5 fixed that up.
 
 ## Roadmap
 
