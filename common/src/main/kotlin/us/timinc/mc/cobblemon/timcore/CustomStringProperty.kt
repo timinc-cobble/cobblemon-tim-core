@@ -6,7 +6,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.properties.StringProperty
 
 @Suppress("Unused", "MemberVisibilityCanBePrivate")
-class CustomStringProperty(override val keys: Iterable<String>, val examples: Set<String>) :
+class CustomStringProperty(override val keys: Iterable<String>, val examples: Set<String> = setOf()) :
     CustomPokemonPropertyType<StringProperty> {
     constructor(key: String, examples: Set<String> = setOf()) : this(setOf(key), examples)
 
