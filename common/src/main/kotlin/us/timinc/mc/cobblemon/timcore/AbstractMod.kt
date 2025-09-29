@@ -2,6 +2,7 @@ package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
+import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.mojang.brigadier.arguments.ArgumentType
@@ -10,11 +11,15 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
+import us.timinc.mc.cobblemon.timcore.event.ReloadConfigEvent
 
 abstract class AbstractMod<T : AbstractConfig>(
     @Suppress("MemberVisibilityCanBePrivate") val modId: String,
     private val configClass: Class<T>,
 ) {
+    @JvmField
+    val RELOAD_CONFIG = EventObservable<ReloadConfigEvent>()
+
     @Suppress("MemberVisibilityCanBePrivate")
     var debugger: Debugger<T>
 
@@ -78,6 +83,7 @@ abstract class AbstractMod<T : AbstractConfig>(
     @Suppress("MemberVisibilityCanBePrivate")
     fun reloadConfig() {
         config = ConfigBuilder.load(configClass, modId)
+        RELOAD_CONFIG.post(ReloadConfigEvent())
     }
 
     fun wrapUp() {
