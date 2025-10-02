@@ -1,8 +1,9 @@
 package us.timinc.mc.cobblemon.timcore
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.server.level.ServerPlayer
 import us.timinc.mc.cobblemon.timcore.TimCore.debugger
+import java.util.*
 
 fun Pokemon.getIdentifier() = "${getDisplayName().string}[${uuid}]"
 fun Pokemon.immuneToQuickBall() = this.persistentData.contains(TimCore.DataKeys.ALREADY_HIT_WITH_QUICK_BALL)
@@ -16,4 +17,16 @@ fun Pokemon.getBucket(): String? {
         )
     }
     return bucket
+}
+
+fun Pokemon.reserveFor(stringUuid: String) {
+    TimCore.CustomPokemonProperties.RESERVED_FOR.pokemonApplicator(this, stringUuid)
+}
+
+fun Pokemon.reserveFor(uuid: UUID) {
+    this.reserveFor(uuid.toString())
+}
+
+fun Pokemon.reserveFor(player: ServerPlayer) {
+    reserveFor(player.uuid)
 }
