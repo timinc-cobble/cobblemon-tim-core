@@ -58,6 +58,10 @@ v1.6.1-1.11
 
 - [Cobblemon](https://www.notion.so/Cobblemon-22157e0d4afd80a49896c70a775a3c7f?pvs=21)
 
+## Known Issues
+
+- In [Tim Core v1.6.1-1.11.0](https://www.notion.so/Tim-Core-v1-6-1-1-11-0-28057e0d4afd80b0a1c0c85d3936c1c0?pvs=21), I hadn’t yet added the convenience function for reserving a Pokémon for a specific player. This was remedied in [Tim Core v1.6.1-1.11.1](https://www.notion.so/Tim-Core-v1-6-1-1-11-1-28057e0d4afd800db306f775c48cda20?pvs=21).
+
 ## Roadmap
 
 If you’d like to keep up with the work being done on the mod, please join [the Discord](https://discord.com/invite/WKAR27SdSv) and subscribe to notifications on the channel for this content. You can also keep track of the to do list available on [the mod’s main page](https://www.notion.so/Tim-Core-22057e0d4afd809b9c02e78f26805376?pvs=21).
