@@ -2,11 +2,16 @@ package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import us.timinc.mc.cobblemon.timcore.handler.AttachBucket
 import us.timinc.mc.cobblemon.timcore.handler.ExpAllHandler
+import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
 import us.timinc.mc.cobblemon.timcore.handler.PreventQuickBallSpam
 
 const val MOD_ID = "tim_core"
@@ -28,11 +33,22 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
     object DataKeys {
         const val SPAWNED_IN_BUCKET = "tim_core:spawned_in_bucket"
         const val ALREADY_HIT_WITH_QUICK_BALL = "tim_core:already_hit_with_quick_ball"
+        const val RESERVED_FOR = "tim_core:reserved_for"
+    }
+
+    object CustomPokemonProperties {
+        val RESERVED_FOR = CustomStringProperty(DataKeys.RESERVED_FOR)
+    }
+
+    object TranslationComponents {
+        fun reserved(pokemon: Pokemon, player: ServerPlayer): MutableComponent =
+            Component.translatable("tim_core.feedback.reserved", pokemon.getDisplayName(), player.name)
     }
 
     init {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.HIGHEST, ExpAllHandler::handle)
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
+        CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
     }
 }

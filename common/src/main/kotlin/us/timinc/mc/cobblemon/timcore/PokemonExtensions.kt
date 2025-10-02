@@ -1,5 +1,6 @@
 package us.timinc.mc.cobblemon.timcore
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
 import us.timinc.mc.cobblemon.timcore.TimCore.debugger
 
