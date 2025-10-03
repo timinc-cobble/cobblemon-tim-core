@@ -19,14 +19,33 @@ fun Pokemon.getBucket(): String? {
     return bucket
 }
 
-fun Pokemon.reserveFor(stringUuid: String) {
-    TimCore.CustomPokemonProperties.RESERVED_FOR.pokemonApplicator(this, stringUuid)
+fun Pokemon.getSpawnCause(): String? = persistentData.getStringOrNull(TimCore.DataKeys.SPAWNED_VIA)
+
+fun Pokemon.reserveFor(player: String) {
+    TimCore.CustomPokemonProperties.RESERVED_FOR.pokemonApplicator(this, player)
 }
 
-fun Pokemon.reserveFor(uuid: UUID) {
-    this.reserveFor(uuid.toString())
+fun Pokemon.reserveFor(player: UUID) {
+    this.reserveFor(player.toString())
 }
 
 fun Pokemon.reserveFor(player: ServerPlayer) {
     reserveFor(player.uuid)
 }
+
+fun Pokemon.getReservedFor(): String? = persistentData.getStringOrNull(TimCore.DataKeys.RESERVED_FOR)
+
+enum class ReservationType {
+    RESERVED_FOR,
+    UNRESERVED,
+    RESERVED_FOR_OTHER
+}
+
+fun Pokemon.isReservedFor(uuid: String): ReservationType {
+    val reservedFor = getReservedFor() ?: return ReservationType.UNRESERVED
+    return if (uuid == reservedFor) ReservationType.RESERVED_FOR else ReservationType.RESERVED_FOR_OTHER
+}
+
+fun Pokemon.isReservedFor(uuid: UUID): ReservationType = isReservedFor(uuid.toString())
+
+fun Pokemon.isReservedFor(player: ServerPlayer): ReservationType = isReservedFor(player.uuid)
