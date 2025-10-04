@@ -62,6 +62,10 @@ v1.6.1-1.14
 
 - [Cobblemon](https://www.notion.so/Cobblemon-22157e0d4afd80a49896c70a775a3c7f?pvs=21)
 
+## Known Issues
+
+- v1.6.1-1.14.0 had an issue with properly maximizing a `PokemonRepresentation`'s IVs if the IVs weren’t null, but were empty. v1.6.1-1.14.1 remedied that.
+
 ## Roadmap
 
 If you’d like to keep up with the work being done on the mod, please join [the Discord](https://discord.com/invite/WKAR27SdSv) and subscribe to notifications on the channel for this content. You can also keep track of the to do list available on [the mod’s main page](https://www.notion.so/Tim-Core-22057e0d4afd809b9c02e78f26805376?pvs=21).
