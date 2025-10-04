@@ -65,6 +65,7 @@ v1.6.1-1.14
 ## Known Issues
 
 - v1.6.1-1.14.0 had an issue with properly maximizing a `PokemonRepresentation`'s IVs if the IVs weren’t null, but were empty. v1.6.1-1.14.1 remedied that.
+- v1.6.1-1.14.1 and before had an issue with properly logging which IVs were perfected. v1.6.1-1.14.2 remedied that.
 
 ## Roadmap
 
