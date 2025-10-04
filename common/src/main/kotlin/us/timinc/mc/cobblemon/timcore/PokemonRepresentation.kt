@@ -67,15 +67,15 @@ abstract class PokemonRepresentation<T>(val pokemon: T) {
 
         override fun makePerfectIvs(count: Int): Set<Stat> {
             val ivs = pokemon.ivs
-            val imperfects = pokemon.ivs?.filter { (_, value) -> value != IVs.MAX_VALUE }?.shuffled()?.take(count)
-            if (imperfects == null) {
+            if (ivs == null || ivs.toList().isEmpty()) {
                 pokemon.ivs = IVs.createRandomIVs(count)
-                return pokemon.ivs!!.filter { (_, value) -> value == IVs.MAX_VALUE }.take(count).map { (stat) -> stat }
+                return ivs!!.filter { (_, value) -> value == IVs.MAX_VALUE }.take(count).map { (stat) -> stat }
                     .toSet()
             }
 
+            val imperfects = ivs.filter { (_, value) -> value != IVs.MAX_VALUE }.shuffled().take(count)
             for ((stat) in imperfects) {
-                ivs!![stat] = IVs.MAX_VALUE
+                ivs[stat] = IVs.MAX_VALUE
             }
             return imperfects.map { (stat) -> stat }.toSet()
         }
