@@ -66,7 +66,7 @@ v1.6.1-1.15
 
 ## Known Issues
 
-- None. Who’s asking? 👀
+- v1.6.1-1.15.0 had an issue with [`PokemonMatcher`](https://www.notion.so/PokemonMatcher-28357e0d4afd812bb3f8c28b2d68eafb?pvs=21)s errantly ignoring lists in their property values. v1.6.1-1.15.1 remedies this.
 
 ## Roadmap
 
