@@ -4,6 +4,8 @@ import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.api.spawning.condition.AppendageCondition
+import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.mojang.brigadier.arguments.ArgumentType
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -72,6 +74,10 @@ abstract class AbstractMod<T : AbstractConfig>(
     fun <T : Block> registerBlock(name: String, container: BlockContainer<T>): BlockContainer<T> {
         blocks[modResource(name)] = container
         return container
+    }
+
+    fun <T : AppendageCondition> registerSpawningCondition(appendageClass: Class<T>) {
+        AppendageCondition.registerAppendage(SpawningCondition::class.java, appendageClass)
     }
 
     fun reloadConfig() {
