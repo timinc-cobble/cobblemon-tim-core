@@ -4,6 +4,8 @@ import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.api.spawning.condition.AppendageCondition
+import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.mojang.brigadier.arguments.ArgumentType
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -14,19 +16,17 @@ import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
 import us.timinc.mc.cobblemon.timcore.event.ReloadConfigEvent
 
 abstract class AbstractMod<T : AbstractConfig>(
-    @Suppress("MemberVisibilityCanBePrivate") val modId: String,
+    val modId: String,
     private val configClass: Class<T>,
 ) {
+    @Suppress("PropertyName")
     @JvmField
     val RELOAD_CONFIG = EventObservable<ReloadConfigEvent>()
 
-    @Suppress("MemberVisibilityCanBePrivate")
     var debugger: Debugger<T>
 
-    @Suppress("MemberVisibilityCanBePrivate")
     lateinit var config: T
 
-    @Suppress("MemberVisibilityCanBePrivate")
     val commands: MutableList<AbstractCommand<*>> = mutableListOf()
 
     val commandArguments = mutableMapOf<ResourceLocation,
@@ -40,7 +40,6 @@ abstract class AbstractMod<T : AbstractConfig>(
     @Suppress("MemberVisibilityCanBePrivate")
     val customPokemonProperties: MutableList<CustomPokemonPropertyType<*>> = mutableListOf()
 
-    @Suppress("MemberVisibilityCanBePrivate")
     val reloadListeners: MutableList<AbstractReloadListener> = mutableListOf()
 
     val items: MutableMap<ResourceLocation, ItemContainer<out Item>> = mutableMapOf()
@@ -57,19 +56,16 @@ abstract class AbstractMod<T : AbstractConfig>(
         return command
     }
 
-    @Suppress("unused")
     fun <R : CustomPokemonProperty, T : CustomPokemonPropertyType<R>> registerCustomPokemonProperty(prop: T): T {
         customPokemonProperties.add(prop)
         return prop
     }
 
-    @Suppress("unused")
     fun <T : AbstractReloadListener> registerReloadListener(listener: T): T {
         reloadListeners.add(listener)
         return listener
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun <T : Item> registerItem(name: String, container: ItemContainer<T>): ItemContainer<T> {
         items[modResource(name)] = container
         return container
@@ -80,7 +76,10 @@ abstract class AbstractMod<T : AbstractConfig>(
         return container
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
+    fun <T : AppendageCondition> registerSpawningCondition(appendageClass: Class<T>) {
+        AppendageCondition.registerAppendage(SpawningCondition::class.java, appendageClass)
+    }
+
     fun reloadConfig() {
         config = ConfigBuilder.load(configClass, modId)
         RELOAD_CONFIG.post(ReloadConfigEvent())
@@ -97,7 +96,6 @@ abstract class AbstractMod<T : AbstractConfig>(
         }
     }
 
-    @Suppress("unused")
     fun modResource(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(modId, name)
 
     init {
