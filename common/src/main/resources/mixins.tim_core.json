@@ -4,7 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "mixins": [
-    "CancelThrownPokeballInBattle",
-    "BerryBlockEntityFix"
+    "BerryBlockEntityFix",
+    "CancelThrownPokeballInBattle"
   ]
 }
