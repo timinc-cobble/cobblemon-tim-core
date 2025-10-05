@@ -36,18 +36,12 @@ data class PokemonMatcher(
         properties.takeIf { it.isNotBlank() }?.let(PokemonProperties::parse)
     }
 
-    @Transient
-    private val labelSet = labels.toSet()
-
-    @Transient
-    private val bucketSet = buckets.toSet()
-
     fun matches(pokemon: Pokemon): Boolean {
         val predicates = buildList<(Pokemon) -> Boolean> {
             if (parsedProps != null) add { p -> parsedProps!!.matches(p) }
-            if (labelSet.isNotEmpty()) add(::labelsMatch)
+            if (labels.isNotEmpty()) add(::labelsMatch)
             if (persistentData.isNotEmpty()) add(::persistentDataMatch)
-            if (bucketSet.isNotEmpty()) add(::bucketMatch)
+            if (buckets.isNotEmpty()) add(::bucketMatch)
             if (forms.isNotEmpty()) add(::formsMatch)
         }
 
@@ -58,7 +52,7 @@ data class PokemonMatcher(
 
     private fun labelsMatch(pokemon: Pokemon): Boolean {
         val pokeLabels = pokemon.form.labels
-        return if (anyLabel) pokeLabels.any(labelSet::contains) else pokeLabels.containsAll(labelSet)
+        return if (anyLabel) pokeLabels.any(labels::contains) else pokeLabels.containsAll(labels)
     }
 
     private fun persistentDataMatch(pokemon: Pokemon): Boolean {
@@ -72,7 +66,7 @@ data class PokemonMatcher(
 
     private fun bucketMatch(pokemon: Pokemon): Boolean {
         val spawnedInBucket = pokemon.getBucket() ?: return false
-        return spawnedInBucket in bucketSet
+        return spawnedInBucket in buckets
     }
 
     private fun formsMatch(pokemon: Pokemon): Boolean {
