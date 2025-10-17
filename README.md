@@ -67,6 +67,7 @@ v1.6.1-1.15
 ## Known Issues
 
 - v1.6.1-1.15.0 had an issue with [`PokemonMatcher`](https://www.notion.so/PokemonMatcher-28357e0d4afd812bb3f8c28b2d68eafb?pvs=21)s errantly ignoring lists in their property values. v1.6.1-1.15.1 remedies this.
+- v1.6.1-1.15.0 - v1.6.1-1.15.1 had an issue with [PokemonRepresentation](https://www.notion.so/PokemonRepresentation-28057e0d4afd808a9491e6296399d3f3?pvs=21)s not retrieving the default forms properly. v1.6.1-1.15.2 remedies this.
 
 ## Roadmap
 
