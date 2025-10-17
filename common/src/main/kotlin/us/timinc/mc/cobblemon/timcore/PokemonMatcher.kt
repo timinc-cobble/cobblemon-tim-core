@@ -36,7 +36,12 @@ data class PokemonMatcher(
             { it.asString() }
         )
 
-        fun parse(string: String, delimiter: String = " ", assigner: String = "=", innerDelimiter: String = ","): PokemonMatcher {
+        fun parse(
+            string: String,
+            delimiter: String = " ",
+            assigner: String = "=",
+            innerDelimiter: String = ",",
+        ): PokemonMatcher {
             val matcher = PokemonMatcher()
             matcher.properties = string
             val keyPairs = string.splitMap(delimiter, assigner)
