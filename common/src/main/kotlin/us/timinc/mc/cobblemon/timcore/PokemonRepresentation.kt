@@ -47,11 +47,10 @@ abstract class PokemonRepresentation<T>(val pokemon: T) {
         override val species: Species?
             get() = pokemon.species?.let { PokemonSpecies.getByName(it) }
         override val form: FormData?
-            get() = pokemon.form?.let { innerForm ->
-                species?.let { innerSpecies ->
+            get() = species?.let { innerSpecies ->
+                pokemon.form?.let { innerForm ->
                     innerSpecies.forms.firstOrNull { innerSpeciesForm -> innerSpeciesForm.name.lowercase() == innerForm }
-                        ?: innerSpecies.standardForm
-                }
+                } ?: innerSpecies.standardForm
             }
         override val abilityName: String?
             get() = pokemon.ability

@@ -2,18 +2,19 @@ package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.splitMap
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
 data class PokemonMatcher(
-    val properties: String = "",
-    val labels: List<String> = emptyList(),
-    val anyLabel: Boolean = false,
-    val persistentData: Map<String, String> = emptyMap(),
-    val anyPersistentData: Boolean = false,
-    val buckets: List<String> = emptyList(),
-    val forms: List<String> = emptyList(),
-    val matchOne: Boolean = false,
+    var properties: String = "",
+    var labels: List<String> = emptyList(),
+    var anyLabel: Boolean = false,
+    var persistentData: Map<String, String> = emptyMap(),
+    var anyPersistentData: Boolean = false,
+    var buckets: List<String> = emptyList(),
+    var forms: List<String> = emptyList(),
+    var matchOne: Boolean = false,
 ) {
     companion object {
         val CODEC: Codec<PokemonMatcher> = RecordCodecBuilder.create { instance ->
@@ -28,6 +29,66 @@ data class PokemonMatcher(
                 Codec.STRING.listOf().optionalFieldOf("forms", emptyList()).forGetter { it.forms },
                 Codec.BOOL.optionalFieldOf("matchOne", false).forGetter { it.matchOne }
             ).apply(instance, ::PokemonMatcher)
+        }
+
+        val STRING_CODEC: Codec<PokemonMatcher> = Codec.STRING.xmap(
+            { parse(it) },
+            { it.asString() }
+        )
+
+        fun parse(
+            string: String,
+            delimiter: String = " ",
+            assigner: String = "=",
+            innerDelimiter: String = ",",
+        ): PokemonMatcher {
+            val matcher = PokemonMatcher()
+            matcher.properties = string
+            val keyPairs = string.splitMap(delimiter, assigner)
+            matcher.labels = parseString(keyPairs, listOf("labels"))?.split(innerDelimiter) ?: listOf()
+            matcher.anyLabel = parseBooleanProperty(keyPairs, listOf("any_label")) ?: false
+            matcher.buckets = parseString(keyPairs, listOf("buckets"))?.split(innerDelimiter) ?: listOf()
+            matcher.forms = parseString(keyPairs, listOf("forms"))?.split(innerDelimiter) ?: listOf()
+            matcher.matchOne = parseBooleanProperty(keyPairs, listOf("match_one")) ?: false
+            matcher.persistentData = parseString(keyPairs, listOf("persistent_data"))?.let {
+                it.splitMap(innerDelimiter, assigner).fold(mutableMapOf()) { acc, (k, v) ->
+                    acc[k] = v ?: ""
+                    acc
+                }
+            } ?: emptyMap()
+            matcher.anyPersistentData = parseBooleanProperty(keyPairs, listOf("any_persistent_data")) ?: false
+            return matcher
+        }
+
+        private fun getMatchedKeyPair(
+            keyPairs: MutableList<Pair<String, String?>>,
+            labels: Iterable<String>,
+        ): Pair<String, String?>? {
+            return keyPairs.findLast { it.first in labels }
+        }
+
+        private fun parseString(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): String? {
+            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            val value = matchingKeyPair.second
+            return if (value.isNullOrBlank()) {
+                null
+            } else {
+                value
+            }
+        }
+
+        private fun parseBooleanProperty(
+            keyPairs: MutableList<Pair<String, String?>>,
+            labels: Iterable<String>,
+        ): Boolean? {
+            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            keyPairs.remove(matchingKeyPair)
+            return when (matchingKeyPair.second?.lowercase()) {
+                null -> true
+                "true", "yes" -> true
+                "false", "no" -> false
+                else -> null
+            }
         }
     }
 
@@ -71,5 +132,20 @@ data class PokemonMatcher(
 
     private fun formsMatch(pokemon: Pokemon): Boolean {
         return forms.contains(pokemon.form.name)
+    }
+
+    fun asString(separator: String = " "): String {
+        val stringed = mutableListOf<String>()
+
+        if (properties != "") stringed.add(properties)
+        if (labels.isNotEmpty()) stringed.add("labels=${labels.joinToString(",")}")
+        if (anyLabel) stringed.add("any_label")
+        if (buckets.isNotEmpty()) stringed.add("buckets=${buckets.joinToString(",")}")
+        if (forms.isNotEmpty()) stringed.add("forms=${forms.joinToString(",")}")
+        if (matchOne) stringed.add("match_one")
+        if (persistentData.isNotEmpty()) stringed.add("persistent_data=${persistentData.entries.joinToString(",") { (k, v) -> "$k=$v" }}")
+        if (anyPersistentData) stringed.add("any_persistent_data")
+
+        return stringed.joinToString(separator)
     }
 }
