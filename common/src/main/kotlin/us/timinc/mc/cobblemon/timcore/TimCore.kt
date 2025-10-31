@@ -6,14 +6,15 @@ import com.cobblemon.mod.common.api.spawning.BestSpawner.fishingSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.getPlayer
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import us.timinc.mc.cobblemon.timcore.handler.*
 import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
+import java.util.*
 
 const val MOD_ID = "tim_core"
 
@@ -27,6 +28,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val preventQuickBallSpam: Boolean = true
         val spawnBlacklist: List<String> = emptyList()
         val spawnWhitelist: List<String> = emptyList()
+        val pokemonEntitiesAreInvulnerable: Boolean = false
+        val reservedPokemonEntitiesAreInvulnerable: Boolean = true
 
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
@@ -69,8 +72,18 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
     }
 
     object TranslationComponents {
-        fun reserved(pokemon: Pokemon, player: ServerPlayer): MutableComponent =
-            Component.translatable("tim_core.feedback.reserved", pokemon.getDisplayName(), player.name)
+        fun reserved(pokemon: Pokemon): MutableComponent =
+            Component.translatable(
+                "tim_core.feedback.reserved",
+                pokemon.getDisplayName(),
+                pokemon.getReservedFor()?.let {
+                    try {
+                        UUID.fromString(it)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }?.getPlayer() ?: Component.translatable("tim_core.bits.someone_else")
+            )
     }
 
     init {
