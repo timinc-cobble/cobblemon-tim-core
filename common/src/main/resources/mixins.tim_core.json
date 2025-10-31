@@ -5,6 +5,9 @@
   "minVersion": "0.8",
   "mixins": [
     "BerryBlockEntityFix",
-    "CancelThrownPokeballInBattle"
+    "CancelThrownPokeballInBattle",
+    "CantHurtPokemonEntity",
+    "IsActuallyWild",
+    "TickPokemonEntity"
   ]
 }

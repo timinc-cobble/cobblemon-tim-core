@@ -49,3 +49,4 @@ fun Pokemon.isReservedFor(uuid: String): ReservationType {
 fun Pokemon.isReservedFor(uuid: UUID): ReservationType = isReservedFor(uuid.toString())
 
 fun Pokemon.isReservedFor(player: ServerPlayer): ReservationType = isReservedFor(player.uuid)
+
