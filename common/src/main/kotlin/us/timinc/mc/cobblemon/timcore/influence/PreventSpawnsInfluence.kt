@@ -21,14 +21,15 @@ class PreventSpawnsInfluence : SpawningInfluence {
 
     override fun affectSpawnable(detail: SpawnDetail, ctx: SpawningContext): Boolean {
         if (detail !is PokemonSpawnDetail) return true
-        return cache[detail.id] ?: run {
-            cache[detail.id] = LimitedList.PokemonMatcherList.matchesList(
+
+        return cache.getOrPut(detail.id) {
+            val cachedVal = LimitedList.PokemonMatcherList.matchesList(
                 detail.pokemon.create(),
                 TimCore.config.spawnWhitelistMatcher,
                 TimCore.config.spawnBlacklistMatcher,
             )
-            TimCore.debugger.debug("Cached spawn ${detail.id} as ${cache[detail.id]} due to spawning blacklist/whitelist.")
-            return cache[detail.id]!!
+            TimCore.debugger.debug("Cached spawn ${detail.id} as $cachedVal due to spawning blacklist/whitelist.")
+            cachedVal
         }
     }
 }

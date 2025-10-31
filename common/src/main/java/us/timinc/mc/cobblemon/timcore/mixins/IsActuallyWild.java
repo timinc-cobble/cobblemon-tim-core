@@ -1,11 +1,20 @@
 package us.timinc.mc.cobblemon.timcore.mixins;
 
-@org.spongepowered.asm.mixin.Mixin(com.cobblemon.mod.common.pokemon.Pokemon.class)
+import com.cobblemon.mod.common.pokemon.OriginalTrainerType;
+import com.cobblemon.mod.common.pokemon.Pokemon;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(Pokemon.class)
 public class IsActuallyWild {
-    @org.spongepowered.asm.mixin.injection.Inject(method = "isWild", at = @org.spongepowered.asm.mixin.injection.At("HEAD"), remap = false, cancellable = true)
-    void isActuallyWild(org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> cir) {
-        com.cobblemon.mod.common.pokemon.Pokemon pokemon = (com.cobblemon.mod.common.pokemon.Pokemon) ((Object) this);
-        if (pokemon.getOriginalTrainerType() != com.cobblemon.mod.common.pokemon.OriginalTrainerType.NONE) {
+
+    @SuppressWarnings("ConstantConditions")
+    @Inject(method = "isWild", at = @At("HEAD"), remap = false, cancellable = true)
+    private void isActuallyWild(CallbackInfoReturnable<Boolean> cir) {
+        Pokemon pokemon = (Pokemon) (Object) this;
+        if (pokemon.getOriginalTrainerType() != OriginalTrainerType.NONE) {
             cir.setReturnValue(false);
         }
     }

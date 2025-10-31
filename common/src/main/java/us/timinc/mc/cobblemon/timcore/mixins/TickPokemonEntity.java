@@ -1,10 +1,18 @@
 package us.timinc.mc.cobblemon.timcore.mixins;
 
-@org.spongepowered.asm.mixin.Mixin(com.cobblemon.mod.common.entity.pokemon.PokemonEntity.class)
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import us.timinc.mc.cobblemon.timcore.mixin.helper.TickPokemonEntityHelper;
+
+@Mixin(PokemonEntity.class)
 public class TickPokemonEntity {
-    @org.spongepowered.asm.mixin.injection.Inject(method = "tick", at = @org.spongepowered.asm.mixin.injection.At("HEAD"))
-    void onPokemonEntityTick(org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
-        com.cobblemon.mod.common.entity.pokemon.PokemonEntity me = (com.cobblemon.mod.common.entity.pokemon.PokemonEntity) ((Object) this);
-        us.timinc.mc.cobblemon.timcore.mixin.helper.TickPokemonEntity.INSTANCE.tick(me);
+    @SuppressWarnings("ConstantConditions")
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onPokemonEntityTick(CallbackInfo ci) {
+        PokemonEntity self = (PokemonEntity) (Object) this;
+        TickPokemonEntityHelper.INSTANCE.tick(self);
     }
 }

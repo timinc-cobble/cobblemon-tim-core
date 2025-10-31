@@ -1,18 +1,30 @@
 package us.timinc.mc.cobblemon.timcore.mixins;
 
-@org.spongepowered.asm.mixin.Mixin(com.cobblemon.mod.common.entity.pokemon.PokemonEntity.class)
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import us.timinc.mc.cobblemon.timcore.mixin.helper.CantHurtPokemonEntityHelper;
+
+@Mixin(PokemonEntity.class)
 public class CantHurtPokemonEntity {
-    @org.spongepowered.asm.mixin.injection.Inject(method = "isInvulnerableTo", at = @org.spongepowered.asm.mixin.injection.At(value = "HEAD"), remap = false, cancellable = true)
-    void isInvulnerableBecauseOwned(net.minecraft.world.damagesource.DamageSource damageSource, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> cir) {
-        if (us.timinc.mc.cobblemon.timcore.mixin.helper.CantHurtPokemonEntityHelper.INSTANCE.cantBeHurtBecauseOwned((com.cobblemon.mod.common.entity.pokemon.PokemonEntity) ((Object) this), damageSource)) {
+
+    @SuppressWarnings("ConstantConditions")
+    @Inject(method = "isInvulnerableTo", at = @At("HEAD"), remap = false, cancellable = true)
+    private void isInvulnerableBecauseOwned(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
+        if (CantHurtPokemonEntityHelper.INSTANCE
+                .cantBeHurtBecauseOwned((PokemonEntity) (Object) this, damageSource)) {
             cir.setReturnValue(true);
         }
     }
 
-    @org.spongepowered.asm.mixin.injection.Inject(method = "isInvulnerableTo", at = @org.spongepowered.asm.mixin.injection.At(value = "HEAD"), remap = false, cancellable = true)
-    void isInvulnerableToInGeneral(net.minecraft.world.damagesource.DamageSource damageSource, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> cir) {
-        if (us.timinc.mc.cobblemon.timcore.mixin.helper.CantHurtPokemonEntityHelper.INSTANCE.cantBeHurtInGeneral(damageSource)) {
+    @Inject(method = "isInvulnerableTo", at = @At("HEAD"), remap = false, cancellable = true)
+    private void isInvulnerableToInGeneral(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
+        if (CantHurtPokemonEntityHelper.INSTANCE.cantBeHurtInGeneral(damageSource)) {
             cir.setReturnValue(true);
         }
     }
 }
+
