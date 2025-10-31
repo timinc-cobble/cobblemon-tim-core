@@ -9,7 +9,7 @@ import us.timinc.mc.cobblemon.timcore.TimCore
 
 class PreventSpawnsInfluence : SpawningInfluence {
     companion object {
-        val cache : MutableMap<String, Boolean> = mutableMapOf()
+        val cache: MutableMap<String, Boolean> = mutableMapOf()
 
         init {
             TimCore.RELOAD_CONFIG.subscribe {
