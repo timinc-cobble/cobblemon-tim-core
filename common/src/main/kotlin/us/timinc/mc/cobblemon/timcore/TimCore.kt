@@ -2,6 +2,9 @@ package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.spawning.BestSpawner.fishingSpawner
+import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
+import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -10,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import us.timinc.mc.cobblemon.timcore.handler.*
+import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
 
 const val MOD_ID = "tim_core"
 
@@ -21,6 +25,25 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val addBucketToData: Boolean = true
         val addSpawnCauseToData: Boolean = true
         val preventQuickBallSpam: Boolean = true
+        val spawnBlacklist: List<String> = emptyList()
+        val spawnWhitelist: List<String> = emptyList()
+
+        var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
+        val spawnBlacklistMatcher: Set<PokemonMatcher>
+            get() {
+                return _spawnBlacklistMatcher ?: run {
+                    _spawnBlacklistMatcher = spawnBlacklist.map(PokemonMatcher::parse).toSet()
+                    return _spawnBlacklistMatcher!!
+                }
+            }
+        var _spawnWhitelistMatcher: Set<PokemonMatcher>? = null
+        val spawnWhitelistMatcher: Set<PokemonMatcher>
+            get() {
+                return _spawnWhitelistMatcher ?: run {
+                    _spawnWhitelistMatcher = spawnWhitelist.map(PokemonMatcher::parse).toSet()
+                    return _spawnWhitelistMatcher!!
+                }
+            }
     }
 
     object Tags {
@@ -56,5 +79,13 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.LOWEST, AttachSpawnCause::handle)
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
+
+        PlayerSpawnerFactory.influenceBuilders.add { PreventSpawnsInfluence() }
+        PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST) { fishingSpawner.influences.add(PreventSpawnsInfluence()) }
+        TimCore.RELOAD_CONFIG.subscribe {
+            config._spawnBlacklistMatcher = null
+            config._spawnWhitelistMatcher = null
+            TimCore.debugger.debug("Cleared the prevent spawns matcher cache due to mod reload.")
+        }
     }
 }
