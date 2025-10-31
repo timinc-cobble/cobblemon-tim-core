@@ -14,7 +14,7 @@ object PokeballHitReserved : AbstractHandler<ThrownPokeballHitEvent>() {
             pokemon.persistentData.contains(TimCore.DataKeys.RESERVED_FOR)
             && !TimCore.CustomPokemonProperties.RESERVED_FOR.pokemonMatcher(pokemon, owner.stringUUID)
         ) {
-            owner.sendSystemMessage(reserved(pokemon, owner))
+            owner.sendSystemMessage(reserved(pokemon))
             evt.cancel()
         }
     }
