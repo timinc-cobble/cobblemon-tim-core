@@ -7,6 +7,7 @@
     "BerryBlockEntityFix",
     "CancelThrownPokeballInBattle",
     "CantHurtPokemonEntity",
+    "IsActuallyWild",
     "TickPokemonEntity"
   ]
 }

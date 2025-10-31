@@ -27,12 +27,12 @@ object TimCoreEvents {
 
     @JvmField
     val BATTLE_FAINTED_PVW_WILD = BATTLE_FAINTED_PVW.pipe(
-        filter { it.killed.effectedPokemon.isActuallyWild() }
+        filter { it.killed.effectedPokemon.isWild() }
     )
 
     @JvmField
     val BATTLE_FAINTED_PVW_PLAYER = BATTLE_FAINTED_PVW.pipe(
-        filter { !it.killed.effectedPokemon.isActuallyWild() }
+        filter { !it.killed.effectedPokemon.isWild() }
     )
 
     @JvmField
@@ -50,7 +50,7 @@ object TimCoreEvents {
 
     @JvmField
     val WILD_POKEMON_FAINTED = POKEMON_FAINTED.pipe(
-        filter { it.pokemon.isActuallyWild() }
+        filter { it.pokemon.isWild() }
     )
 
     @JvmField
@@ -59,6 +59,6 @@ object TimCoreEvents {
     @JvmField
     val WILD_POKEMON_TICKED = POKEMON_TICKED
         .pipe(
-            filter { it.entity.pokemon.isActuallyWild() }
+            filter { it.entity.pokemon.isWild() }
         )
 }

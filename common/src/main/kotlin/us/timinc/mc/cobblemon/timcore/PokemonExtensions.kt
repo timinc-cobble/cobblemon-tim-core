@@ -1,6 +1,5 @@
 package us.timinc.mc.cobblemon.timcore
 
-import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 import us.timinc.mc.cobblemon.timcore.TimCore.debugger
@@ -51,4 +50,3 @@ fun Pokemon.isReservedFor(uuid: UUID): ReservationType = isReservedFor(uuid.toSt
 
 fun Pokemon.isReservedFor(player: ServerPlayer): ReservationType = isReservedFor(player.uuid)
 
-fun Pokemon.isActuallyWild(): Boolean = isWild() && originalTrainerType == OriginalTrainerType.NONE
