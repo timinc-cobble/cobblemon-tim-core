@@ -13,6 +13,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import us.timinc.mc.cobblemon.timcore.handler.*
+import us.timinc.mc.cobblemon.timcore.influence.EntityDidSpawn
 import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
 import java.util.*
 
@@ -30,6 +31,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val spawnWhitelist: List<String> = emptyList()
         val pokemonEntitiesAreInvulnerable: Boolean = false
         val reservedPokemonEntitiesAreInvulnerable: Boolean = true
+        val requirePartyToFishPokemon: Boolean = false
 
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
@@ -88,13 +90,18 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
 
     init {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.HIGHEST, ExpAllHandler::handle)
-        CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
-        CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.LOWEST, AttachSpawnCause::handle)
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
+        CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
+        TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
+        TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
 
         PlayerSpawnerFactory.influenceBuilders.add { PreventSpawnsInfluence() }
-        PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST) { fishingSpawner.influences.add(PreventSpawnsInfluence()) }
+        PlayerSpawnerFactory.influenceBuilders.add { EntityDidSpawn() }
+        PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST) {
+            fishingSpawner.influences.add(PreventSpawnsInfluence())
+            fishingSpawner.influences.add(EntityDidSpawn())
+        }
         TimCore.RELOAD_CONFIG.subscribe {
             config._spawnBlacklistMatcher = null
             config._spawnWhitelistMatcher = null
