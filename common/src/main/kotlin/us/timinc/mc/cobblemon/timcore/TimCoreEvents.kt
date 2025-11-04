@@ -3,10 +3,14 @@ package us.timinc.mc.cobblemon.timcore
 import com.cobblemon.mod.common.api.events.CobblemonEvents.BATTLE_FAINTED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_CAPTURED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_FAINTED
+import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
+import com.cobblemon.mod.common.api.reactive.Observable.Companion.map
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isInBattle
 import us.timinc.mc.cobblemon.timcore.event.CheckExpAllEvent
+import us.timinc.mc.cobblemon.timcore.event.EntityDidSpawnEvent
 import us.timinc.mc.cobblemon.timcore.event.PokemonEntityTickedEvent
 
 object TimCoreEvents {
@@ -60,5 +64,18 @@ object TimCoreEvents {
     val WILD_POKEMON_TICKED = POKEMON_TICKED
         .pipe(
             filter { it.entity.pokemon.isWild() }
+        )
+
+    @JvmField
+    val ENTITY_DID_SPAWN = EventObservable<EntityDidSpawnEvent<*>>()
+
+    @JvmField
+    val POKEMON_ENTITY_DID_SPAWN = ENTITY_DID_SPAWN
+        .pipe(
+            filter { it.entity is PokemonEntity },
+            map {
+                @Suppress("UNCHECKED_CAST")
+                it as EntityDidSpawnEvent<PokemonEntity>
+            }
         )
 }
