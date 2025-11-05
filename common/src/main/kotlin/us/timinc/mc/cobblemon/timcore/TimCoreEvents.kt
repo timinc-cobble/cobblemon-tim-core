@@ -3,7 +3,6 @@ package us.timinc.mc.cobblemon.timcore
 import com.cobblemon.mod.common.api.events.CobblemonEvents.BATTLE_FAINTED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_CAPTURED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_FAINTED
-import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.map

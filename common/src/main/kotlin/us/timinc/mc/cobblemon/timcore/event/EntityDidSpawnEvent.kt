@@ -5,5 +5,5 @@ import net.minecraft.world.entity.Entity
 
 data class EntityDidSpawnEvent<T : Entity>(
     val entity: T,
-    val ctx: SpawningContext
+    val ctx: SpawningContext,
 )
