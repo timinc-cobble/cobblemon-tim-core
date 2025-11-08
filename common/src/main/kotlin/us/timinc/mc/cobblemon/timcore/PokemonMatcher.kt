@@ -61,7 +61,7 @@ data class PokemonMatcher(
                 }
             } ?: emptyMap()
             matcher.anyPersistentData = parseBooleanProperty(keyPairs, listOf("any_persistent_data")) ?: false
-            matcher.maxIVs = parseInt(keyPairs, listOf("maxIVs")) ?: -1
+            matcher.maxIVs = parseInt(keyPairs, listOf("max_ivs")) ?: -1
             return matcher
         }
 
@@ -164,7 +164,7 @@ data class PokemonMatcher(
         if (matchOne) stringed.add("match_one")
         if (persistentData.isNotEmpty()) stringed.add("persistent_data=${persistentData.entries.joinToString(",") { (k, v) -> "$k=$v" }}")
         if (anyPersistentData) stringed.add("any_persistent_data")
-        if (maxIVs != -1) stringed.add("maxIVs=$maxIVs")
+        if (maxIVs != -1) stringed.add("max_ivs=$maxIVs")
 
         return stringed.joinToString(separator)
     }
