@@ -1,6 +1,7 @@
 package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.splitMap
 import com.mojang.serialization.Codec
@@ -14,9 +15,11 @@ data class PokemonMatcher(
     var anyPersistentData: Boolean = false,
     var buckets: List<String> = emptyList(),
     var forms: List<String> = emptyList(),
+    var maxIVs: Int = -1,
     var matchOne: Boolean = false,
 ) {
     companion object {
+        @Deprecated("Favor the string Codec instead. This will be removed in the future.")
         val CODEC: Codec<PokemonMatcher> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.STRING.optionalFieldOf("properties", "").forGetter { it.properties },
@@ -27,6 +30,7 @@ data class PokemonMatcher(
                 Codec.BOOL.optionalFieldOf("anyPersistentData", false).forGetter { it.anyPersistentData },
                 Codec.STRING.listOf().optionalFieldOf("buckets", emptyList()).forGetter { it.buckets },
                 Codec.STRING.listOf().optionalFieldOf("forms", emptyList()).forGetter { it.forms },
+                Codec.INT.optionalFieldOf("maxIVs", -1).forGetter { it.maxIVs },
                 Codec.BOOL.optionalFieldOf("matchOne", false).forGetter { it.matchOne }
             ).apply(instance, ::PokemonMatcher)
         }
@@ -57,6 +61,7 @@ data class PokemonMatcher(
                 }
             } ?: emptyMap()
             matcher.anyPersistentData = parseBooleanProperty(keyPairs, listOf("any_persistent_data")) ?: false
+            matcher.maxIVs = parseInt(keyPairs, listOf("max_ivs")) ?: -1
             return matcher
         }
 
@@ -74,6 +79,16 @@ data class PokemonMatcher(
                 null
             } else {
                 value
+            }
+        }
+
+        private fun parseInt(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): Int? {
+            val stringValue = parseString(keyPairs, labels) ?: return null
+            try {
+                return stringValue.toInt()
+            } catch (e: NumberFormatException) {
+                TimCore.debugger.debug("Attempted to use non-int value of $stringValue for maxIVs.")
+                return -1
             }
         }
 
@@ -104,12 +119,16 @@ data class PokemonMatcher(
             if (persistentData.isNotEmpty()) add(::persistentDataMatch)
             if (buckets.isNotEmpty()) add(::bucketMatch)
             if (forms.isNotEmpty()) add(::formsMatch)
+            if (maxIVs != -1) add(::maxIVsMatch)
         }
 
         if (predicates.isEmpty()) return true
 
         return if (matchOne) predicates.any { it(pokemon) } else predicates.all { it(pokemon) }
     }
+
+    private fun maxIVsMatch(pokemon: Pokemon): Boolean =
+        pokemon.ivs.count { (_, int) -> int == IVs.MAX_VALUE } >= maxIVs
 
     private fun labelsMatch(pokemon: Pokemon): Boolean {
         val pokeLabels = pokemon.form.labels
@@ -145,6 +164,7 @@ data class PokemonMatcher(
         if (matchOne) stringed.add("match_one")
         if (persistentData.isNotEmpty()) stringed.add("persistent_data=${persistentData.entries.joinToString(",") { (k, v) -> "$k=$v" }}")
         if (anyPersistentData) stringed.add("any_persistent_data")
+        if (maxIVs != -1) stringed.add("max_ivs=$maxIVs")
 
         return stringed.joinToString(separator)
     }
