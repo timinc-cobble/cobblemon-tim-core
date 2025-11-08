@@ -1,14 +1,14 @@
 package us.timinc.mc.cobblemon.timcore.handler
 
-import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import us.timinc.mc.cobblemon.timcore.AbstractHandler
 import us.timinc.mc.cobblemon.timcore.TimCore
+import us.timinc.mc.cobblemon.timcore.event.EntityDidSpawnEvent
 
-object AttachSpawnCause : AbstractHandler<SpawnEvent<PokemonEntity>>() {
-    override fun handle(evt: SpawnEvent<PokemonEntity>) {
+object AttachSpawnCause : AbstractHandler<EntityDidSpawnEvent<PokemonEntity>>() {
+    override fun handle(evt: EntityDidSpawnEvent<PokemonEntity>) {
         if (!TimCore.config.addSpawnCauseToData) return
 
         val spawner = evt.ctx.cause.spawner
