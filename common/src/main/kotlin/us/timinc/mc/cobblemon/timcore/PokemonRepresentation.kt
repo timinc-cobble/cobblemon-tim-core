@@ -47,14 +47,7 @@ abstract class PokemonRepresentation<T>(val pokemon: T) {
         override val species: Species?
             get() = pokemon.species?.let { PokemonSpecies.getByName(it) }
         override val form: FormData?
-            get() = species?.let { innerSpecies ->
-                pokemon.form?.let { innerForm ->
-                    innerSpecies.forms.firstOrNull { innerSpeciesForm ->
-                        innerSpeciesForm.formOnlyShowdownId().equals(innerForm, false)
-                    }
-                } ?: innerSpecies.forms.firstOrNull { pokemon.aspects.containsAll(it.aspects) }
-                ?: innerSpecies.standardForm
-            }
+            get() = if (species != null) getPokemon().form else null
         override val abilityName: String?
             get() = pokemon.ability
         override val hasHiddenAbility: Boolean
