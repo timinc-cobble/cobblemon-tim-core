@@ -66,6 +66,10 @@ v1.6.1-1.18
 
 - [Cobblemon](https://www.notion.so/Cobblemon-22157e0d4afd80a49896c70a775a3c7f?pvs=21)
 
+## Known Issues
+
+- v1.6.1-1.18.0 was catching the normal form as the first which the PokemonRepresentation.FromProperties’ aspects satisfied every time. v1.6.1-1.18.1 says forget it, we’re converting it to a proper Pokemon when looking for the form, so long as the species exists.
+
 ## Roadmap
 
 If you’d like to keep up with the work being done on the mod, please join [the Discord](https://discord.com/invite/WKAR27SdSv) and subscribe to notifications on the channel for this content. You can also keep track of the to do list available on [the mod’s main page](https://www.notion.so/Tim-Core-22057e0d4afd809b9c02e78f26805376?pvs=21).
