@@ -52,7 +52,8 @@ abstract class PokemonRepresentation<T>(val pokemon: T) {
                     innerSpecies.forms.firstOrNull { innerSpeciesForm ->
                         innerSpeciesForm.formOnlyShowdownId().equals(innerForm, false)
                     }
-                } ?: innerSpecies.standardForm
+                } ?: innerSpecies.forms.firstOrNull { pokemon.aspects.containsAll(it.aspects) }
+                ?: innerSpecies.standardForm
             }
         override val abilityName: String?
             get() = pokemon.ability
