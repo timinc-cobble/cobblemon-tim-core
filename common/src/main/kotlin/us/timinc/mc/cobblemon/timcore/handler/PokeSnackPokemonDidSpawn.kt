@@ -9,10 +9,7 @@ object PokeSnackPokemonDidSpawn : AbstractHandler<PokeSnackSpawnPokemonEvent.Pos
     override fun handle(evt: PokeSnackSpawnPokemonEvent.Post) {
         TimCoreEvents.ENTITY_DID_SPAWN.post(
             EntityDidSpawnEvent(
-                evt.pokemonEntity,
-                evt.spawnAction.spawnablePosition,
-                evt.spawnAction.labels,
-                evt.spawnAction.bucket
+                evt.pokemonEntity, evt.spawnAction
             )
         )
     }
