@@ -19,8 +19,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${property("junit_version")}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 
-    modImplementation("io.wispforest:owo-lib:${property("owo_version")}")
+    compileOnly("io.wispforest:owo-lib:${property("owo_version")}")
     annotationProcessor("io.wispforest:owo-lib:${property("owo_version")}")
+
+    annotationProcessor("net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7")
+    compileOnly("net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7")
 }
 
 tasks.getByName<Test>("test") {

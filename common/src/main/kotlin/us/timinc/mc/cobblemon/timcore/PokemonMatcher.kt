@@ -19,22 +19,6 @@ data class PokemonMatcher(
     var matchOne: Boolean = false,
 ) {
     companion object {
-        @Deprecated("Favor the string Codec instead. This will be removed in the future.")
-        val CODEC: Codec<PokemonMatcher> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                Codec.STRING.optionalFieldOf("properties", "").forGetter { it.properties },
-                Codec.STRING.listOf().optionalFieldOf("labels", emptyList()).forGetter { it.labels },
-                Codec.BOOL.optionalFieldOf("anyLabel", false).forGetter { it.anyLabel },
-                Codec.unboundedMap(Codec.STRING, Codec.STRING).optionalFieldOf("persistentData", emptyMap())
-                    .forGetter { it.persistentData },
-                Codec.BOOL.optionalFieldOf("anyPersistentData", false).forGetter { it.anyPersistentData },
-                Codec.STRING.listOf().optionalFieldOf("buckets", emptyList()).forGetter { it.buckets },
-                Codec.STRING.listOf().optionalFieldOf("forms", emptyList()).forGetter { it.forms },
-                Codec.INT.optionalFieldOf("maxIVs", -1).forGetter { it.maxIVs },
-                Codec.BOOL.optionalFieldOf("matchOne", false).forGetter { it.matchOne }
-            ).apply(instance, ::PokemonMatcher)
-        }
-
         val STRING_CODEC: Codec<PokemonMatcher> = Codec.STRING.xmap(
             { parse(it) },
             { it.asString() }

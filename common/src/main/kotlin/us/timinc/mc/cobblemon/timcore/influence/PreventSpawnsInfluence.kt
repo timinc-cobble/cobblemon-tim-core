@@ -1,9 +1,9 @@
 package us.timinc.mc.cobblemon.timcore.influence
 
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import us.timinc.mc.cobblemon.timcore.LimitedList
 import us.timinc.mc.cobblemon.timcore.TimCore
 
@@ -19,7 +19,7 @@ class PreventSpawnsInfluence : SpawningInfluence {
         }
     }
 
-    override fun affectSpawnable(detail: SpawnDetail, ctx: SpawningContext): Boolean {
+    override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition): Boolean {
         if (detail !is PokemonSpawnDetail) return true
 
         return cache.getOrPut(detail.id) {
