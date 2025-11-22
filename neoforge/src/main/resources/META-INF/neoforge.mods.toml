@@ -36,8 +36,3 @@ mandatory = true
 versionRange = "[${cobblemon_version}]"
 ordering = "AFTER"
 side = "BOTH"
-
-[[dependencies.${modId}]]
-modId = "cobbled_counter"
-type = "incompatible"
-versionRange = "(,${minimum_counter_neoforge_version}]"

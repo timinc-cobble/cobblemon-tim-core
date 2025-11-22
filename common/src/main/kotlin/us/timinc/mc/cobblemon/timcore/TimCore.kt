@@ -57,20 +57,26 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
     }
 
     object DataKeys {
-        const val SPAWNED_IN_BUCKET = "tim_core:spawned_in_bucket"
-        const val ALREADY_HIT_WITH_QUICK_BALL = "tim_core:already_hit_with_quick_ball"
-        const val RESERVED_FOR = "tim_core:reserved_for"
-        const val SPAWNED_VIA = "tim_core:spawned_via"
+        private fun createKey(name: String, namespace: String? = MOD_ID) = "$namespace:$name"
 
-        object SpawnCauses {
-            val FISHING = modResource("fishing")
-            val PLAYER_SPAWNER = modResource("player_spawner")
+        val SPAWNED_IN_BUCKET = createKey("spawned_in_bucket")
+        val ALREADY_HIT_WITH_QUICK_BALL = createKey("already_hit_with_quick_ball")
+        val RESERVED_FOR = createKey("reserved_for")
+        val SPAWNED_VIA = createKey("spawned_via")
+        val SPAWNED_ON = createKey("spawned_on")
+
+        object SpawnerTypes {
+            val PLAYER = createKey("spawner_player")
+            val FISHING = createKey("spawner_fishing")
+            val SNACK = createKey("spawner_snack")
+            val UNKNOWN = createKey("spawner_unknown")
         }
     }
 
     object CustomPokemonProperties {
         val RESERVED_FOR = CustomStringProperty(DataKeys.RESERVED_FOR)
         val SPAWNED_VIA = CustomStringProperty(DataKeys.SPAWNED_VIA)
+        val SPAWNED_ON = CustomStringProperty(DataKeys.SPAWNED_ON)
     }
 
     object TranslationComponents {
@@ -93,6 +99,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
+        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_POST.subscribe(Priority.NORMAL, PokeSnackPokemonDidSpawn::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
 
@@ -102,10 +109,10 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             fishingSpawner.influences.add(PreventSpawnsInfluence())
             fishingSpawner.influences.add(EntityDidSpawn())
         }
-        TimCore.RELOAD_CONFIG.subscribe {
+        RELOAD_CONFIG.subscribe {
             config._spawnBlacklistMatcher = null
             config._spawnWhitelistMatcher = null
-            TimCore.debugger.debug("Cleared the prevent spawns matcher cache due to mod reload.")
+            debugger.debug("Cleared the prevent spawns matcher cache due to mod reload.")
         }
     }
 }
