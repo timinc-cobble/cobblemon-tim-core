@@ -9,6 +9,13 @@ import us.timinc.mc.cobblemon.timcore.event.EntityDidSpawnEvent
 class EntityDidSpawn : SpawningInfluence {
     override fun affectAction(action: SpawnAction<*>) {
         if (action !is SingleEntitySpawnAction<*>) return
-        action.entity.subscribe { TimCoreEvents.ENTITY_DID_SPAWN.emit(EntityDidSpawnEvent(it, action.ctx)) }
+        action.entity.subscribe {
+            TimCoreEvents.ENTITY_DID_SPAWN.emit(
+                EntityDidSpawnEvent(
+                    it,
+                    action
+                )
+            )
+        }
     }
 }

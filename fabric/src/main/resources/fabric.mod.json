@@ -15,9 +15,6 @@
     "fabric": "*",
     "cobblemon": "${cobblemon_version}"
   },
-  "breaks": {
-    "cobbled_counter": "<=${minimum_counter_fabric_version}"
-  },
   "contact": {
     "homepage": "${modDiscord}",
     "issues": "${modIssues}",

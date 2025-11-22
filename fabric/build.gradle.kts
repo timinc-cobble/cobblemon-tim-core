@@ -28,6 +28,7 @@ dependencies {
     modImplementation(fabricApi.module("fabric-command-api-v2", property("fabric_api_version").toString()))
     modImplementation(fabricApi.module("fabric-resource-loader-v0", property("fabric_api_version").toString()))
     modImplementation(fabricApi.module("fabric-item-group-api-v1", property("fabric_api_version").toString()))
+    modImplementation(fabricApi.module("fabric-networking-api-v1", property("fabric_api_version").toString()))
 
     //needed for cobblemon
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")
@@ -39,9 +40,6 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${property("junit_version")}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
-
-    modImplementation("io.wispforest:owo-lib:${property("owo_version")}")
-    annotationProcessor("io.wispforest:owo-lib:${property("owo_version")}")
 }
 
 tasks.getByName<Test>("test") {
