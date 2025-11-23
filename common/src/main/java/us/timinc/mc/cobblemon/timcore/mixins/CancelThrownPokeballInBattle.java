@@ -1,16 +1,19 @@
 package us.timinc.mc.cobblemon.timcore.mixins;
 
-import com.cobblemon.mod.common.entity.pokeball.*;
-import com.cobblemon.mod.common.entity.pokemon.*;
-import net.minecraft.network.syncher.*;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.projectile.*;
-import net.minecraft.world.level.*;
-import net.minecraft.world.phys.*;
-import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.*;
-import us.timinc.mc.cobblemon.timcore.mixin.helper.*;
+import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity;
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import us.timinc.mc.cobblemon.timcore.mixin.helper.CancelThrownPokeballInBattleHelper;
 
 @Mixin(EmptyPokeBallEntity.class)
 public abstract class CancelThrownPokeballInBattle extends ThrowableItemProjectile {

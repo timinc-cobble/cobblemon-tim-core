@@ -2,9 +2,6 @@ package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.spawning.BestSpawner.fishingSpawner
-import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
-import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.getPlayer
 import net.minecraft.core.registries.Registries
@@ -99,16 +96,11 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
-        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_POST.subscribe(Priority.NORMAL, PokeSnackPokemonDidSpawn::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
 
-        PlayerSpawnerFactory.influenceBuilders.add { PreventSpawnsInfluence() }
-        PlayerSpawnerFactory.influenceBuilders.add { EntityDidSpawn() }
-        PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST) {
-            fishingSpawner.influences.add(PreventSpawnsInfluence())
-            fishingSpawner.influences.add(EntityDidSpawn())
-        }
+        registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
+        registerGeneralSpawnerInfluence(EntityDidSpawn())
         RELOAD_CONFIG.subscribe {
             config._spawnBlacklistMatcher = null
             config._spawnWhitelistMatcher = null
