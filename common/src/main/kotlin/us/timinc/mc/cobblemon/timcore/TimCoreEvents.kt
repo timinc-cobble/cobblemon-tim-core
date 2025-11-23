@@ -10,6 +10,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isInBattle
 import us.timinc.mc.cobblemon.timcore.event.CheckExpAllEvent
 import us.timinc.mc.cobblemon.timcore.event.EntityDidSpawnEvent
+import us.timinc.mc.cobblemon.timcore.event.EntityLoadEvent
 import us.timinc.mc.cobblemon.timcore.event.PokemonEntityTickedEvent
 
 object TimCoreEvents {
@@ -75,6 +76,19 @@ object TimCoreEvents {
             map {
                 @Suppress("UNCHECKED_CAST")
                 it as EntityDidSpawnEvent<PokemonEntity>
+            }
+        )
+
+    @JvmField
+    val ENTITY_LOAD = EventObservable<EntityLoadEvent<*>>()
+
+    @JvmField
+    val POKEMON_ENTITY_LOAD = ENTITY_LOAD
+        .pipe(
+            filter { it.entity is PokemonEntity },
+            map {
+                @Suppress("UNCHECKED_CAST")
+                it as EntityLoadEvent<PokemonEntity>
             }
         )
 }
