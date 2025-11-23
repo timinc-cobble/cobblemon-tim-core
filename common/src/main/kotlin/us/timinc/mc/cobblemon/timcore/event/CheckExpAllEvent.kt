@@ -8,6 +8,10 @@ interface CheckExpAllEvent {
     var hasExpAll: Boolean
     val pokemon: Pokemon?
 
-    class Check(override val player: ServerPlayer, override var hasExpAll: Boolean, override val pokemon: Pokemon? = null) :
+    class Check(
+        override val player: ServerPlayer,
+        override var hasExpAll: Boolean,
+        override val pokemon: Pokemon? = null,
+    ) :
         CheckExpAllEvent
 }

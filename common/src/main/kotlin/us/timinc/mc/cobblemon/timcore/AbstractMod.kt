@@ -1,15 +1,20 @@
 package us.timinc.mc.cobblemon.timcore
 
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.api.spawning.BestSpawner.fishingSpawner
 import com.cobblemon.mod.common.api.spawning.condition.AppendageCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
+import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.mojang.brigadier.arguments.ArgumentType
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
@@ -98,7 +103,34 @@ abstract class AbstractMod<T : AbstractConfig>(
 
     fun modResource(name: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(modId, name)
 
+    fun registerPlayerSpawnerInfluence(influence: (player: ServerPlayer) -> SpawningInfluence) {
+        PlayerSpawnerFactory.influenceBuilders.add(influence)
+    }
+
+    fun registerPlayerSpawnerInfluence(influence: SpawningInfluence) {
+        PlayerSpawnerFactory.influenceBuilders.add { influence }
+    }
+
+    val fishingSpawnerInfluences: MutableList<SpawningInfluence> = mutableListOf()
+    fun registerFishingSpawnerInfluence(influence: SpawningInfluence) {
+        fishingSpawnerInfluences.add(influence)
+    }
+
+    val snackSpawnerInfluences: MutableList<SpawningInfluence> = mutableListOf()
+    fun registerSnackSpawnerInfluence(influence: SpawningInfluence) {
+        snackSpawnerInfluences.add(influence)
+    }
+
+    fun registerGeneralSpawnerInfluence(influence: SpawningInfluence) {
+        registerPlayerSpawnerInfluence(influence)
+        registerFishingSpawnerInfluence(influence)
+        registerSnackSpawnerInfluence(influence)
+    }
+
     init {
         registerCommand(ConfigReloadCommand(this))
+        PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST) {
+            fishingSpawner.influences.addAll(fishingSpawnerInfluences)
+        }
     }
 }
