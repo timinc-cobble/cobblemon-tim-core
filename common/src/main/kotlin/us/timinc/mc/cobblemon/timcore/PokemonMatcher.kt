@@ -111,7 +111,7 @@ data class PokemonMatcher(
     }
 
     private fun maxIVsMatch(pokemon: Pokemon): Boolean =
-        pokemon.ivs.count { (_, int) -> int == IVs.MAX_VALUE } >= maxIVs
+        pokemon.ivs.count { (_, int) -> int == IVs.MAX_VALUE } == maxIVs
 
     private fun labelsMatch(pokemon: Pokemon): Boolean {
         val pokeLabels = pokemon.form.labels
