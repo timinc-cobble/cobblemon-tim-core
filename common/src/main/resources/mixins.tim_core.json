@@ -9,6 +9,7 @@
     "FossilTweaks",
     "IsActuallyWild",
     "PokeSnackBlockSpawningInfluences",
+    "SendOutResurrectedPokemon",
     "TickPokemonEntity"
   ]
 }
