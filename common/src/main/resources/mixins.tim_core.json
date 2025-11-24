@@ -6,6 +6,7 @@
   "mixins": [
     "CancelThrownPokeballInBattle",
     "CantHurtPokemonEntity",
+    "FossilTweaks",
     "IsActuallyWild",
     "PokeSnackBlockSpawningInfluences",
     "TickPokemonEntity"
