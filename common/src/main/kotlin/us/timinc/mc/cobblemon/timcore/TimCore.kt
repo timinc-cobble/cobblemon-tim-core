@@ -29,6 +29,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val pokemonEntitiesAreInvulnerable: Boolean = false
         val reservedPokemonEntitiesAreInvulnerable: Boolean = true
         val requirePartyToFishPokemon: Boolean = false
+        val fossilMachineResurrectionTime: Int = 14400
 
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
