@@ -1,6 +1,3 @@
-import dev.architectury.plugin.TransformingTask
-import org.gradle.kotlin.dsl.getByName
-
 plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
