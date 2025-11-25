@@ -1,4 +1,9 @@
 {
   "tim_core.feedback.reserved": "That %1$s is reserved for %2$s.",
-  "tim_core.bits.someone_else": "someone else"
+  "tim_core.bits.someone_else": "someone else",
+  "tim_core.buckets.common": "Common",
+  "tim_core.buckets.uncommon": "Uncommon",
+  "tim_core.buckets.rare": "Rare",
+  "tim_core.buckets.ultra_rare": "Ultra Rare",
+  "tim_core.buckets.unknown": "Unknown Bucket"
 }

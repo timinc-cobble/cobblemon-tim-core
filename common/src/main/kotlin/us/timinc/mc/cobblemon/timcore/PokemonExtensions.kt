@@ -1,6 +1,7 @@
 package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import us.timinc.mc.cobblemon.timcore.TimCore.debugger
 import java.util.*
@@ -18,6 +19,9 @@ fun Pokemon.getBucket(): String? {
     }
     return bucket
 }
+
+fun Pokemon.getBucketTranslationKey(): Component =
+    Component.translatable(TimCore.getBucketKeyFromName(this.getBucket()))
 
 fun Pokemon.getSpawnCause(): String? = persistentData.getStringOrNull(TimCore.DataKeys.SPAWNED_VIA)
 
