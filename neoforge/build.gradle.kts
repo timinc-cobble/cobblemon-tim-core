@@ -1,7 +1,10 @@
+import dev.architectury.plugin.TransformingTask
+import org.gradle.kotlin.dsl.getByName
+
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("dev.architectury.loom")
     id("architectury-plugin")
+    id("com.gradleup.shadow") version("9.2.2")
 }
 
 architectury {
@@ -24,7 +27,7 @@ repositories {
     maven("https://maven.su5ed.dev/releases")
 }
 
-val shadowBundle = configurations.create("shadowBundle") {
+var shadowNeoForgeBundle = configurations.create("shadowCommon").apply {
     isCanBeConsumed = false
     isCanBeResolved = true
 }
@@ -44,42 +47,50 @@ dependencies {
     "developmentNeoForge"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
-    shadowBundle(project(":common", configuration = "transformProductionFabric"))
+    shadowNeoForgeBundle(project(":common", configuration = "transformProductionFabric"))
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${property("junit_version")}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-tasks.processResources {
-    inputs.property("version", project.version)
-
-    filesMatching("META-INF/neoforge.mods.toml") {
-        expand(project.properties)
-    }
-}
-
 tasks {
+    processResources {
+        inputs.property("version", project.version)
+
+        filesMatching("META-INF/neoforge.mods.toml") {
+            expand(project.properties)
+        }
+    }
+
+    shadowJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+        archiveClassifier.set("dev-shadow")
+
+        configurations = listOf(shadowNeoForgeBundle)
+    }
 
     jar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveClassifier.set("dev-slim")
     }
 
-    shadowJar {
-        exclude("fabric.mod.json")
-        archiveClassifier.set("dev-shadow")
+    remapSourcesJar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        configurations = listOf(shadowBundle)
+        archiveVersion.set("${rootProject.version}")
+        archiveClassifier.set("sources")
     }
 
     remapJar {
         dependsOn(shadowJar)
-        inputFile.set(shadowJar.flatMap { it.archiveFile })
+
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")
+
+        inputFile.set(shadowJar.flatMap { it.archiveFile })
+    }
+
+    getByName<Test>("test") {
+        useJUnitPlatform()
     }
 }

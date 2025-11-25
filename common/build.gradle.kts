@@ -23,6 +23,19 @@ dependencies {
     compileOnly("net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+tasks {
+    getByName<Test>("test") {
+        useJUnitPlatform()
+    }
+
+    remapSourcesJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+        archiveClassifier.set("sources")
+    }
+
+    remapJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
 }

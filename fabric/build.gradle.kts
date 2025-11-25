@@ -1,7 +1,7 @@
 plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version("9.2.2")
 }
 
 architectury {
@@ -13,11 +13,13 @@ loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
 
+    @Suppress("UnstableApiUsage")
     mixin {
-        defaultRefmapName.set("mixins.${project.name}.refmap.json")
+        defaultRefmapName = "mixins.${project.name}.refmap.json"
     }
 }
-val shadowCommon = configurations.create("shadowCommon")
+
+val shadowFabricBundle = configurations.create("shadowCommon")
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
@@ -32,42 +34,51 @@ dependencies {
 
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))
-    shadowCommon(project(":common", configuration = "transformProductionFabric"))
+    shadowFabricBundle(project(":common", configuration = "transformProductionFabric"))
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${property("junit_version")}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-tasks.processResources {
-    inputs.property("version", project.version)
-
-    filesMatching("fabric.mod.json") {
-        expand(project.properties)
-    }
-
-}
-
 tasks {
+    processResources {
+        inputs.property("version", project.version)
 
-    jar {
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveClassifier.set("dev-slim")
+        filesMatching("fabric.mod.json") {
+            expand(project.properties)
+        }
     }
 
     shadowJar {
-        archiveClassifier.set("dev-shadow")
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        configurations = listOf(shadowCommon)
+        archiveVersion.set("${rootProject.version}")
+        archiveClassifier.set("dev-shadow")
+
+        configurations = listOf(shadowFabricBundle)
+    }
+
+    jar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+        archiveClassifier.set("dev-slim")
+    }
+
+    remapSourcesJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+        archiveClassifier.set("sources")
     }
 
     remapJar {
         dependsOn(shadowJar)
-        inputFile.set(shadowJar.flatMap { it.archiveFile })
+
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")
+
+        inputFile.set(shadowJar.flatMap { it.archiveFile })
+    }
+
+    getByName<Test>("test") {
+        useJUnitPlatform()
     }
 }
