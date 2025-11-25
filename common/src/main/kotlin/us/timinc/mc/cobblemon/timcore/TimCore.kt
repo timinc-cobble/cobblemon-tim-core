@@ -30,6 +30,13 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val reservedPokemonEntitiesAreInvulnerable: Boolean = true
         val requirePartyToFishPokemon: Boolean = false
         val fossilMachineResurrectionTime: Int = 14400
+        val bucketKeys: Map<String, String> = mapOf(
+            "common" to "tim_core.buckets.common",
+            "uncommon" to "tim_core.buckets.uncommon",
+            "rare" to "tim_core.buckets.rare",
+            "ultra-rare" to "tim_core.buckets.ultra_rare"
+        )
+        val unknownBucketKey: String = "tim_core.buckets.unknown"
 
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
@@ -48,6 +55,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 }
             }
     }
+
+    fun getBucketKeyFromName(name: String?) = config.bucketKeys[name] ?: config.unknownBucketKey
 
     object Tags {
         @JvmField
