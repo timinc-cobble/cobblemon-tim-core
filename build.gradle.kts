@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("java-library")
-    kotlin("jvm") version("2.2.20")
+    kotlin("jvm") version("2.2.21")
 
     id("dev.architectury.loom") version("1.11-SNAPSHOT") apply false
     id("architectury-plugin") version("3.4-SNAPSHOT") apply false
@@ -31,4 +31,3 @@ allprojects {
         withSourcesJar()
     }
 }
-
