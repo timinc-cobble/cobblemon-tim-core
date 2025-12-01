@@ -19,6 +19,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
 import us.timinc.mc.cobblemon.timcore.event.ReloadConfigEvent
+import us.timinc.mc.cobblemon.timcore.mixin.helper.PokeSnackBlockSpawningInfluencesHelper
 
 abstract class AbstractMod<T : AbstractConfig>(
     val modId: String,
@@ -116,9 +117,8 @@ abstract class AbstractMod<T : AbstractConfig>(
         fishingSpawnerInfluences.add(influence)
     }
 
-    val snackSpawnerInfluences: MutableList<SpawningInfluence> = mutableListOf()
     fun registerSnackSpawnerInfluence(influence: SpawningInfluence) {
-        snackSpawnerInfluences.add(influence)
+        PokeSnackBlockSpawningInfluencesHelper.snackSpawnerInfluences.add(influence)
     }
 
     fun registerGeneralSpawnerInfluence(influence: SpawningInfluence) {
