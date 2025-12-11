@@ -121,9 +121,15 @@ data class PokemonMatcher(
     private fun persistentDataMatch(pokemon: Pokemon): Boolean {
         val pd = pokemon.persistentData
         return if (anyPersistentData) {
-            persistentData.entries.any { (k, v) -> pd.getOrNull(k)?.toString() == v }
+            persistentData.entries.any { (k, v) ->
+                val realKey = pd.allKeys.find { it.equals(k, ignoreCase = true) } ?: return@any false
+                pd.getOrNull(realKey)?.toString() == v
+            }
         } else {
-            persistentData.entries.all { (k, v) -> pd.getOrNull(k)?.toString() == v }
+            persistentData.entries.all { (k, v) ->
+                val realKey = pd.allKeys.find { it.equals(k, ignoreCase = true) } ?: return@all false
+                pd.getOrNull(realKey)?.toString() == v
+            }
         }
     }
 
