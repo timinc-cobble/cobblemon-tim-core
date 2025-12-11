@@ -2,7 +2,6 @@ package us.timinc.mc.cobblemon.timcore.mixin.helper
 
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
-import us.timinc.mc.cobblemon.timcore.TimCore
 
 object PokeSnackBlockSpawningInfluencesHelper {
     val alreadyInjected: MutableSet<PokeSnackBlockEntity> = mutableSetOf()
