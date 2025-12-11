@@ -1,0 +1,9 @@
+{
+  "tim_core.feedback.reserved": "Esse %1$s está reservado para %2$s.",
+  "tim_core.bits.someone_else": "outra pessoa",
+  "tim_core.buckets.common": "Comum",
+  "tim_core.buckets.uncommon": "Incomum",
+  "tim_core.buckets.rare": "Raro",
+  "tim_core.buckets.ultra_rare": "Ultra Raro",
+  "tim_core.buckets.unknown": "Grupo Desconhecido"
+}
