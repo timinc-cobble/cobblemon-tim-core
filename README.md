@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.7.1-1.26.1
+v1.7.1-1.27.0
 
 This documentation is out of date, I'm doing rapid development whilst working on 1.7 porting. I'll come back around at some point.
 

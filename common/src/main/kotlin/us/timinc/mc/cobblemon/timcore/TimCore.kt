@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
+import us.timinc.mc.cobblemon.timcore.data.CustomPropertyExtractorWhitelistManager
 import us.timinc.mc.cobblemon.timcore.handler.*
 import us.timinc.mc.cobblemon.timcore.influence.EntityDidSpawn
 import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
@@ -111,6 +112,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
 
         registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
         registerGeneralSpawnerInfluence(EntityDidSpawn())
+        registerReloadListener(CustomPropertyExtractorWhitelistManager)
         RELOAD_CONFIG.subscribe {
             config._spawnBlacklistMatcher = null
             config._spawnWhitelistMatcher = null
