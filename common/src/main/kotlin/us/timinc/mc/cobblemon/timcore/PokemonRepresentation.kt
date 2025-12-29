@@ -10,6 +10,7 @@ import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 
 abstract class PokemonRepresentation<T>(val pokemon: T) {
     class FromPokemon(pokemon: Pokemon) : PokemonRepresentation<Pokemon>(pokemon) {
@@ -45,7 +46,7 @@ abstract class PokemonRepresentation<T>(val pokemon: T) {
 
     class FromProperties(pokemon: PokemonProperties) : PokemonRepresentation<PokemonProperties>(pokemon) {
         override val species: Species?
-            get() = pokemon.species?.let { PokemonSpecies.getByName(it) }
+            get() = pokemon.species?.let { PokemonSpecies.getByName(it.asIdentifierDefaultingNamespace().path) }
         override val form: FormData?
             get() = if (species != null) getPokemon().form else null
         override val abilityName: String?
