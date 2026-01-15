@@ -9,7 +9,11 @@ class SetCondition<T, V>(
     val matchAnyWhitelist: Boolean = false,
 ) : Predicate<T> {
     override fun test(t: T): Boolean = getter(t).let { list ->
-        (if (matchAnyWhitelist) list.any { whitelist.contains(it) } else list.containsAll(whitelist))
-                && !list.any { blacklist.contains(it) }
+        val passedWhitelist = whitelist.isEmpty()
+                || (matchAnyWhitelist && whitelist.any { list.contains(it) })
+                || (!matchAnyWhitelist && whitelist.all { list.contains(it) })
+        val passedBlacklist = blacklist.isEmpty()
+                || blacklist.none { list.contains(it) }
+        return passedWhitelist && passedBlacklist
     }
 }
