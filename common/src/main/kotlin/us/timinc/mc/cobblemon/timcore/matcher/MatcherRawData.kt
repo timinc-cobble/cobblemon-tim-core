@@ -6,12 +6,15 @@ import us.timinc.mc.cobblemon.timcore.TimCore
 class MatcherRawData(
     rawString: String,
 ) {
-    var keyPairs: MutableList<Pair<String, String?>> = rawString.splitMap(" ", "=")
+    var keyPairs: List<Pair<String, String?>> =
+        rawString
+            .splitMap(" ", "=")
+            .map { (k, v) -> k.lowercase() to v }
 
     private fun getMatchedKeyPair(
         labels: Set<String>,
     ): Pair<String, String?>? {
-        return keyPairs.findLast { it.first in labels }
+        return keyPairs.findLast { (k) -> k.lowercase() in labels }
     }
 
     fun asString(ignoreKeys: Set<String> = emptySet()): String =
@@ -20,7 +23,8 @@ class MatcherRawData(
             .joinToString(" ") { (k, v) -> if (v != null) "$k=$v" else k }
 
     fun updateValue(newValue: String, labels: Set<String>) {
-        keyPairs = keyPairs.map { (k, v) -> if (k in labels) k to newValue else k to v }.toMutableList()
+        val cleanedLabels = labels.map(String::lowercase)
+        keyPairs = keyPairs.map { (k, v) -> if (k in cleanedLabels) k to newValue else k to v }.toMutableList()
     }
 
     fun getString(labels: Set<String>): String? {

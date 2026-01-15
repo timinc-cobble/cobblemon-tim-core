@@ -136,8 +136,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val LEVEL = PokemonMatcher.registerPiece(
             IntRangePiece(
                 getter = Pokemon::level,
-                minKeys = setOf("level_min"),
-                maxKeys = setOf("level_max"),
+                minKeys = setOf("level_min", "lvl_min"),
+                maxKeys = setOf("level_max", "lvl_max"),
             )
         )
         val TOTAL_IVS = PokemonMatcher.registerPiece(
@@ -157,8 +157,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val FRIENDSHIP = PokemonMatcher.registerPiece(
             IntRangePiece(
                 getter = Pokemon::friendship,
-                minKeys = setOf("friendship_min"),
-                maxKeys = setOf("friendship_max"),
+                minKeys = setOf("friendship_min", "happiness_min"),
+                maxKeys = setOf("friendship_max", "happiness_max"),
             )
         )
         val LABELS = PokemonMatcher.registerPiece(
@@ -252,8 +252,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val TOTAL_POWER_POINTS = PokemonMatcher.registerPiece(
             IntRangePiece(
                 getter = { it.moveSet.getMoves().fold(0) { acc, move -> acc + move.currentPp } },
-                minKeys = setOf("total_pp_min", "pp_min", "power_points_min"),
-                maxKeys = setOf("total_pp_max", "pp_max", "power_points_max"),
+                minKeys = setOf("total_pp_min", "pp_min", "power_points_min", "sum_pp_min"),
+                maxKeys = setOf("total_pp_max", "pp_max", "power_points_max", "sum_pp_max"),
             )
         )
         val PROPERTIES = PokemonMatcher.registerPiece(PropertiesPiece())
@@ -274,15 +274,15 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val DYNAMAX_LEVEL = PokemonMatcher.registerPiece(
             IntRangePiece(
                 getter = Pokemon::dmaxLevel,
-                minKeys = setOf("dynamax_level_min", "dmax_level_min"),
-                maxKeys = setOf("dynamax_level_max", "dmax_level_max"),
+                minKeys = setOf("dynamax_level_min", "dmax_level_min", "dynamax_lvl_min", "dmax_lvl_min"),
+                maxKeys = setOf("dynamax_level_max", "dmax_level_max", "dynamax_lvl_max", "dmax_lvl_max"),
             )
         )
         val TERA_TYPES = PokemonMatcher.registerPiece(
             StringSetPiece(
                 getter = { setOf(it.teraType.showdownId()) },
                 whitelistKeys = setOf("tera_types"),
-                blacklistKeys = setOf("not_tera_type"),
+                blacklistKeys = setOf("not_tera_types"),
                 matchAnyWhitelistBackup = true,
             )
         )
@@ -305,8 +305,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val GENDERS = PokemonMatcher.registerPiece(
             StringSetPiece(
                 getter = { it.gender.name.let(::setOf) },
-                whitelistKeys = setOf("genders"),
-                blacklistKeys = setOf("not_genders"),
+                whitelistKeys = setOf("genders", "sexes"),
+                blacklistKeys = setOf("not_genders", "not_sexes"),
                 matchAnyWhitelistBackup = true,
             )
         )
@@ -351,28 +351,28 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         }
         val MOVE_MIN_ACCURACY = PokemonMatcher.registerPiece(
             DoubleRangePiece(
-                getter = { it.moveSet.getMoves().minBy(Move::accuracy).accuracy },
+                getter = { it.moveSet.getMoves().minByOrNull(Move::accuracy)?.accuracy ?: 0.0 },
                 minKeys = setOf("move_min_accuracy_min", "min_accuracy_min", "move_min_acc_min", "min_acc_min"),
                 maxKeys = setOf("move_min_accuracy_max", "min_accuracy_max", "move_min_acc_max", "min_acc_max"),
             )
         )
         val MOVE_MAX_ACCURACY = PokemonMatcher.registerPiece(
             DoubleRangePiece(
-                getter = { it.moveSet.getMoves().minBy(Move::accuracy).accuracy },
+                getter = { it.moveSet.getMoves().maxByOrNull(Move::accuracy)?.accuracy ?: 0.0 },
                 minKeys = setOf("move_max_accuracy_min", "max_accuracy_min", "move_max_acc_min", "max_acc_min"),
                 maxKeys = setOf("move_max_accuracy_max", "max_accuracy_max", "move_max_acc_max", "max_acc_max"),
             )
         )
         val MOVE_MIN_POWER = PokemonMatcher.registerPiece(
             DoubleRangePiece(
-                getter = { it.moveSet.getMoves().minBy(Move::power).power },
+                getter = { it.moveSet.getMoves().minByOrNull(Move::power)?.power ?: 0.0 },
                 minKeys = setOf("move_min_power_min", "min_power_min", "move_min_pow_min", "min_pow_min"),
                 maxKeys = setOf("move_min_power_max", "min_power_max", "move_min_pow_max", "min_pow_max"),
             )
         )
         val MOVE_MAX_POWER = PokemonMatcher.registerPiece(
             DoubleRangePiece(
-                getter = { it.moveSet.getMoves().minBy(Move::power).power },
+                getter = { it.moveSet.getMoves().maxByOrNull(Move::power)?.power ?: 0.0 },
                 minKeys = setOf("move_max_power_min", "max_power_min", "move_max_pow_min", "max_pow_min"),
                 maxKeys = setOf("move_max_power_max", "max_power_max", "move_max_pow_max", "max_pow_max"),
             )
@@ -388,8 +388,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val MOVE_COUNT = PokemonMatcher.registerPiece(
             IntRangePiece(
                 getter = { it.moveSet.getMoves().size },
-                minKeys = setOf("move_count_min"),
-                maxKeys = setOf("move_count_max"),
+                minKeys = setOf("move_count_min", "moves_min"),
+                maxKeys = setOf("move_count_max", "moves_max"),
             )
         )
         val CURRENT_FULLNESS = PokemonMatcher.registerPiece(
@@ -491,8 +491,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 PokemonMatcher.registerPiece(
                     FloatRangePiece(
                         getter = { it.getRideStat(style, stat) },
-                        minKeys = setOf("${style.name}_${stat.name}_min"),
-                        maxKeys = setOf("${style.name}_${stat.name}_max"),
+                        minKeys = setOf("${style.name.lowercase()}_${stat.name.lowercase()}_min"),
+                        maxKeys = setOf("${style.name.lowercase()}_${stat.name.lowercase()}_max"),
                     )
                 )
             }

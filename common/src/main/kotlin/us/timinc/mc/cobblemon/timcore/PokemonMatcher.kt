@@ -19,6 +19,12 @@ data class PokemonMatcher(
         val pieces: MutableList<Piece<*>> = mutableListOf()
 
         fun <P : Predicate<Pokemon>> registerPiece(piece: Piece<P>): Piece<P> {
+            TimCore.debugger.debug("Registering piece with keys ${piece.allKeys.joinToString()}")
+            val overlappingKeys = pieces.flatMap { it.allKeys }.filter(piece.allKeys::contains)
+            if (overlappingKeys.isNotEmpty()) TimCore.debugger.debug(
+                "Registering piece with duplicate key(s) ${overlappingKeys.joinToString()}",
+                true
+            )
             pieces.add(piece)
             return piece
         }
