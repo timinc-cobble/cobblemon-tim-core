@@ -2,9 +2,12 @@ package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.mark.Mark
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.getPlayer
@@ -13,6 +16,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
+import us.timinc.mc.cobblemon.timcore.command.PokemonMatcherTestCommand
 import us.timinc.mc.cobblemon.timcore.data.CustomPropertyExtractorWhitelistManager
 import us.timinc.mc.cobblemon.timcore.handler.AttachBucket
 import us.timinc.mc.cobblemon.timcore.handler.AttachSpawnCause
@@ -24,6 +28,8 @@ import us.timinc.mc.cobblemon.timcore.influence.EntityDidSpawn
 import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
 import us.timinc.mc.cobblemon.timcore.matcher.piece.CompoundTagFloatRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.CompoundTagPiece
+import us.timinc.mc.cobblemon.timcore.matcher.piece.DoubleRangePiece
+import us.timinc.mc.cobblemon.timcore.matcher.piece.FloatRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.IntRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.PropertiesPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.StringSetPiece
@@ -52,6 +58,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             "ultra-rare" to "tim_core.buckets.ultra_rare"
         )
         val unknownBucketKey: String = "tim_core.buckets.unknown"
+        val successKey: String = "tim_core.result.success"
+        val failureKey: String = "tim_core.result.failure"
 
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
@@ -127,7 +135,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         )
         val LEVEL = PokemonMatcher.registerPiece(
             IntRangePiece(
-                getter = { it.level },
+                getter = Pokemon::level,
                 minKeys = setOf("level_min"),
                 maxKeys = setOf("level_max"),
             )
@@ -148,7 +156,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         )
         val FRIENDSHIP = PokemonMatcher.registerPiece(
             IntRangePiece(
-                getter = { it.friendship },
+                getter = Pokemon::friendship,
                 minKeys = setOf("friendship_min"),
                 maxKeys = setOf("friendship_max"),
             )
@@ -163,7 +171,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         )
         val TYPES = PokemonMatcher.registerPiece(
             StringSetPiece(
-                getter = { it.types.map { type -> type.resourceLocation.toString() }.toSet() },
+                getter = { it.types.map { type -> type.showdownId }.toSet() },
                 whitelistKeys = setOf("types", "elemental_types"),
                 blacklistKeys = setOf("not_types"),
                 matchAnyWhitelistKeys = setOf("any_type"),
@@ -171,7 +179,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         )
         val PRIMARY_TYPES = PokemonMatcher.registerPiece(
             StringSetPiece(
-                getter = { it.types.toList().getOrNull(0)?.resourceLocation?.toString()?.let(::setOf) ?: emptySet() },
+                getter = { it.primaryType.showdownId.let(::setOf) },
                 whitelistKeys = setOf("primary_types"),
                 blacklistKeys = setOf("not_primary_types"),
                 matchAnyWhitelistBackup = true
@@ -179,7 +187,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         )
         val SECONDARY_TYPES = PokemonMatcher.registerPiece(
             StringSetPiece(
-                getter = { it.types.toList().getOrNull(1)?.resourceLocation?.toString()?.let(::setOf) ?: emptySet() },
+                getter = { it.secondaryType?.showdownId?.let(::setOf) ?: emptySet() },
                 whitelistKeys = setOf("secondary_types"),
                 blacklistKeys = setOf("not_secondary_types"),
                 matchAnyWhitelistBackup = true,
@@ -219,7 +227,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         )
         val ASPECTS = PokemonMatcher.registerPiece(
             StringSetPiece(
-                getter = { it.aspects },
+                getter = Pokemon::aspects,
                 whitelistKeys = setOf("aspects"),
                 blacklistKeys = setOf("not_aspects"),
                 matchAnyWhitelistKeys = setOf("any_aspects"),
@@ -241,24 +249,31 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 matchAnyWhitelistKeys = setOf("any_active_move_types"),
             )
         )
+        val TOTAL_POWER_POINTS = PokemonMatcher.registerPiece(
+            IntRangePiece(
+                getter = { it.moveSet.getMoves().fold(0) { acc, move -> acc + move.currentPp } },
+                minKeys = setOf("total_pp_min", "pp_min", "power_points_min"),
+                maxKeys = setOf("total_pp_max", "pp_max", "power_points_max"),
+            )
+        )
         val PROPERTIES = PokemonMatcher.registerPiece(PropertiesPiece())
         val PERSISTENT_DATA = PokemonMatcher.registerPiece(
             CompoundTagPiece(
-                getter = { it.persistentData },
+                getter = Pokemon::persistentData,
                 propsKeys = setOf("persistent_data"),
                 matchAnyPropKeys = setOf("any_persistent_data"),
             )
         )
         val PERSISTENT_DATA_RANGE = PokemonMatcher.registerPiece(
             CompoundTagFloatRangePiece(
-                getter = { it.persistentData },
+                getter = Pokemon::persistentData,
                 propsKeys = setOf("persistent_data_range"),
                 matchAnyPropKeys = setOf("any_persistent_data_range")
             )
         )
         val DYNAMAX_LEVEL = PokemonMatcher.registerPiece(
             IntRangePiece(
-                getter = { it.dmaxLevel },
+                getter = Pokemon::dmaxLevel,
                 minKeys = setOf("dynamax_level_min", "dmax_level_min"),
                 maxKeys = setOf("dynamax_level_max", "dmax_level_max"),
             )
@@ -303,7 +318,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 matchAnyWhitelistBackup = true,
             )
         )
-        val IVS = Stats.BATTLE_ONLY.fold(mutableMapOf<Stat, IntRangePiece>()) { acc, stat ->
+        val IVS = Stats.PERMANENT.fold(mutableMapOf<Stat, IntRangePiece>()) { acc, stat ->
             acc.plus(
                 stat to (PokemonMatcher.registerPiece(
                     IntRangePiece(
@@ -314,7 +329,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 ) as IntRangePiece)
             ).toMutableMap()
         }
-        val EVS = Stats.BATTLE_ONLY.fold(mutableMapOf<Stat, IntRangePiece>()) { acc, stat ->
+        val EVS = Stats.PERMANENT.fold(mutableMapOf<Stat, IntRangePiece>()) { acc, stat ->
             acc.plus(
                 stat to (PokemonMatcher.registerPiece(
                     IntRangePiece(
@@ -324,6 +339,163 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                     )
                 ) as IntRangePiece)
             ).toMutableMap()
+        }
+        val STATS = Stats.PERMANENT.map { stat ->
+            PokemonMatcher.registerPiece(
+                IntRangePiece(
+                    getter = { it.getStat(stat) },
+                    minKeys = setOf("${stat.showdownId}_min", "${stat.identifier.path}_min"),
+                    maxKeys = setOf("${stat.showdownId}_max", "${stat.identifier.path}_max"),
+                )
+            )
+        }
+        val MOVE_MIN_ACCURACY = PokemonMatcher.registerPiece(
+            DoubleRangePiece(
+                getter = { it.moveSet.getMoves().minBy(Move::accuracy).accuracy },
+                minKeys = setOf("move_min_accuracy_min", "min_accuracy_min", "move_min_acc_min", "min_acc_min"),
+                maxKeys = setOf("move_min_accuracy_max", "min_accuracy_max", "move_min_acc_max", "min_acc_max"),
+            )
+        )
+        val MOVE_MAX_ACCURACY = PokemonMatcher.registerPiece(
+            DoubleRangePiece(
+                getter = { it.moveSet.getMoves().minBy(Move::accuracy).accuracy },
+                minKeys = setOf("move_max_accuracy_min", "max_accuracy_min", "move_max_acc_min", "max_acc_min"),
+                maxKeys = setOf("move_max_accuracy_max", "max_accuracy_max", "move_max_acc_max", "max_acc_max"),
+            )
+        )
+        val MOVE_MIN_POWER = PokemonMatcher.registerPiece(
+            DoubleRangePiece(
+                getter = { it.moveSet.getMoves().minBy(Move::power).power },
+                minKeys = setOf("move_min_power_min", "min_power_min", "move_min_pow_min", "min_pow_min"),
+                maxKeys = setOf("move_min_power_max", "min_power_max", "move_min_pow_max", "min_pow_max"),
+            )
+        )
+        val MOVE_MAX_POWER = PokemonMatcher.registerPiece(
+            DoubleRangePiece(
+                getter = { it.moveSet.getMoves().minBy(Move::power).power },
+                minKeys = setOf("move_max_power_min", "max_power_min", "move_max_pow_min", "max_pow_min"),
+                maxKeys = setOf("move_max_power_max", "max_power_max", "move_max_pow_max", "max_pow_max"),
+            )
+        )
+        val MARKINGS = PokemonMatcher.registerPiece(
+            StringSetPiece(
+                getter = { it.markings.map(Int::toString).toSet() },
+                whitelistKeys = setOf("markings"),
+                blacklistKeys = setOf("not_markings"),
+                matchAnyWhitelistKeys = setOf("any_markings")
+            )
+        )
+        val MOVE_COUNT = PokemonMatcher.registerPiece(
+            IntRangePiece(
+                getter = { it.moveSet.getMoves().size },
+                minKeys = setOf("move_count_min"),
+                maxKeys = setOf("move_count_max"),
+            )
+        )
+        val CURRENT_FULLNESS = PokemonMatcher.registerPiece(
+            IntRangePiece(
+                getter = Pokemon::currentFullness,
+                minKeys = setOf("current_fullness_min", "cur_fullness_min", "current_full_min", "cur_full_min"),
+                maxKeys = setOf("current_fullness_max", "cur_fullness_max", "current_full_max", "cur_full_max"),
+            )
+        )
+        val MAX_FULLNESS = PokemonMatcher.registerPiece(
+            IntRangePiece(
+                getter = Pokemon::getMaxFullness,
+                minKeys = setOf("max_fullness_min", "max_full_min"),
+                maxKeys = setOf("max_fullness_max", "max_full_max"),
+            )
+        )
+        val CURRENT_HEALTH = PokemonMatcher.registerPiece(
+            IntRangePiece(
+                getter = Pokemon::currentHealth,
+                minKeys = setOf("current_health_min", "cur_health_min", "current_hp_min", "cur_hp_min"),
+                maxKeys = setOf("current_health_max", "cur_health_max", "current_hp_max", "cur_hp_max"),
+            )
+        )
+        val MAX_HEALTH = PokemonMatcher.registerPiece(
+            IntRangePiece(
+                getter = Pokemon::maxHealth,
+                minKeys = setOf("max_health_min", "max_hp_min"),
+                maxKeys = setOf("max_health_max", "max_hp_max"),
+            )
+        )
+        val MARKS = PokemonMatcher.registerPiece(
+            StringSetPiece(
+                getter = {
+                    it.marks.map { mark -> mark.identifier.toString() }.toSet() + it.marks.map(Mark::name).toSet()
+                },
+                whitelistKeys = setOf("marks"),
+                blacklistKeys = setOf("not_marks"),
+                matchAnyWhitelistKeys = setOf("any_marks")
+            )
+        )
+        val ACTIVE_MARKS = PokemonMatcher.registerPiece(
+            StringSetPiece(
+                getter = { it.activeMark?.let { mark -> setOf(mark.name, mark.identifier.toString()) } ?: emptySet() },
+                whitelistKeys = setOf("active_marks"),
+                blacklistKeys = setOf("not_active_marks"),
+                matchAnyWhitelistKeys = setOf("any_active_marks"),
+            )
+        )
+        val EXPERIENCE = PokemonMatcher.registerPiece(
+            IntRangePiece(
+                getter = Pokemon::experience,
+                minKeys = setOf("experience_min"),
+                maxKeys = setOf("experience_max"),
+            )
+        )
+        val CAUGHT_BALLS = PokemonMatcher.registerPiece(
+            StringSetPiece(
+                getter = { it.caughtBall.let { ball -> setOf(ball.name.toString(), ball.name.path) } },
+                whitelistKeys = setOf("caught_balls"),
+                blacklistKeys = setOf("not_caught_balls"),
+                matchAnyWhitelistKeys = setOf("any_caught_balls"),
+            )
+        )
+        val EFFECTIVE_NATURES = PokemonMatcher.registerPiece(
+            StringSetPiece(
+                getter = { it.effectiveNature.let { nature -> setOf(nature.name.toString(), nature.name.path) } },
+                whitelistKeys = setOf("effective_natures"),
+                blacklistKeys = setOf("not_effective_natures"),
+                matchAnyWhitelistKeys = setOf("any_effective_natures"),
+            )
+        )
+        val MINTED_NATURES = PokemonMatcher.registerPiece(
+            StringSetPiece(
+                getter = {
+                    it.mintedNature?.let { nature -> setOf(nature.name.toString(), nature.name.path) } ?: emptySet()
+                },
+                whitelistKeys = setOf("minted_natures"),
+                blacklistKeys = setOf("not_minted_natures"),
+                matchAnyWhitelistKeys = setOf("any_minted_natures"),
+            )
+        )
+        val EXPERIENCE_GROUPS = PokemonMatcher.registerPiece(
+            StringSetPiece(
+                getter = { it.experienceGroup.name.let(::setOf) },
+                whitelistKeys = setOf("experience_groups", "exp_groups"),
+                blacklistKeys = setOf("not_experience_groups", "not_exp_groups"),
+                matchAnyWhitelistKeys = setOf("any_experience_groups", "any_exp_groups"),
+            )
+        )
+        val RIDE_STAMINA = PokemonMatcher.registerPiece(
+            FloatRangePiece(
+                getter = Pokemon::rideStamina,
+                minKeys = setOf("ride_stamina_min", "stamina_min", "stam_min"),
+                maxKeys = setOf("ride_stamina_max", "stamina_max", "stam_max"),
+            )
+        )
+        val RIDE_STATS = RidingStyle.entries.map { style ->
+            RidingStat.entries.map { stat ->
+                PokemonMatcher.registerPiece(
+                    FloatRangePiece(
+                        getter = { it.getRideStat(style, stat) },
+                        minKeys = setOf("${style.name}_${stat.name}_min"),
+                        maxKeys = setOf("${style.name}_${stat.name}_max"),
+                    )
+                )
+            }
         }
     }
 
@@ -340,6 +512,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
         registerGeneralSpawnerInfluence(EntityDidSpawn())
         registerReloadListener(CustomPropertyExtractorWhitelistManager)
+        registerCommand(PokemonMatcherTestCommand)
         RELOAD_CONFIG.subscribe {
             config._spawnBlacklistMatcher = null
             config._spawnWhitelistMatcher = null

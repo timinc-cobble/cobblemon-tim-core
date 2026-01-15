@@ -14,7 +14,10 @@ class MatcherRawData(
         return keyPairs.findLast { it.first in labels }
     }
 
-    fun asString(): String = keyPairs.joinToString(" ") { "${it.first}=${it.second}" }
+    fun asString(ignoreKeys: Set<String> = emptySet()): String =
+        keyPairs
+            .filter { (k) -> !ignoreKeys.contains(k) }
+            .joinToString(" ") { (k, v) -> if (v != null) "$k=$v" else k }
 
     fun updateValue(newValue: String, labels: Set<String>) {
         keyPairs = keyPairs.map { (k, v) -> if (k in labels) k to newValue else k to v }.toMutableList()
@@ -45,6 +48,34 @@ class MatcherRawData(
     }
 
     fun setInt(newValue: Int, labels: Set<String>) {
+        setString(newValue.toString(), labels)
+    }
+
+    fun getDouble(labels: Set<String>): Double? {
+        val stringValue = getString(labels) ?: return null
+        try {
+            return stringValue.toDouble()
+        } catch (_: NumberFormatException) {
+            TimCore.debugger.debug("Attempted to use non-int value of $stringValue.", true)
+            return -1.0
+        }
+    }
+
+    fun setDouble(newValue: Double, labels: Set<String>) {
+        setString(newValue.toString(), labels)
+    }
+
+    fun getFloat(labels: Set<String>): Float? {
+        val stringValue = getString(labels) ?: return null
+        try {
+            return stringValue.toFloat()
+        } catch (_: NumberFormatException) {
+            TimCore.debugger.debug("Attempted to use non-int value of $stringValue.", true)
+            return -1F
+        }
+    }
+
+    fun setFloat(newValue: Float, labels: Set<String>) {
         setString(newValue.toString(), labels)
     }
 
