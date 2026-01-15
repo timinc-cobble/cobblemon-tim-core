@@ -51,6 +51,34 @@ class MatcherRawData(
         setString(newValue.toString(), labels)
     }
 
+    fun getDouble(labels: Set<String>): Double? {
+        val stringValue = getString(labels) ?: return null
+        try {
+            return stringValue.toDouble()
+        } catch (_: NumberFormatException) {
+            TimCore.debugger.debug("Attempted to use non-int value of $stringValue.", true)
+            return -1.0
+        }
+    }
+
+    fun setDouble(newValue: Double, labels: Set<String>) {
+        setString(newValue.toString(), labels)
+    }
+
+    fun getFloat(labels: Set<String>): Float? {
+        val stringValue = getString(labels) ?: return null
+        try {
+            return stringValue.toFloat()
+        } catch (_: NumberFormatException) {
+            TimCore.debugger.debug("Attempted to use non-int value of $stringValue.", true)
+            return -1F
+        }
+    }
+
+    fun setFloat(newValue: Float, labels: Set<String>) {
+        setString(newValue.toString(), labels)
+    }
+
     fun getBoolean(labels: Set<String>): Boolean? {
         val matchingKeyPair = getMatchedKeyPair(labels) ?: return null
         return when (matchingKeyPair.second?.lowercase()) {

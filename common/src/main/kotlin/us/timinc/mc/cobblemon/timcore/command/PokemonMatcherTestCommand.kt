@@ -32,10 +32,10 @@ object PokemonMatcherTestCommand : AbstractCommand<PokemonMatcherTestCommand.Dat
             return 0
         }
         if (PokemonMatcher.parse(commandContext.matcher).matches(teamMember)) {
-            player.sendSystemMessage(Component.translatable("tim_core.command.result.pokemon_matcher_test.success"))
+            player.sendSystemMessage(Component.translatable(TimCore.config.successKey))
             return Command.SINGLE_SUCCESS
         }
-        player.sendSystemMessage(Component.translatable("tim_core.command.result.pokemon_matcher_test.failure"))
+        player.sendSystemMessage(Component.translatable(TimCore.config.failureKey))
         return 0
     }
 
