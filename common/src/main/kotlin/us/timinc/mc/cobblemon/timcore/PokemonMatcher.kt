@@ -30,11 +30,12 @@ data class PokemonMatcher(
         get() = raw.getBoolean(setOf("match_one")) ?: false
 
     val conditions: List<Predicate<Pokemon>>
-        get() = pieces.map { it.condition(raw) }
+        get() = pieces.mapNotNull { it.condition(raw) }
 
     fun matches(pokemon: Pokemon): Boolean {
-        if (conditions.isEmpty()) return true
-        return if (matchOne) conditions.any { it.test(pokemon) } else conditions.all { it.test(pokemon) }
+        return conditions.takeIf { it.isNotEmpty() }?.let { conditions ->
+            if (matchOne) conditions.any { it.test(pokemon) } else conditions.all { it.test(pokemon) }
+        } ?: true
     }
 
     fun asString(): String = raw.asString()

@@ -103,9 +103,9 @@ class MatcherRawData(
     fun setStringMap(
         newValue: Map<List<String>, String>,
         labels: Set<String>,
-        delimiter: String,
-        assigner: String,
-        keyDelimiter: String,
+        delimiter: String = ",",
+        assigner: String = "=",
+        keyDelimiter: String = ".",
     ) {
         val stringed = newValue.entries.fold(mutableListOf<String>()) { acc, (k, v) ->
             acc.plus("${k.joinToString(keyDelimiter)}$assigner$v").toMutableList()

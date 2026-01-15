@@ -12,12 +12,19 @@ class IntRangePiece(
     val minValueBackup: Int = Int.MIN_VALUE,
     val maxValueBackup: Int = Int.MAX_VALUE,
 ) : Piece<RangeCondition<Pokemon, Int>> {
-    override fun condition(raw: MatcherRawData): RangeCondition<Pokemon, Int> = RangeCondition(
-        minKeys?.let(raw::getInt) ?: minValueBackup,
-        maxKeys?.let(raw::getInt) ?: maxValueBackup,
-        getter,
-    )
+    override fun condition(raw: MatcherRawData): RangeCondition<Pokemon, Int>? {
+        val min = minKeys?.let(raw::getInt)
+        val max = maxKeys?.let(raw::getInt)
+        if (min == null && max == null) return null
 
+        return RangeCondition(
+            min ?: minValueBackup,
+            max ?: maxValueBackup,
+            getter,
+        )
+    }
+
+    @Suppress("unused")
     fun apply(matcher: PokemonMatcher, min: Int? = null, max: Int? = null) {
         min?.let { min -> minKeys?.let { minKeys -> matcher.raw.setInt(min, minKeys) } }
         max?.let { max -> maxKeys?.let { maxKeys -> matcher.raw.setInt(max, maxKeys) } }

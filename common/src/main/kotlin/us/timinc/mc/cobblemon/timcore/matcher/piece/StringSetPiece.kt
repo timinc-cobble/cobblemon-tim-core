@@ -14,13 +14,20 @@ class StringSetPiece(
     val matchAnyWhitelistKeys: Set<String>? = null,
     val matchAnyWhitelistBackup: Boolean = false,
 ) : Piece<SetCondition<Pokemon, String>> {
-    override fun condition(raw: MatcherRawData): SetCondition<Pokemon, String> = SetCondition(
-        whitelistKeys?.let(raw::getStringSet) ?: whitelistBackup,
-        blacklistKeys?.let(raw::getStringSet) ?: blacklistBackup,
-        getter,
-        matchAnyWhitelistKeys?.let(raw::getBoolean) ?: matchAnyWhitelistBackup
-    )
+    override fun condition(raw: MatcherRawData): SetCondition<Pokemon, String>? {
+        val whitelist = whitelistKeys?.let(raw::getStringSet)
+        val blacklist = blacklistKeys?.let(raw::getStringSet)
+        if (whitelist == null && blacklist == null) return null
 
+        return SetCondition(
+            whitelist ?: whitelistBackup,
+            blacklist ?: blacklistBackup,
+            getter,
+            matchAnyWhitelistKeys?.let(raw::getBoolean) ?: matchAnyWhitelistBackup
+        )
+    }
+
+    @Suppress("unused")
     fun apply(
         matcher: PokemonMatcher,
         whitelist: Set<String>? = null,
