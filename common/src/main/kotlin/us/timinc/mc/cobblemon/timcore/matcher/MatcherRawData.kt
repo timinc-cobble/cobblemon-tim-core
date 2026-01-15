@@ -14,7 +14,10 @@ class MatcherRawData(
         return keyPairs.findLast { it.first in labels }
     }
 
-    fun asString(): String = keyPairs.joinToString(" ") { if (it.second != null) "${it.first}=${it.second}" else it.first }
+    fun asString(ignoreKeys: Set<String> = emptySet()): String =
+        keyPairs
+            .filter { (k) -> !ignoreKeys.contains(k) }
+            .joinToString(" ") { (k, v) -> if (v != null) "$k=$v" else k }
 
     fun updateValue(newValue: String, labels: Set<String>) {
         keyPairs = keyPairs.map { (k, v) -> if (k in labels) k to newValue else k to v }.toMutableList()
