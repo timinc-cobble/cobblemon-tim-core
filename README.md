@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.7.1-1.27
+v1.7.1-1.28
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
@@ -72,7 +72,7 @@ v1.7.1-1.27
 
 ## Known Issues
 
-- None. Yet. Probably. 👀
+- ≤v1.7.1-1.28.0 I forgot to provide a backwards-compatible version of the new, simpler parse method. v1.7.1-1.28.1 I re-added the old version that just calls the new version so nothing breaks with a deprecation warning.
 
 ## Roadmap
 
