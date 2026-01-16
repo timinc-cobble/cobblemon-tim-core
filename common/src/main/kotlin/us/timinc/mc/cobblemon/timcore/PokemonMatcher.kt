@@ -30,6 +30,20 @@ data class PokemonMatcher(
         }
 
         fun parse(string: String): PokemonMatcher = PokemonMatcher(MatcherRawData(string))
+
+        /**
+         * Legacy function, do not remove until everybody else has been recompiled against the newer version above.
+         * Alternatively, we could actually use the unused values here, but I don't think that's necessary as we
+         * handle the separators ourselves pretty well.
+         */
+        @Suppress("unused")
+        @Deprecated("Use the single-input parse w/o separator params.")
+        fun parse(
+            string: String,
+            delimiter: String = " ",
+            assigner: String = "=",
+            innerDelimiter: String = ",",
+        ): PokemonMatcher = parse(string)
     }
 
     val matchOne: Boolean
