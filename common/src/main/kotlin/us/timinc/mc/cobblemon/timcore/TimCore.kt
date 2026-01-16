@@ -441,8 +441,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val EXPERIENCE = PokemonMatcher.registerPiece(
             IntRangePiece(
                 getter = Pokemon::experience,
-                minKeys = setOf("experience_min"),
-                maxKeys = setOf("experience_max"),
+                minKeys = setOf("experience_min", "exp_min"),
+                maxKeys = setOf("experience_max", "exp_max"),
             )
         )
         val CAUGHT_BALLS = PokemonMatcher.registerPiece(
