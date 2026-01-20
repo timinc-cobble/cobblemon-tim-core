@@ -26,11 +26,13 @@ import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
 import us.timinc.mc.cobblemon.timcore.handler.PreventQuickBallSpam
 import us.timinc.mc.cobblemon.timcore.influence.EntityDidSpawn
 import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
+import us.timinc.mc.cobblemon.timcore.matcher.piece.BooleanPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.CompoundTagFloatRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.CompoundTagPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.DoubleRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.FloatRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.IntRangePiece
+import us.timinc.mc.cobblemon.timcore.matcher.piece.ItemTagPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.PropertiesPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.StringSetPiece
 import java.util.*
@@ -497,6 +499,30 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 )
             }
         }
+        val HAS_HELD_ITEM = PokemonMatcher.registerPiece(
+            BooleanPiece(
+                { !it.heldItem().isEmpty },
+                setOf("has_held_item")
+            )
+        )
+        val HELD_ITEM_TAG = PokemonMatcher.registerPiece(
+            ItemTagPiece(
+                { it.heldItem() },
+                setOf("held_item_tag", "held_tag")
+            )
+        )
+        val HAS_COSMETIC_ITEM = PokemonMatcher.registerPiece(
+            BooleanPiece(
+                { !it.cosmeticItem().isEmpty },
+                setOf("has_cosmetic_item")
+            )
+        )
+        val COSMETIC_ITEM_TAG = PokemonMatcher.registerPiece(
+            ItemTagPiece(
+                { it.cosmeticItem() },
+                setOf("cosmetic_item_tag", "cosmetic_tag")
+            )
+        )
     }
 
     init {
