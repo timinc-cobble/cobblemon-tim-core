@@ -8,7 +8,7 @@ abstract class LimitedList<X, Y> {
     }
 
     fun matchesList(entry: X, whitelist: Set<Y>, blacklist: Set<Y>): Boolean = when {
-        whitelist.isNotEmpty() && blacklist.isNotEmpty() -> isInList(entry, whitelist) || !isInList(entry, blacklist)
+        whitelist.isNotEmpty() && blacklist.isNotEmpty() -> isInList(entry, whitelist) && !isInList(entry, blacklist)
 
         whitelist.isNotEmpty() -> isInList(entry, whitelist)
         blacklist.isNotEmpty() -> !isInList(entry, blacklist)
