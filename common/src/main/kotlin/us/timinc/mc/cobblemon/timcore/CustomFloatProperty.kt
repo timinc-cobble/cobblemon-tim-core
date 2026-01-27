@@ -31,12 +31,9 @@ open class CustomFloatProperty(override val keys: Iterable<String>) : CustomPoke
         pokemonApplicator(entity.pokemon, value)
     }
 
-    fun getValue(pokemon: Pokemon): Float? =
-        if (!pokemon.persistentData.contains(keys.first())) null
-        else pokemon.persistentData.getFloat(keys.first())
+    fun getValue(pokemon: Pokemon): Float? = pokemon.persistentData.getFloatOrNull(keys.first())
 
-    fun pokemonMatcher(pokemon: Pokemon, value: Float): Boolean =
-        pokemon.persistentData.contains(keys.first()) && (pokemon.persistentData.getFloat(keys.first()) == value)
+    fun pokemonMatcher(pokemon: Pokemon, value: Float): Boolean = getValue(pokemon) == value
 
     fun entityMatcher(entity: PokemonEntity, value: Float): Boolean = pokemonMatcher(entity.pokemon, value)
 }
