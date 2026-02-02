@@ -5,5 +5,7 @@
   "tim_core.buckets.uncommon": "Incomum",
   "tim_core.buckets.rare": "Raro",
   "tim_core.buckets.ultra_rare": "Ultra Raro",
-  "tim_core.buckets.unknown": "Grupo Desconhecido"
+  "tim_core.buckets.unknown": "Grupo Desconhecido",
+  "tim_core.result.success": "Sucesso",
+  "tim_core.result.failure": "Falhou"
 }
