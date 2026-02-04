@@ -342,6 +342,17 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 ) as IntRangePiece)
             ).toMutableMap()
         }
+        val EV_YIELDS = Stats.PERMANENT.fold(mutableMapOf<Stat, IntRangePiece>()) { acc, stat ->
+            acc.plus(
+                stat to (PokemonMatcher.registerPiece(
+                    IntRangePiece(
+                        getter = { it.form.evYield[stat] ?: 0 },
+                        minKeys = setOf("${stat.showdownId}_ev_yield_min", "${stat.identifier.path}_ev_yield_min"),
+                        maxKeys = setOf("${stat.showdownId}_ev_yield_max", "${stat.identifier.path}_ev_yield_max"),
+                    )
+                ) as IntRangePiece)
+            ).toMutableMap()
+        }
         val STATS = Stats.PERMANENT.map { stat ->
             PokemonMatcher.registerPiece(
                 IntRangePiece(
