@@ -20,6 +20,7 @@ import us.timinc.mc.cobblemon.timcore.command.PokemonMatcherTestCommand
 import us.timinc.mc.cobblemon.timcore.data.CustomPropertyExtractorWhitelistManager
 import us.timinc.mc.cobblemon.timcore.handler.AttachBucket
 import us.timinc.mc.cobblemon.timcore.handler.AttachSpawnCause
+import us.timinc.mc.cobblemon.timcore.handler.DisableEvGain
 import us.timinc.mc.cobblemon.timcore.handler.ExpAllHandler
 import us.timinc.mc.cobblemon.timcore.handler.FishingWithoutATeamCanceller
 import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
@@ -53,6 +54,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val reservedPokemonEntitiesAreInvulnerable: Boolean = true
         val requirePartyToFishPokemon: Boolean = false
         val fossilMachineResurrectionTime: Int = 14400
+        val disableEvGain: Boolean = false
         val bucketKeys: Map<String, String> = mapOf(
             "common" to "tim_core.buckets.common",
             "uncommon" to "tim_core.buckets.uncommon",
@@ -545,6 +547,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
+        CobblemonEvents.EV_GAINED_EVENT_PRE.subscribe(Priority.NORMAL, DisableEvGain::handle)
 
         registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
         registerGeneralSpawnerInfluence(EntityDidSpawn())
