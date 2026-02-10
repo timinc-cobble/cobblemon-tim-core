@@ -3,15 +3,18 @@ package us.timinc.mc.cobblemon.timcore
 import com.cobblemon.mod.common.api.events.CobblemonEvents.BATTLE_FAINTED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_CAPTURED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_FAINTED
+import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.map
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isInBattle
+import net.minecraft.core.BlockPos
 import us.timinc.mc.cobblemon.timcore.event.CheckExpAllEvent
 import us.timinc.mc.cobblemon.timcore.event.EntityDidSpawnEvent
 import us.timinc.mc.cobblemon.timcore.event.EntityLoadEvent
 import us.timinc.mc.cobblemon.timcore.event.EntityUnloadEvent
+import us.timinc.mc.cobblemon.timcore.event.PokeBallBreakEvent
 import us.timinc.mc.cobblemon.timcore.event.PokemonEntityTickedEvent
 
 object TimCoreEvents {
@@ -105,4 +108,13 @@ object TimCoreEvents {
                 it as EntityUnloadEvent<PokemonEntity>
             }
         )
+
+    @JvmField
+    val POKE_BALL_BREAK_CHANCE = EventObservable<PokeBallBreakEvent.Chance>()
+
+    @JvmField
+    val POKE_BALL_BREAK_PRE = CancelableObservable<PokeBallBreakEvent.Pre>()
+
+    @JvmField
+    val POKE_BALL_BREAK_POST = EventObservable<PokeBallBreakEvent.Post>()
 }

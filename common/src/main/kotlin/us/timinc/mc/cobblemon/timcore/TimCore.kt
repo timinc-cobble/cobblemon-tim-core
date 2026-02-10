@@ -15,11 +15,14 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.Item
 import us.timinc.mc.cobblemon.timcore.command.PokemonMatcherTestCommand
 import us.timinc.mc.cobblemon.timcore.data.CustomPropertyExtractorWhitelistManager
+import us.timinc.mc.cobblemon.timcore.feature.PokeBallBreaking
 import us.timinc.mc.cobblemon.timcore.handler.AttachBucket
 import us.timinc.mc.cobblemon.timcore.handler.AttachSpawnCause
+import us.timinc.mc.cobblemon.timcore.handler.BreakBallsAfterCancellation
 import us.timinc.mc.cobblemon.timcore.handler.DisableEvGain
 import us.timinc.mc.cobblemon.timcore.handler.ExpAllHandler
 import us.timinc.mc.cobblemon.timcore.handler.FishingWithoutATeamCanceller
@@ -36,6 +39,7 @@ import us.timinc.mc.cobblemon.timcore.matcher.piece.IntRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.ItemTagPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.PropertiesPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.StringSetPiece
+import us.timinc.mc.cobblemon.timcore.mixin.helper.PokeBallBreakingHelper
 import java.util.*
 
 const val MOD_ID = "tim_core"
@@ -64,6 +68,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val unknownBucketKey: String = "tim_core.buckets.unknown"
         val successKey: String = "tim_core.result.success"
         val failureKey: String = "tim_core.result.failure"
+        val ballBreakChance: Float = 0F
+        val dontBreakBallOnHittingOwnPokemon: Boolean = true
 
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
@@ -104,6 +110,18 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             val FISHING = createKey("spawner_fishing")
             val SNACK = createKey("spawner_snack")
             val UNKNOWN = createKey("spawner_unknown")
+        }
+
+        object PokeBallBreakReasons {
+            const val HIT_BLOCK = "hit_block"
+            const val HIT_OWNED = "hit_owned"
+            const val HIT_UNCATCHABLE = "hit_uncatchable"
+            const val HIT_WILD_OTHER_BATTLE = "hit_wild_other_battle"
+            const val HIT_WILD_NOT_SINGLES = "hit_wild_not_singles"
+            const val HIT_WILD_NOT_TURN = "hit_wild_not_turn"
+            const val HIT_BUSY = "hit_busy"
+            const val HIT_NON_TARGET_WILD = "hit_non_target_wild"
+            const val EVT_CANCELLED = "evt_cancelled"
         }
     }
 
@@ -548,6 +566,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
         CobblemonEvents.EV_GAINED_EVENT_PRE.subscribe(Priority.NORMAL, DisableEvGain::handle)
+        CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.LOWEST, BreakBallsAfterCancellation::handle)
 
         registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
         registerGeneralSpawnerInfluence(EntityDidSpawn())
@@ -558,5 +577,9 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             config._spawnWhitelistMatcher = null
             debugger.debug("Cleared the prevent spawns matcher cache due to mod reload.")
         }
+
+        TimCoreEvents.POKE_BALL_BREAK_CHANCE.subscribe { it.chance /= 2 }
+        TimCoreEvents.POKE_BALL_BREAK_PRE.subscribe { it.cancel() }
+        TimCoreEvents.POKE_BALL_BREAK_POST.subscribe { println("Broke!") }
     }
 }
