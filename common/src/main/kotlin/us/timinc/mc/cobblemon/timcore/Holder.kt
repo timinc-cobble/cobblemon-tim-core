@@ -1,7 +1,7 @@
 package us.timinc.mc.cobblemon.timcore
 
 import net.minecraft.server.level.ServerPlayer
-import java.util.*
+import java.util.UUID
 
 @Suppress("unused")
 class Holder<T> {

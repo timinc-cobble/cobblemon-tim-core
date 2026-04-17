@@ -4,7 +4,7 @@ import us.timinc.mc.cobblemon.timcore.PokemonMatcher
 import us.timinc.mc.cobblemon.timcore.condition.PokemonPropertiesCondition
 import us.timinc.mc.cobblemon.timcore.matcher.MatcherRawData
 
-class PropertiesPiece() : Piece<PokemonPropertiesCondition> {
+class PropertiesPiece : Piece<PokemonPropertiesCondition> {
     override fun condition(raw: MatcherRawData): PokemonPropertiesCondition =
         PokemonPropertiesCondition(raw.asString(PokemonMatcher.pieces.flatMap { it.allKeys }.toSet()))
 

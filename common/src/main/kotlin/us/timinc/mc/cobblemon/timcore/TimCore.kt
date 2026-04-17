@@ -20,6 +20,7 @@ import us.timinc.mc.cobblemon.timcore.command.PokemonMatcherTestCommand
 import us.timinc.mc.cobblemon.timcore.data.CustomPropertyExtractorWhitelistManager
 import us.timinc.mc.cobblemon.timcore.handler.AttachBucket
 import us.timinc.mc.cobblemon.timcore.handler.AttachSpawnCause
+import us.timinc.mc.cobblemon.timcore.handler.DisableEvGain
 import us.timinc.mc.cobblemon.timcore.handler.ExpAllHandler
 import us.timinc.mc.cobblemon.timcore.handler.FishingWithoutATeamCanceller
 import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
@@ -35,7 +36,7 @@ import us.timinc.mc.cobblemon.timcore.matcher.piece.IntRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.ItemTagPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.PropertiesPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.StringSetPiece
-import java.util.*
+import java.util.UUID
 
 const val MOD_ID = "tim_core"
 
@@ -53,6 +54,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val reservedPokemonEntitiesAreInvulnerable: Boolean = true
         val requirePartyToFishPokemon: Boolean = false
         val fossilMachineResurrectionTime: Int = 14400
+        val disableEvGain: Boolean = false
         val bucketKeys: Map<String, String> = mapOf(
             "common" to "tim_core.buckets.common",
             "uncommon" to "tim_core.buckets.uncommon",
@@ -342,6 +344,17 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 ) as IntRangePiece)
             ).toMutableMap()
         }
+        val EV_YIELDS = Stats.PERMANENT.fold(mutableMapOf<Stat, IntRangePiece>()) { acc, stat ->
+            acc.plus(
+                stat to (PokemonMatcher.registerPiece(
+                    IntRangePiece(
+                        getter = { it.form.evYield[stat] ?: 0 },
+                        minKeys = setOf("${stat.showdownId}_ev_yield_min", "${stat.identifier.path}_ev_yield_min"),
+                        maxKeys = setOf("${stat.showdownId}_ev_yield_max", "${stat.identifier.path}_ev_yield_max"),
+                    )
+                ) as IntRangePiece)
+            ).toMutableMap()
+        }
         val STATS = Stats.PERMANENT.map { stat ->
             PokemonMatcher.registerPiece(
                 IntRangePiece(
@@ -534,6 +547,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
+        CobblemonEvents.EV_GAINED_EVENT_PRE.subscribe(Priority.NORMAL, DisableEvGain::handle)
 
         registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
         registerGeneralSpawnerInfluence(EntityDidSpawn())
