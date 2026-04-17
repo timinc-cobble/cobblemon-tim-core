@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.7.3-1.31
+v1.7.3-1.32
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
@@ -14,59 +14,59 @@ v1.7.3-1.31
 
 ## Features
 
-[AbstractMod](https://www.notion.so/AbstractMod-2fb57e0d4afd817b8612d3e4449956bf?pvs=21)
+[AbstractMod](https://www.notion.so/AbstractMod-34557e0d4afd816d8e01ee21e5085916?pvs=21)
 
-[AbstractConfig](https://www.notion.so/AbstractConfig-2fb57e0d4afd816b8d8fcb15b09c0f8a?pvs=21)
+[AbstractConfig](https://www.notion.so/AbstractConfig-34557e0d4afd810a9eaef342baa4ab2b?pvs=21)
 
-[ConfigBuilder](https://www.notion.so/ConfigBuilder-2fb57e0d4afd815385a0f62746dc3a32?pvs=21)
+[ConfigBuilder](https://www.notion.so/ConfigBuilder-34557e0d4afd81238b26cede7008e1fc?pvs=21)
 
-[Overridable Options](https://www.notion.so/Overridable-Options-2fb57e0d4afd811f8a10e56d2dad718e?pvs=21)
+[Overridable Options](https://www.notion.so/Overridable-Options-34557e0d4afd81e089d6fa06bc860ee5?pvs=21)
 
-[AbstractHandler](https://www.notion.so/AbstractHandler-2fb57e0d4afd813fb883fd539053be04?pvs=21)
+[AbstractHandler](https://www.notion.so/AbstractHandler-34557e0d4afd81f2b818f918be923af1?pvs=21)
 
-[Debugger](https://www.notion.so/Debugger-2fb57e0d4afd815c817de32f57e5c0be?pvs=21)
+[Debugger](https://www.notion.so/Debugger-34557e0d4afd8135ac46e9f36ed11592?pvs=21)
 
-[PokemonExtensions](https://www.notion.so/PokemonExtensions-2fb57e0d4afd81a98ed6d0b2bfd56421?pvs=21)
+[PokemonExtensions](https://www.notion.so/PokemonExtensions-34557e0d4afd81d281fce19bb434224d?pvs=21)
 
-[Events](https://www.notion.so/Events-2fb57e0d4afd81dd9c39d8c954a28420?pvs=21)
+[Events](https://www.notion.so/Events-34557e0d4afd81b48320c3f5e6e7acb9?pvs=21)
 
-[Custom Pokémon Properties](https://www.notion.so/Custom-Pok-mon-Properties-2fb57e0d4afd81c4a4bed69179471d09?pvs=21)
+[Custom Pokémon Properties](https://www.notion.so/Custom-Pok-mon-Properties-34557e0d4afd818d906bd38dcc380447?pvs=21)
 
-[Holdings](https://www.notion.so/Holdings-2fb57e0d4afd81aaa359e1948d19988e?pvs=21)
+[Holdings](https://www.notion.so/Holdings-34557e0d4afd81569ff1ee48fbfc392a?pvs=21)
 
-[ExpAll Logic](https://www.notion.so/ExpAll-Logic-2fb57e0d4afd8195be3bd2ebbd5239b7?pvs=21)
+[ExpAll Logic](https://www.notion.so/ExpAll-Logic-34557e0d4afd814197c6fc9eaa0d879a?pvs=21)
 
-[Spawning Buckets Attachment](https://www.notion.so/Spawning-Buckets-Attachment-2fb57e0d4afd813c96f7cbb8e6924c16?pvs=21)
+[Spawning Buckets Attachment](https://www.notion.so/Spawning-Buckets-Attachment-34557e0d4afd81028b19e20ee31a93d7?pvs=21)
 
-[Spawn Cause Attachment](https://www.notion.so/Spawn-Cause-Attachment-2fb57e0d4afd8126bf67e5f526098552?pvs=21)
+[Spawn Cause Attachment](https://www.notion.so/Spawn-Cause-Attachment-34557e0d4afd815db306e2e2407c73b1?pvs=21)
 
-[`PokemonMatcher`](https://www.notion.so/PokemonMatcher-2fb57e0d4afd819180aee50ae705c795?pvs=21)
+[`PokemonMatcher`](https://www.notion.so/PokemonMatcher-34557e0d4afd81f8a1a5f52108ca6132?pvs=21)
 
-[`ResourceReloadListeners`](https://www.notion.so/ResourceReloadListeners-2fb57e0d4afd810ba3fee0a59207e060?pvs=21)
+[`ResourceReloadListeners`](https://www.notion.so/ResourceReloadListeners-34557e0d4afd819da8bfd1d7b1209823?pvs=21)
 
-[Block & Item Registration](https://www.notion.so/Block-Item-Registration-2fb57e0d4afd81979b18e8fccc978a57?pvs=21)
+[Block & Item Registration](https://www.notion.so/Block-Item-Registration-34557e0d4afd817cab91d25fc4a92ed9?pvs=21)
 
-[Commands](https://www.notion.so/Commands-2fb57e0d4afd81ceb2adfc24b1377050?pvs=21)
+[Commands](https://www.notion.so/Commands-34557e0d4afd81d9961cf9991915b7f5?pvs=21)
 
-[Limited List](https://www.notion.so/Limited-List-2fb57e0d4afd81a28e56e48ee96857cf?pvs=21)
+[Limited List](https://www.notion.so/Limited-List-34557e0d4afd81deb26fc6fbdb1565a3?pvs=21)
 
-[Wild Pokémon Reservation System](https://www.notion.so/Wild-Pok-mon-Reservation-System-2fb57e0d4afd814fb925ecc9593d9565?pvs=21)
+[Wild Pokémon Reservation System](https://www.notion.so/Wild-Pok-mon-Reservation-System-34557e0d4afd81df8af6e07c9d8b1ff1?pvs=21)
 
-[PokemonRepresentation](https://www.notion.so/PokemonRepresentation-2fb57e0d4afd81c1881cd894f12b8854?pvs=21)
+[PokemonRepresentation](https://www.notion.so/PokemonRepresentation-34557e0d4afd81ef9dc5e4425fe558f5?pvs=21)
 
-[Base Cobblemon Fixes](https://www.notion.so/Base-Cobblemon-Fixes-2fb57e0d4afd8147a428e845cd42b6d8?pvs=21)
+[Base Cobblemon Fixes](https://www.notion.so/Base-Cobblemon-Fixes-34557e0d4afd81a9ab8fd4131a5ec455?pvs=21)
 
-[Prevent Spawns](https://www.notion.so/Prevent-Spawns-2fb57e0d4afd8193b767d9023288b7c0?pvs=21)
+[Prevent Spawns](https://www.notion.so/Prevent-Spawns-34557e0d4afd816cb6a7df8f588ddcfb?pvs=21)
 
-[Spawning Influences](https://www.notion.so/Spawning-Influences-2fb57e0d4afd8127a8c9c78fffb629fb?pvs=21)
+[Spawning Influences](https://www.notion.so/Spawning-Influences-34557e0d4afd8153b677e774d701714f?pvs=21)
 
-[Custom Property Extractor](https://www.notion.so/Custom-Property-Extractor-2fb57e0d4afd819c9a21d526d7591634?pvs=21)
+[Custom Property Extractor](https://www.notion.so/Custom-Property-Extractor-34557e0d4afd817a8f54cbff2cb092e0?pvs=21)
 
-[Codecs](https://www.notion.so/Codecs-2fb57e0d4afd81e49bc5d746c1c10c8b?pvs=21)
+[Codecs](https://www.notion.so/Codecs-34557e0d4afd8170bd99c3c49d0b2227?pvs=21)
 
 ## Player Help
 
-[Config Options](https://www.notion.so/Config-Options-2fb57e0d4afd81d1ac7de074d314d790?pvs=21)
+[Config Options](https://www.notion.so/Config-Options-34557e0d4afd81048b19d3177d6fd2db?pvs=21)
 
 ## Dependencies
 
