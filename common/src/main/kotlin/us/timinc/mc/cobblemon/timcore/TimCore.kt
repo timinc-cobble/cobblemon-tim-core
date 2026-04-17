@@ -36,7 +36,7 @@ import us.timinc.mc.cobblemon.timcore.matcher.piece.IntRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.ItemTagPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.PropertiesPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.StringSetPiece
-import java.util.*
+import java.util.UUID
 
 const val MOD_ID = "tim_core"
 

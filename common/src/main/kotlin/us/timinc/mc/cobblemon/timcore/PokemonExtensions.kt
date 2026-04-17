@@ -4,7 +4,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import us.timinc.mc.cobblemon.timcore.TimCore.debugger
-import java.util.*
+import java.util.UUID
 
 fun Pokemon.getIdentifier() = "${getDisplayName().string}[${uuid}]"
 fun Pokemon.immuneToQuickBall() = this.persistentData.contains(TimCore.DataKeys.ALREADY_HIT_WITH_QUICK_BALL)

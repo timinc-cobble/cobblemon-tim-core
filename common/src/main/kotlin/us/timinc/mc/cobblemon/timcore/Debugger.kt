@@ -2,7 +2,7 @@ package us.timinc.mc.cobblemon.timcore
 
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import java.util.*
+import java.util.UUID
 
 open class Debugger<T : AbstractConfig>(
     @Suppress("MemberVisibilityCanBePrivate") val id: String,

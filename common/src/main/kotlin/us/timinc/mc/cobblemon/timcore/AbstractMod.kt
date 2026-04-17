@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import us.timinc.mc.cobblemon.timcore.codec.makeResourceLocationWithDefaultNamespaceCodec
 import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
 import us.timinc.mc.cobblemon.timcore.event.ReloadConfigEvent
 import us.timinc.mc.cobblemon.timcore.mixin.helper.PokeSnackBlockSpawningInfluencesHelper
@@ -28,6 +29,9 @@ abstract class AbstractMod<T : AbstractConfig>(
     @Suppress("PropertyName")
     @JvmField
     val RELOAD_CONFIG = EventObservable<ReloadConfigEvent>()
+
+    @Suppress("PropertyName", "unused")
+    val RESOURCE_LOCATION_CODEC = makeResourceLocationWithDefaultNamespaceCodec(modId)
 
     var debugger: Debugger<T>
 
