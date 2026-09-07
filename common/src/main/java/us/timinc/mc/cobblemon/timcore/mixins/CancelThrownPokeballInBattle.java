@@ -25,7 +25,7 @@ public abstract class CancelThrownPokeballInBattle extends ThrowableItemProjecti
         super(entityType, d, e, f, level);
     }
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract void drop();
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"), cancellable = true, remap = false)

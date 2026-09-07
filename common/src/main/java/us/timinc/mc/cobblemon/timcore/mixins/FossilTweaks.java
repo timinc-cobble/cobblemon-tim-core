@@ -16,6 +16,6 @@ public class FossilTweaks {
 
     @Inject(method = "startMachine", at = @At("TAIL"), remap = false)
     private void startMachineMixin(Level world, CallbackInfo ci) {
-        this.timeRemaining = FossilTweaksHelper.INSTANCE.calculateTime((com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure) ((Object) this));
+        this.timeRemaining = FossilTweaksHelper.INSTANCE.calculateTime((FossilMultiblockStructure) ((Object) this));
     }
 }

@@ -30,6 +30,18 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}") { isTransitive = false }
 
+    // GraalVM polyglot (provides HostAccess) for Showdown
+    modRuntimeOnly("org.graalvm.sdk:graal-sdk:22.3.0")
+    // Truffle API (required by Graal for language/polyglot support)
+    modRuntimeOnly("org.graalvm.truffle:truffle-api:22.3.0")
+    // GraalJS runtime (provides JS language implementation)
+    modRuntimeOnly("org.graalvm.js:js:22.3.0")
+    // Graal regular expression engine used by GraalJS
+    modRuntimeOnly("org.graalvm.regex:regex:22.3.0")
+    // Unicode support used by Cobblemon's Showdown service
+    modRuntimeOnly("com.ibm.icu:icu4j:71.1")
+    minecraftServerLibraries("com.ibm.icu:icu4j:71.1")
+
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))
     shadowCommon(project(":common", configuration = "transformProductionFabric"))

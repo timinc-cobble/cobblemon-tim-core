@@ -59,7 +59,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             "common" to "tim_core.buckets.common",
             "uncommon" to "tim_core.buckets.uncommon",
             "rare" to "tim_core.buckets.rare",
-            "ultra-rare" to "tim_core.buckets.ultra_rare"
+            "ultra-rare" to "tim_core.buckets.ultra_rare",
+            "boss" to "tim_core.buckets.boss"
         )
         val unknownBucketKey: String = "tim_core.buckets.unknown"
         val successKey: String = "tim_core.result.success"
@@ -103,6 +104,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             val PLAYER = createKey("spawner_player")
             val FISHING = createKey("spawner_fishing")
             val SNACK = createKey("spawner_snack")
+            val HABITAT = createKey("spawner_habitat")
             val UNKNOWN = createKey("spawner_unknown")
         }
     }
@@ -536,6 +538,18 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                 setOf("cosmetic_item_tag", "cosmetic_tag")
             )
         )
+        val IS_WILD = PokemonMatcher.registerPiece(
+            BooleanPiece(
+                { it.isWild() },
+                setOf("is_wild", "wild")
+            )
+        )
+        val IS_TETHERED = PokemonMatcher.registerPiece(
+            BooleanPiece(
+                { it.tetheringId != null },
+                setOf("is_tethered", "tethered")
+            )
+        )
     }
 
     init {
@@ -544,7 +558,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.HIGHEST, ExpAllHandler::handle)
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
-        CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
+        CobblemonEvents.BOBBER_SPAWN_POKEMON_PRE.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
         CobblemonEvents.EV_GAINED_EVENT_PRE.subscribe(Priority.NORMAL, DisableEvGain::handle)

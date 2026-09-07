@@ -1,6 +1,7 @@
 package us.timinc.mc.cobblemon.timcore
 
 import com.cobblemon.mod.common.api.Priority
+import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.api.reactive.EventObservable
@@ -10,6 +11,7 @@ import com.cobblemon.mod.common.api.spawning.condition.AppendageCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
+import com.cobblemon.mod.common.api.spawning.spawner.PokeSnackSpawnerFactory
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.mojang.brigadier.arguments.ArgumentType
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -20,7 +22,6 @@ import net.minecraft.world.level.block.Block
 import us.timinc.mc.cobblemon.timcore.codec.makeResourceLocationWithDefaultNamespaceCodec
 import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
 import us.timinc.mc.cobblemon.timcore.event.ReloadConfigEvent
-import us.timinc.mc.cobblemon.timcore.mixin.helper.PokeSnackBlockSpawningInfluencesHelper
 
 abstract class AbstractMod<T : AbstractConfig>(
     val modId: String,
@@ -122,19 +123,32 @@ abstract class AbstractMod<T : AbstractConfig>(
     }
 
     fun registerSnackSpawnerInfluence(influence: SpawningInfluence) {
-        PokeSnackBlockSpawningInfluencesHelper.snackSpawnerInfluences.add(influence)
+        PokeSnackSpawnerFactory.influenceBuilders.add { influence }
+    }
+
+    fun registerSnackSpawnerInfluence(influenceBuilder: (ctx: PokeSnackSpawnerFactory.Context) -> SpawningInfluence) {
+        PokeSnackSpawnerFactory.influenceBuilders.add(influenceBuilder)
+    }
+
+    val habitatSpawnerInfluences: MutableList<SpawningInfluence> = mutableListOf()
+    fun registerHabitatSpawnerInfluence(influence: SpawningInfluence) {
+        habitatSpawnerInfluences.add(influence)
     }
 
     fun registerGeneralSpawnerInfluence(influence: SpawningInfluence) {
         registerPlayerSpawnerInfluence(influence)
         registerFishingSpawnerInfluence(influence)
         registerSnackSpawnerInfluence(influence)
+        registerHabitatSpawnerInfluence(influence)
     }
 
     init {
         registerCommand(ConfigReloadCommand(this))
         PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST) {
             fishingSpawner.influences.addAll(fishingSpawnerInfluences)
+        }
+        CobblemonEvents.HABITAT_SPAWN_ACTIVATED.subscribe { event ->
+            event.spawner.influences.addAll(habitatSpawnerInfluences.filter { !event.spawner.influences.contains(it) })
         }
     }
 }
