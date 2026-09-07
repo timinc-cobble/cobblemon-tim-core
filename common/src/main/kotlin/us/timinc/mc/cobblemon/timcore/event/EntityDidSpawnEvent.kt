@@ -1,6 +1,5 @@
 package us.timinc.mc.cobblemon.timcore.event
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import net.minecraft.server.level.ServerPlayer
@@ -16,7 +15,6 @@ data class EntityDidSpawnEvent<T : Entity>(
         get() = action.spawnablePosition.cause.entity as? ServerPlayer
     val spawner: Spawner
         get() = action.spawnablePosition.spawner
-    val bucket: SpawnBucket
+    val bucket: String
         get() = action.bucket
-
 }

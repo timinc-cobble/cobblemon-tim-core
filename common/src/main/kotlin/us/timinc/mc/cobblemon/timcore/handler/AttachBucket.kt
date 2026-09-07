@@ -9,6 +9,6 @@ import us.timinc.mc.cobblemon.timcore.event.EntityDidSpawnEvent
 object AttachBucket : AbstractHandler<EntityDidSpawnEvent<PokemonEntity>>() {
     override fun handle(evt: EntityDidSpawnEvent<PokemonEntity>) {
         if (!config.addBucketToData) return
-        evt.entity.pokemon.persistentData.putString(SPAWNED_IN_BUCKET, evt.bucket.name)
+        evt.entity.pokemon.persistentData.putString(SPAWNED_IN_BUCKET, evt.bucket)
     }
 }

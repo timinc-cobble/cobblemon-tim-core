@@ -59,7 +59,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             "common" to "tim_core.buckets.common",
             "uncommon" to "tim_core.buckets.uncommon",
             "rare" to "tim_core.buckets.rare",
-            "ultra-rare" to "tim_core.buckets.ultra_rare"
+            "ultra-rare" to "tim_core.buckets.ultra_rare",
+            "boss" to "tim_core.buckets.boss"
         )
         val unknownBucketKey: String = "tim_core.buckets.unknown"
         val successKey: String = "tim_core.result.success"
@@ -103,6 +104,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             val PLAYER = createKey("spawner_player")
             val FISHING = createKey("spawner_fishing")
             val SNACK = createKey("spawner_snack")
+            val HABITAT = createKey("spawner_habitat")
             val UNKNOWN = createKey("spawner_unknown")
         }
     }
@@ -534,6 +536,18 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
             ItemTagPiece(
                 { it.cosmeticItem() },
                 setOf("cosmetic_item_tag", "cosmetic_tag")
+            )
+        )
+        val IS_WILD = PokemonMatcher.registerPiece(
+            BooleanPiece(
+                { it.isWild() },
+                setOf("is_wild", "wild")
+            )
+        )
+        val IS_TETHERED = PokemonMatcher.registerPiece(
+            BooleanPiece(
+                { it.tetheringId != null },
+                setOf("is_tethered", "tethered")
             )
         )
     }

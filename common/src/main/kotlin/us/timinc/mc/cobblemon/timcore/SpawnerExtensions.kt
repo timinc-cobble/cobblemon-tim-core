@@ -1,9 +1,11 @@
 package us.timinc.mc.cobblemon.timcore
 
+import com.cobblemon.mod.common.api.habitats.ActivatedHabitatSpawningInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 
 fun Spawner.getType(): String {
+    if (this.influences.any { it is ActivatedHabitatSpawningInfluence }) return TimCore.DataKeys.SpawnerTypes.HABITAT
     if (this is PlayerSpawner) return TimCore.DataKeys.SpawnerTypes.PLAYER
     if (this.name.startsWith("poke_snack_spawner")) return TimCore.DataKeys.SpawnerTypes.SNACK
     if (this.name == "fishing") return TimCore.DataKeys.SpawnerTypes.FISHING
