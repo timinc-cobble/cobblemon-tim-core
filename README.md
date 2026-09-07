@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.7.3-1.32
+v1.8.0-1.32
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
@@ -74,7 +74,7 @@ v1.7.3-1.32
 
 ## Known Issues
 
-- ≤v1.7.1-1.29.0 for some reason had an “or” for [Limited List](https://www.notion.so/Limited-List-27a57e0d4afd80b68ae3c0613e8e6ca7?pvs=21) if both whitelist and blacklist were present. That’d mean you could either pass the whitelist or not pass the blacklist, but that’s kinda silly. You want to be able to say something to the tune of “all electric types, but not those with a hidden ability” which requires it to be in the whitelist and not in the blacklist. Fixed in 1.7.1-1.29.1.
+- None. Yet. 👀 Why? Who's asking?
 
 ## Roadmap
 
