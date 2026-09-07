@@ -16,34 +16,62 @@ object ExpAllHandler : AbstractHandler<BattleVictoryEvent>() {
         val caseDebugger = debugger.getCaseDebugger()
         caseDebugger.debug("Reviewing post-battle for ExpAll logic.")
 
-        for (winner in evt.winners) {
-            for (winningPokemon in winner.pokemonList) {
-                val winningPokemonIdentifier = winningPokemon.effectedPokemon.getIdentifier()
-                caseDebugger.debug("Reviewing winner $winningPokemonIdentifier...")
-                val owner = winningPokemon.originalPokemon.getOwnerPlayer()
-                if (owner == null) {
-                    caseDebugger.debug("Not player-owned, skipping.")
-                    continue
-                }
-                if (!owner.hasExpAllFor(winningPokemon.effectedPokemon)) {
-                    caseDebugger.debug("Player ${owner.name} does not have an ExpAll, skipping.")
-                    continue
-                }
-                for (loser in evt.losers) {
-                    for (losingPokemon in loser.pokemonList) {
-                        val losingPokemonIdentifier = losingPokemon.effectedPokemon.getIdentifier()
-                        caseDebugger.debug("Reviewing loser $losingPokemonIdentifier...")
-                        if (winningPokemon.facedOpponents.contains(losingPokemon)) {
-                            caseDebugger.debug("Faced $losingPokemonIdentifier, skipping as exp already given by Cobblemon.")
+        val awardToFainted = Cobblemon.config.awardExperienceToFaintedPokemon
+        val awardOnLoss = Cobblemon.config.awardExperienceOnBattleLoss
+
+        for (defeatedActor in evt.battle.actors) {
+            val defeatedPokemon = defeatedActor.pokemonList.filter { it.health <= 0 }
+            if (defeatedPokemon.isEmpty()) continue
+
+            val teamWiped = defeatedActor.pokemonList.all { it.health <= 0 }
+            if (!teamWiped && !awardOnLoss) {
+                caseDebugger.debug("Skipping a non-wiped team because experience on battle loss is disabled.")
+                continue
+            }
+
+            for (recipientActor in defeatedActor.getSide().getOppositeSide().actors) {
+                for (recipient in recipientActor.pokemonList) {
+                    val recipientIdentifier = recipient.effectedPokemon.getIdentifier()
+                    caseDebugger.debug("Reviewing recipient $recipientIdentifier...")
+
+                    val owner = recipient.originalPokemon.getOwnerPlayer()
+                    if (owner == null) {
+                        caseDebugger.debug("Not player-owned, skipping.")
+                        continue
+                    }
+                    if (!owner.hasExpAllFor(recipient.effectedPokemon)) {
+                        caseDebugger.debug("Player ${owner.name} does not have an ExpAll, skipping.")
+                        continue
+                    }
+                    if (recipient.effectedPokemon.heldItem().`is`(CobblemonItemTags.EXPERIENCE_SHARE)) {
+                        caseDebugger.debug("Holding ExpShare, skipping as exp is already given by Cobblemon.")
+                        continue
+                    }
+                    if (recipient.health <= 0 && !awardToFainted) {
+                        caseDebugger.debug("Fainted and experience for fainted Pokémon is disabled, skipping.")
+                        continue
+                    }
+
+                    for (faintedOpponent in defeatedPokemon) {
+                        val faintedOpponentIdentifier = faintedOpponent.effectedPokemon.getIdentifier()
+                        caseDebugger.debug("Reviewing fainted opponent $faintedOpponentIdentifier...")
+
+                        if (awardToFainted) {
+                            val opponentFaintedAt = faintedOpponent.faintedAt ?: continue
+                            val recipientFaintedAt = recipient.faintedAt
+                            if (recipientFaintedAt != null && recipientFaintedAt <= opponentFaintedAt) {
+                                caseDebugger.debug("Recipient fainted before $faintedOpponentIdentifier, skipping.")
+                                continue
+                            }
+                        }
+                        if (recipient.facedOpponents.contains(faintedOpponent)) {
+                            caseDebugger.debug("Faced $faintedOpponentIdentifier, skipping as exp is already given by Cobblemon.")
                             continue
                         }
-                        if (winningPokemon.effectedPokemon.heldItem().`is`(CobblemonItemTags.EXPERIENCE_SHARE)) {
-                            caseDebugger.debug("Holding ExpShare, skipping as exp already given by Cobblemon.")
-                            continue
-                        }
+
                         val experience = Cobblemon.experienceCalculator.calculate(
-                            winningPokemon,
-                            losingPokemon,
+                            recipient,
+                            faintedOpponent,
                             config.expAllMultiplier.toDouble()
                         )
                         if (experience <= 0) {
@@ -52,7 +80,7 @@ object ExpAllHandler : AbstractHandler<BattleVictoryEvent>() {
                         }
 
                         caseDebugger.debug("Awarding $experience experience.")
-                        winningPokemon.actor.awardExperience(winningPokemon, experience)
+                        recipient.actor.awardExperience(recipient, experience)
                     }
                 }
             }
