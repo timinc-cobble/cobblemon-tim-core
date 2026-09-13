@@ -6,6 +6,7 @@
   "mixins": [
     "CancelThrownPokeballInBattle",
     "CantHurtPokemonEntity",
+    "FixTypeGemFeature",
     "FossilTweaks",
     "IsActuallyWild",
     "SendOutResurrectedPokemon",

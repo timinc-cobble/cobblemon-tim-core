@@ -21,6 +21,7 @@ dependencies {
 
     annotationProcessor("net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7")
     compileOnly("net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7")
+    compileOnly("io.github.llamalad7:mixinextras-common:0.4.1")
 }
 
 tasks.getByName<Test>("test") {
