@@ -12,10 +12,6 @@ architectury {
 loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
-
-    mixin {
-        defaultRefmapName.set("mixins.${project.name}.refmap.json")
-    }
 }
 val shadowCommon = configurations.create("shadowCommon")
 

@@ -9,6 +9,11 @@ architectury {
 
 loom {
     silentMojangMappingsLicense()
+
+    @Suppress("UnstableApiUsage")
+    mixin {
+        defaultRefmapName.set("mixins.${project.name}.refmap.json")
+    }
 }
 
 dependencies {
