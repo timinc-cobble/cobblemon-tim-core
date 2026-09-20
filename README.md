@@ -74,7 +74,7 @@ v1.8.1-1.32
 
 ## Known Issues
 
-- None. Yet. 👀 Why? Who's asking?
+- v1.32.0 had a sometimes-issue with trying to load its mixins from the same file as Cobblemon. Fixed in v1.32.1+.
 
 ## Roadmap
 
