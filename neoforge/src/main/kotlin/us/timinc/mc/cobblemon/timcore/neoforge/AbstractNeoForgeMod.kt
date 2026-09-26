@@ -32,6 +32,8 @@ abstract class AbstractNeoForgeMod(@Suppress("MemberVisibilityCanBePrivate") val
         NeoForge.EVENT_BUS.addListener(::registerReloadListeners)
         MOD_BUS.addListener(::registerItems)
         MOD_BUS.addListener(::registerBlocks)
+        MOD_BUS.addListener(::registerBlockEntityTypes)
+        MOD_BUS.addListener(::registerMenuTypes)
         MOD_BUS.addListener(::onCreativeTabsModification)
         mod.wrapUp()
     }
@@ -50,6 +52,20 @@ abstract class AbstractNeoForgeMod(@Suppress("MemberVisibilityCanBePrivate") val
         if (e.registry != BuiltInRegistries.BLOCK) return
         mod.blocks.entries.forEach { (k, v) ->
             Registry.register(BuiltInRegistries.BLOCK, k, v.block)
+        }
+    }
+
+    private fun registerBlockEntityTypes(e: RegisterEvent) {
+        if (e.registry != BuiltInRegistries.BLOCK_ENTITY_TYPE) return
+        mod.blockEntityTypes.entries.forEach { (k, v) ->
+            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, k, v)
+        }
+    }
+
+    private fun registerMenuTypes(e: RegisterEvent) {
+        if (e.registry != BuiltInRegistries.MENU) return
+        mod.menuTypes.entries.forEach { (k, v) ->
+            Registry.register(BuiltInRegistries.MENU, k, v)
         }
     }
 
