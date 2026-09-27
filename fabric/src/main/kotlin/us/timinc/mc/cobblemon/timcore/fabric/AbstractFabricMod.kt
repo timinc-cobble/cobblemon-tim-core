@@ -35,10 +35,10 @@ abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val m
             v.item?.let { registerItem(k, it) }
         }
         mod.blockEntityTypes.entries.forEach { (k, v) ->
-            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, k, v)
+            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, k, v.type)
         }
         mod.menuTypes.entries.forEach { (k, v) ->
-            Registry.register(BuiltInRegistries.MENU, k, v)
+            Registry.register(BuiltInRegistries.MENU, k, v.type)
         }
 
 //        TODO: Figure out why adding items to creative tabs is breaking on Fabric.
