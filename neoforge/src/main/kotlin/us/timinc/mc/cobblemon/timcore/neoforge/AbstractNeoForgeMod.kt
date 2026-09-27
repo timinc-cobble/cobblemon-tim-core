@@ -58,14 +58,14 @@ abstract class AbstractNeoForgeMod(@Suppress("MemberVisibilityCanBePrivate") val
     private fun registerBlockEntityTypes(e: RegisterEvent) {
         if (e.registry != BuiltInRegistries.BLOCK_ENTITY_TYPE) return
         mod.blockEntityTypes.entries.forEach { (k, v) ->
-            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, k, v)
+            Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, k, v.type)
         }
     }
 
     private fun registerMenuTypes(e: RegisterEvent) {
         if (e.registry != BuiltInRegistries.MENU) return
         mod.menuTypes.entries.forEach { (k, v) ->
-            Registry.register(BuiltInRegistries.MENU, k, v)
+            Registry.register(BuiltInRegistries.MENU, k, v.type)
         }
     }
 

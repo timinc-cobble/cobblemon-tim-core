@@ -14,20 +14,13 @@ import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
 import com.cobblemon.mod.common.api.spawning.spawner.PokeSnackSpawnerFactory
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.mojang.brigadier.arguments.ArgumentType
-import com.mojang.datafixers.types.Type
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
-import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.flag.FeatureFlagSet
-import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.inventory.AbstractContainerMenu
-import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.level.block.state.BlockState
 import us.timinc.mc.cobblemon.timcore.codec.makeResourceLocationWithDefaultNamespaceCodec
 import us.timinc.mc.cobblemon.timcore.command.ConfigReloadCommand
 import us.timinc.mc.cobblemon.timcore.event.ReloadConfigEvent
@@ -64,8 +57,8 @@ abstract class AbstractMod<T : AbstractConfig>(
 
     val items: MutableMap<ResourceLocation, ItemContainer<out Item>> = mutableMapOf()
     val blocks: MutableMap<ResourceLocation, BlockContainer<out Block>> = mutableMapOf()
-    val blockEntityTypes: MutableMap<ResourceLocation, BlockEntityType<*>> = mutableMapOf()
-    val menuTypes: MutableMap<ResourceLocation, MenuType<*>> = mutableMapOf()
+    val blockEntityTypes: MutableMap<ResourceLocation, BlockEntityTypeContainer<out BlockEntity>> = mutableMapOf()
+    val menuTypes: MutableMap<ResourceLocation, MenuTypeContainer<out AbstractContainerMenu>> = mutableMapOf()
 
     init {
         reloadConfig()
@@ -100,26 +93,18 @@ abstract class AbstractMod<T : AbstractConfig>(
 
     fun <T : BlockEntity> registerBlockEntity(
         name: String,
-        factory: (BlockPos, BlockState) -> T,
-        vararg validBlocks: Block,
-        datafixerType: Type<*>? = null,
-    ): BlockEntityType<T> {
-        val type = BlockEntityType.Builder.of(
-            { pos, state -> factory(pos, state) },
-            *validBlocks,
-        ).build(datafixerType)
-        blockEntityTypes[modResource(name)] = type
-        return type
+        container: BlockEntityTypeContainer<T>,
+    ): BlockEntityTypeContainer<T> {
+        blockEntityTypes[modResource(name)] = container
+        return container
     }
 
     fun <T : AbstractContainerMenu> registerMenu(
         name: String,
-        factory: MenuType.MenuSupplier<T>,
-        requiredFeatures: FeatureFlagSet = FeatureFlags.DEFAULT_FLAGS,
-    ): MenuType<T> {
-        val type = MenuType(factory, requiredFeatures)
-        menuTypes[modResource(name)] = type
-        return type
+        container: MenuTypeContainer<T>,
+    ): MenuTypeContainer<T> {
+        menuTypes[modResource(name)] = container
+        return container
     }
 
     fun <T : AppendageCondition> registerSpawningCondition(appendageClass: Class<T>) {
