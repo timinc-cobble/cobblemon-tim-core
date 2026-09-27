@@ -74,7 +74,7 @@ v1.8.1-1.33
 
 ## Known Issues
 
-- v1.32.0 had a sometimes-issue with trying to load its mixins from the same file as Cobblemon. Fixed in v1.32.1+.
+- v1.33.0 had a breaking issue with its new menu and block type registry handler stuff. v1.33.1 fixed that.
 
 ## Roadmap
 
