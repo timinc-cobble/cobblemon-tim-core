@@ -75,6 +75,7 @@ v1.8.1-1.33
 ## Known Issues
 
 - v1.33.0 had a breaking issue with its new menu and block type registry handler stuff. v1.33.1 fixed that.
+- v1.33.1 didn't load the fix for type gems properly. v1.33.2 fixed that.
 
 ## Roadmap
 
