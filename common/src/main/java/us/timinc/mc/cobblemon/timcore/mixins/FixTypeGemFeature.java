@@ -17,7 +17,8 @@ public class FixTypeGemFeature {
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/WorldGenLevel;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z",
                     ordinal = 0
-            )
+            ),
+            require = 1
     )
     private void placeInitialGem(Args args, @Local(name = "chosenPos") BlockPos chosenPos, @Local(name = "gemState") BlockState gemState) {
         args.set(0, chosenPos);
