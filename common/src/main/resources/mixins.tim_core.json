@@ -9,5 +9,8 @@
     "FossilTweaks",
     "IsActuallyWild",
     "TickPokemonEntity"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
