@@ -24,9 +24,9 @@ class ConfigBuilder<T> private constructor(private val clazz: Class<T>, private 
 
         if (configFile.exists()) {
             try {
-                val fileReader = FileReader(configFile)
-                config = gson.fromJson(fileReader, clazz)
-                fileReader.close()
+                FileReader(configFile).use { reader ->
+                    config = gson.fromJson(reader, clazz) ?: config
+                }
             } catch (e: Exception) {
                 println("Error reading config file")
             }
