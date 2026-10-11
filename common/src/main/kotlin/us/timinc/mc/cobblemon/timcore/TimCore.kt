@@ -66,6 +66,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val successKey: String = "tim_core.result.success"
         val failureKey: String = "tim_core.result.failure"
 
+        @Transient
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
             get() {
@@ -74,6 +75,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                     return _spawnBlacklistMatcher!!
                 }
             }
+        @Transient
         var _spawnWhitelistMatcher: Set<PokemonMatcher>? = null
         val spawnWhitelistMatcher: Set<PokemonMatcher>
             get() {
