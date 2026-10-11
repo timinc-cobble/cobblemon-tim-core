@@ -26,7 +26,6 @@ public abstract class CancelThrownPokeballInBattle {
         tim_core$postedBattleHit = false;
     }
 
-    // Validate the capture first, but let subscribers cancel before battle actions are attached.
     @Inject(method = "onHitEntity", at = @At(value = "INVOKE", target =
             "Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;getCaptureActions()Ljava/util/List;",
             remap = false), cancellable = true)
@@ -39,7 +38,6 @@ public abstract class CancelThrownPokeballInBattle {
         }
     }
 
-    // postThen is inlined by Kotlin; its emit call would otherwise notify subscribers twice.
     @WrapWithCondition(method = "onHitEntity", at = @At(value = "INVOKE", target =
             "Lcom/cobblemon/mod/common/api/reactive/EventObservable;emit([Ljava/lang/Object;)V",
             remap = false))
