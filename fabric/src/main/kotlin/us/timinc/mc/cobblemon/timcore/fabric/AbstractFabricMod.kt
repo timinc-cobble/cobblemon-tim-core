@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.ArgumentType
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -41,23 +42,15 @@ abstract class AbstractFabricMod(@Suppress("MemberVisibilityCanBePrivate") val m
             Registry.register(BuiltInRegistries.MENU, k, v.type)
         }
 
-//        TODO: Figure out why adding items to creative tabs is breaking on Fabric.
-//        mod.items.values.map { it.tab }.toSet().forEach { tabToAddTo ->
-//            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register { addingTab ->
-//                for (container in mod.items.values) {
-//                    if (container.tab != tabToAddTo) continue
-//                    addingTab.accept(container.item)
-//                }
-//            }
-//        }
-//        mod.blocks.values.map { it.tab }.toSet().forEach { tabToAddTo ->
-//            ItemGroupEvents.modifyEntriesEvent(tabToAddTo).register { addingTab ->
-//                for (container in mod.blocks.values) {
-//                    if (container.tab != tabToAddTo) continue
-//                    container.item?.let { addingTab.accept(it) }
-//                }
-//            }
-//        }
+        (mod.items.values.mapNotNull { it.tab } + mod.blocks.values.mapNotNull { it.tab })
+            .toSet().forEach { tab ->
+                ItemGroupEvents.modifyEntriesEvent(tab).register { entries ->
+                    mod.items.values.filter { it.tab == tab }.forEach { entries.accept(it.item) }
+                    mod.blocks.values.filter { it.tab == tab }.forEach { container ->
+                        container.item?.let { entries.accept(it) }
+                    }
+                }
+            }
         registerReloadListeners()
         mod.wrapUp()
     }
