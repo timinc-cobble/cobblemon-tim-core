@@ -46,12 +46,14 @@ data class PokemonMatcher(
         ): PokemonMatcher = parse(string)
     }
 
+    @Deprecated("Use a list of PokemonMatchers and accept any matching entry instead of match_one.")
     val matchOne: Boolean
         get() = raw.getBoolean(setOf("match_one")) ?: false
 
     val conditions: List<Predicate<Pokemon>>
         get() = pieces.mapNotNull { it.condition(raw) }
 
+    @Suppress("DEPRECATION")
     fun matches(pokemon: Pokemon): Boolean {
         return conditions.takeIf { it.isNotEmpty() }?.let { conditions ->
             if (matchOne) conditions.any { it.test(pokemon) } else conditions.all { it.test(pokemon) }

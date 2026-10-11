@@ -5,8 +5,10 @@ import us.timinc.mc.cobblemon.timcore.condition.PokemonPropertiesCondition
 import us.timinc.mc.cobblemon.timcore.matcher.MatcherRawData
 
 class PropertiesPiece : Piece<PokemonPropertiesCondition> {
-    override fun condition(raw: MatcherRawData): PokemonPropertiesCondition =
-        PokemonPropertiesCondition(raw.asString(PokemonMatcher.pieces.flatMap { it.allKeys }.toSet()))
+    override fun condition(raw: MatcherRawData): PokemonPropertiesCondition? =
+        raw.asString(PokemonMatcher.pieces.flatMap { it.allKeys }.toSet() + "match_one")
+            .takeIf { it.isNotBlank() }
+            ?.let(::PokemonPropertiesCondition)
 
     override val allKeys: Set<String>
         get() = emptySet()
