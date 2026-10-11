@@ -12,7 +12,7 @@ import us.timinc.mc.cobblemon.timcore.mixin.helper.CantHurtPokemonEntityHelper;
 public class CantHurtPokemonEntity {
 
     @SuppressWarnings("ConstantConditions")
-    @Inject(method = "isInvulnerableTo", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
     private void isInvulnerableBecauseOwned(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         if (CantHurtPokemonEntityHelper.INSTANCE
                 .cantBeHurtBecauseOwned((PokemonEntity) (Object) this, damageSource)) {
@@ -20,7 +20,7 @@ public class CantHurtPokemonEntity {
         }
     }
 
-    @Inject(method = "isInvulnerableTo", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
     private void isInvulnerableToInGeneral(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         if (CantHurtPokemonEntityHelper.INSTANCE.cantBeHurtInGeneral(damageSource)) {
             cir.setReturnValue(true);
