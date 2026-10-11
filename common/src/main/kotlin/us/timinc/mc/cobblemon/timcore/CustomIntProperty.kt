@@ -11,7 +11,7 @@ class CustomIntProperty(override val keys: Iterable<String>) : CustomPokemonProp
 
     override val needsKey: Boolean = true
 
-    override fun examples(): Collection<String> = (0..100).map { (it / 100.0).toString() }
+    override fun examples(): Collection<String> = (0..100).map(Int::toString)
 
     override fun fromString(value: String?) = IntProperty(
         keys.first(),
