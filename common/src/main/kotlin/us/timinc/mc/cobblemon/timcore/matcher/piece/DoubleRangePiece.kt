@@ -9,7 +9,7 @@ class DoubleRangePiece(
     val getter: (Pokemon) -> Double,
     val minKeys: Set<String>? = null,
     val maxKeys: Set<String>? = null,
-    val minValueBackup: Double = Double.MIN_VALUE,
+    val minValueBackup: Double = -Double.MAX_VALUE,
     val maxValueBackup: Double = Double.MAX_VALUE,
 ) : Piece<RangeCondition<Pokemon, Double>> {
     override fun condition(raw: MatcherRawData): RangeCondition<Pokemon, Double>? {

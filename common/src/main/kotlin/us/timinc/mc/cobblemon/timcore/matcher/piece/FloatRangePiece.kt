@@ -9,7 +9,7 @@ class FloatRangePiece(
     val getter: (Pokemon) -> Float,
     val minKeys: Set<String>? = null,
     val maxKeys: Set<String>? = null,
-    val minValueBackup: Float = Float.MIN_VALUE,
+    val minValueBackup: Float = -Float.MAX_VALUE,
     val maxValueBackup: Float = Float.MAX_VALUE,
 ) : Piece<RangeCondition<Pokemon, Float>> {
     override fun condition(raw: MatcherRawData): RangeCondition<Pokemon, Float>? {
