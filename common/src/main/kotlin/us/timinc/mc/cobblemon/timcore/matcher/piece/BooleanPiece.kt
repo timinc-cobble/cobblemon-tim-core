@@ -8,8 +8,8 @@ class BooleanPiece(
     val getter: (Pokemon) -> Boolean,
     val desiredKeys: Set<String>? = null,
 ) : Piece<BooleanCondition<Pokemon>> {
-    override fun condition(raw: MatcherRawData): BooleanCondition<Pokemon> {
-        val desired = desiredKeys?.let(raw::getBoolean)
+    override fun condition(raw: MatcherRawData): BooleanCondition<Pokemon>? {
+        val desired = desiredKeys?.let(raw::getBoolean) ?: return null
 
         return BooleanCondition(desired, getter)
     }

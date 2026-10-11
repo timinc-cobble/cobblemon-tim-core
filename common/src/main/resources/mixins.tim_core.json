@@ -6,11 +6,12 @@
   "mixins": [
     "CancelThrownPokeballInBattle",
     "CantHurtPokemonEntity",
-    "FixTestPartySlotCommand",
-    "FixTypeGemFeature",
     "FossilTweaks",
+    "FossilClientUpdate",
     "IsActuallyWild",
-    "SendOutResurrectedPokemon",
     "TickPokemonEntity"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
