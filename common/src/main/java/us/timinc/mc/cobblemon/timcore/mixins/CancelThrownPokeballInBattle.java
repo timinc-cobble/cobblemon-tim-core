@@ -1,44 +1,47 @@
 package us.timinc.mc.cobblemon.timcore.mixins;
 
+import com.cobblemon.mod.common.api.reactive.EventObservable;
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.level.Level;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.minecraft.world.phys.EntityHitResult;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.timinc.mc.cobblemon.timcore.mixin.helper.CancelThrownPokeballInBattleHelper;
 
 @Mixin(EmptyPokeBallEntity.class)
-public abstract class CancelThrownPokeballInBattle extends ThrowableItemProjectile {
-    @Shadow
-    @Final
-    private static EntityDataAccessor<Byte> CAPTURE_STATE;
-
-    public CancelThrownPokeballInBattle(EntityType<? extends ThrowableItemProjectile> entityType, double d, double e, double f, Level level) {
-        super(entityType, d, e, f, level);
-    }
+public abstract class CancelThrownPokeballInBattle {
+    @Unique
+    private boolean tim_core$postedBattleHit;
 
     @Shadow(remap = false)
     protected abstract void drop();
 
-    @Inject(method = "onHitEntity", at = @At(value = "HEAD"), cancellable = true, remap = false)
-    void cancelHitEntityInBattle(EntityHitResult hitResult, CallbackInfo ci) {
-        if (EmptyPokeBallEntity.CaptureState.getEntries().get(this.entityData.get(CAPTURE_STATE).intValue()) == EmptyPokeBallEntity.CaptureState.NOT) {
-            if (hitResult.getEntity() instanceof PokemonEntity entity && !this.level().isClientSide) {
-                if (entity.isBattling()) {
-                    if (CancelThrownPokeballInBattleHelper.INSTANCE.checkForCancel((EmptyPokeBallEntity) ((Object) this), entity)) {
-                        this.drop();
-                        ci.cancel();
-                    }
-                }
-            }
+    @Inject(method = "onHitEntity", at = @At("HEAD"))
+    private void tim_core$resetHitEvent(EntityHitResult hitResult, CallbackInfo ci) {
+        tim_core$postedBattleHit = false;
+    }
+
+    @Inject(method = "onHitEntity", at = @At(value = "INVOKE", target =
+            "Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;getCaptureActions()Ljava/util/List;",
+            remap = false), cancellable = true)
+    private void tim_core$checkBattleHit(EntityHitResult hitResult, CallbackInfo ci) {
+        PokemonEntity pokemonEntity = (PokemonEntity) hitResult.getEntity();
+        tim_core$postedBattleHit = true;
+        if (CancelThrownPokeballInBattleHelper.INSTANCE.checkForCancel((EmptyPokeBallEntity) (Object) this, pokemonEntity)) {
+            drop();
+            ci.cancel();
         }
+    }
+
+    @WrapWithCondition(method = "onHitEntity", at = @At(value = "INVOKE", target =
+            "Lcom/cobblemon/mod/common/api/reactive/EventObservable;emit([Ljava/lang/Object;)V",
+            remap = false))
+    private boolean tim_core$emitHitOnce(EventObservable<?> observable, Object[] events) {
+        return !tim_core$postedBattleHit;
     }
 }
