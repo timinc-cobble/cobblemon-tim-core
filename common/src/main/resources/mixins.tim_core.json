@@ -6,7 +6,6 @@
   "mixins": [
     "CancelThrownPokeballInBattle",
     "CantHurtPokemonEntity",
-    "FixTestPartySlotCommand",
     "FixTypeGemFeature",
     "FossilTweaks",
     "IsActuallyWild",
