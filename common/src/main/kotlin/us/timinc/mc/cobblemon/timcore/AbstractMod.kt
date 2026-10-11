@@ -170,5 +170,6 @@ abstract class AbstractMod<T : AbstractConfig>(
         CobblemonEvents.HABITAT_SPAWN_ACTIVATED.subscribe { event ->
             event.spawner.influences.addAll(habitatSpawnerInfluences.filter { !event.spawner.influences.contains(it) })
         }
+        RELOAD_CONFIG.subscribe(Priority.HIGHEST) { debugger = Debugger(modId, config) }
     }
 }
