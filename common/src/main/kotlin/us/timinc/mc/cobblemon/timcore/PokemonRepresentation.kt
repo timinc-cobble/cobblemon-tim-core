@@ -46,7 +46,7 @@ abstract class PokemonRepresentation<T>(val pokemon: T) {
 
     class FromProperties(pokemon: PokemonProperties) : PokemonRepresentation<PokemonProperties>(pokemon) {
         override val species: Species?
-            get() = pokemon.species?.let { PokemonSpecies.getByName(it.asIdentifierDefaultingNamespace().path) }
+            get() = pokemon.species?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
         override val form: FormData?
             get() = if (species != null) getPokemon().form else null
         override val abilityName: String?
