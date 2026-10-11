@@ -24,6 +24,11 @@ class MatcherRawData(
 
     fun updateValue(newValue: String, labels: Set<String>) {
         val cleanedLabels = labels.map(String::lowercase)
+        if (cleanedLabels.isEmpty()) return
+        if (keyPairs.none { (k) -> k in cleanedLabels }) {
+            keyPairs = keyPairs + (cleanedLabels.first() to newValue)
+            return
+        }
         keyPairs = keyPairs.map { (k, v) -> if (k in cleanedLabels) k to newValue else k to v }.toMutableList()
     }
 
