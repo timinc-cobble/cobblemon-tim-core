@@ -9,7 +9,7 @@ val FLOAT_RANGE_CODEC: Codec<ClosedFloatingPointRange<Float>> = Codec.STRING.xma
 
         try {
             val actualStart = when (start.lowercase()) {
-                "min" -> Float.MIN_VALUE
+                "min" -> -Float.MAX_VALUE
                 else -> start.toFloat()
             }
             val actualEnd = when (end.lowercase()) {
