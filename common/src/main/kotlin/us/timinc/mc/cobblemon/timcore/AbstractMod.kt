@@ -116,7 +116,12 @@ abstract class AbstractMod<T : AbstractConfig>(
         RELOAD_CONFIG.post(ReloadConfigEvent())
     }
 
+    private var wrappedUp = false
+
     fun wrapUp() {
+        if (wrappedUp) return
+        wrappedUp = true
+        registerEventHandlers()
         var initialized = false
         PlatformEvents.SERVER_STARTED.subscribe { evt ->
             if (initialized) return@subscribe
@@ -162,14 +167,17 @@ abstract class AbstractMod<T : AbstractConfig>(
         registerHabitatSpawnerInfluence(influence)
     }
 
-    init {
-        registerCommand(ConfigReloadCommand(this))
+    protected open fun registerEventHandlers() {
         PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST) {
             fishingSpawner.influences.addAll(fishingSpawnerInfluences)
         }
         CobblemonEvents.HABITAT_SPAWN_ACTIVATED.subscribe { event ->
             event.spawner.influences.addAll(habitatSpawnerInfluences.filter { !event.spawner.influences.contains(it) })
         }
+    }
+
+    init {
+        registerCommand(ConfigReloadCommand(this))
         RELOAD_CONFIG.subscribe(Priority.HIGHEST) { debugger = Debugger(modId, config) }
     }
 }

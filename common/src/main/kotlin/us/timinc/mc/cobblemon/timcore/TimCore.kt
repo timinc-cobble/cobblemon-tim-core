@@ -554,9 +554,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         )
     }
 
-    init {
-        PokemonMatcherPieces
-
+    override fun registerEventHandlers() {
+        super.registerEventHandlers()
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.HIGHEST, ExpAllHandler::handle)
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
@@ -567,6 +566,11 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
 
         registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
         registerGeneralSpawnerInfluence(EntityDidSpawn())
+    }
+
+    init {
+        PokemonMatcherPieces
+
         registerReloadListener(CustomPropertyExtractorWhitelistManager)
         registerCommand(PokemonMatcherTestCommand)
         RELOAD_CONFIG.subscribe {

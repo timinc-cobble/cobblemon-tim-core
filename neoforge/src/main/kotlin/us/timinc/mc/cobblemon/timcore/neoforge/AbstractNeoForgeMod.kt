@@ -6,6 +6,7 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
@@ -35,7 +36,11 @@ abstract class AbstractNeoForgeMod(@Suppress("MemberVisibilityCanBePrivate") val
         MOD_BUS.addListener(::registerBlockEntityTypes)
         MOD_BUS.addListener(::registerMenuTypes)
         MOD_BUS.addListener(::onCreativeTabsModification)
-        mod.wrapUp()
+        MOD_BUS.addListener(::commonSetup)
+    }
+
+    private fun commonSetup(event: FMLCommonSetupEvent) {
+        event.enqueueWork { mod.wrapUp() }
     }
 
     private fun registerItems(e: RegisterEvent) {
