@@ -3,6 +3,10 @@ package us.timinc.mc.cobblemon.timcore
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 abstract class LimitedList<X, Y> {
+    class Generic<T> : LimitedList<T, T>() {
+        override fun isInList(entry: T, list: Set<T>): Boolean = entry in list
+    }
+
     object PokemonMatcherList : LimitedList<Pokemon, PokemonMatcher>() {
         override fun isInList(entry: Pokemon, list: Set<PokemonMatcher>): Boolean = list.any { it.matches(entry) }
     }
