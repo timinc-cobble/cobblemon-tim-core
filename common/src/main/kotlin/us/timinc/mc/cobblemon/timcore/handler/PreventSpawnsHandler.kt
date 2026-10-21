@@ -1,16 +1,16 @@
-package us.timinc.mc.cobblemon.timcore.influence
+package us.timinc.mc.cobblemon.timcore.handler
 
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
-import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import us.timinc.mc.cobblemon.timcore.AbstractHandler
 import us.timinc.mc.cobblemon.timcore.LimitedList
 import us.timinc.mc.cobblemon.timcore.TimCore
+import us.timinc.mc.cobblemon.timcore.event.SpawningInfluenceEvents
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.concurrent.thread
 
-class PreventSpawnsInfluence : SpawningInfluence {
+class PreventSpawnsHandler : AbstractHandler<SpawningInfluenceEvents.Spawnable>() {
     companion object {
         enum class CacheResult(val value: Boolean) {
             YES(true), NO(false), COMPUTING(false)
@@ -60,7 +60,12 @@ class PreventSpawnsInfluence : SpawningInfluence {
         }
     }
 
-    override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition): Boolean {
+    override fun handle(evt: SpawningInfluenceEvents.Spawnable) {
+        if (!evt.allowed) return
+        evt.allowed = isAllowed(evt.detail)
+    }
+
+    private fun isAllowed(detail: SpawnDetail): Boolean {
         if (detail !is PokemonSpawnDetail) return true
         if (TimCore.config.spawnBlacklistMatcher.isEmpty() && TimCore.config.spawnWhitelistMatcher.isEmpty()) return true
 
