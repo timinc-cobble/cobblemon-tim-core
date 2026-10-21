@@ -42,6 +42,21 @@ import java.util.UUID
 const val MOD_ID = "tim_core"
 
 object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
+    private var modLookup: ((String) -> Boolean)? = null
+
+    fun initializeModLookup(lookup: (String) -> Boolean) {
+        modLookup = lookup
+    }
+
+    fun isModInstalled(modId: String): Boolean {
+        val lookup = modLookup
+        if (lookup == null) {
+            throw IllegalStateException("Cannot check whether '$modId' is installed: TimCore's loader entrypoint has not initialized the mod lookup.")
+        }
+
+        return lookup(modId)
+    }
+
     class Config : AbstractConfig() {
         val expAllMultiplier: Float = 1.0F
         val enableExpAll: Boolean = true

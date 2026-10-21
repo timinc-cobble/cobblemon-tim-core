@@ -2,6 +2,7 @@ package us.timinc.mc.cobblemon.timcore.neoforge
 
 import net.minecraft.server.level.ServerLevel
 import net.neoforged.fml.common.Mod
+import net.neoforged.fml.ModList
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent
@@ -14,6 +15,7 @@ import us.timinc.mc.cobblemon.timcore.event.EntityUnloadEvent
 @Mod(MOD_ID)
 object NeoForgeTimCore : AbstractNeoForgeMod(TimCore) {
     init {
+        TimCore.initializeModLookup { ModList.get().isLoaded(it) }
         with(NeoForge.EVENT_BUS) {
             addListener(::onEntityLoad)
             addListener(::onEntityUnload)
