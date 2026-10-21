@@ -1,6 +1,7 @@
 package us.timinc.mc.cobblemon.timcore.fabric
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
+import net.fabricmc.loader.api.FabricLoader
 import us.timinc.mc.cobblemon.timcore.TimCore
 import us.timinc.mc.cobblemon.timcore.TimCoreEvents
 import us.timinc.mc.cobblemon.timcore.event.EntityLoadEvent
@@ -8,6 +9,7 @@ import us.timinc.mc.cobblemon.timcore.event.EntityUnloadEvent
 
 object FabricTimCore : AbstractFabricMod(TimCore) {
     override fun onInitialize() {
+        TimCore.initializeModLookup { FabricLoader.getInstance().isModLoaded(it) }
         ServerEntityEvents.ENTITY_LOAD.register { entity, world ->
             TimCoreEvents.ENTITY_LOAD.post(
                 EntityLoadEvent(
