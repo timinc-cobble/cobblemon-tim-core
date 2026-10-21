@@ -26,6 +26,7 @@ import us.timinc.mc.cobblemon.timcore.handler.FishingWithoutATeamCanceller
 import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
 import us.timinc.mc.cobblemon.timcore.handler.PreventQuickBallSpam
 import us.timinc.mc.cobblemon.timcore.influence.EntityDidSpawn
+import us.timinc.mc.cobblemon.timcore.influence.EventSpawningInfluence
 import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
 import us.timinc.mc.cobblemon.timcore.matcher.piece.BooleanPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.CompoundTagFloatRangePiece
@@ -566,6 +567,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
 
         registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
         registerGeneralSpawnerInfluence(EntityDidSpawn())
+        registerGeneralSpawnerInfluence(EventSpawningInfluence())
     }
 
     init {
