@@ -13,8 +13,33 @@ import us.timinc.mc.cobblemon.timcore.event.EntityDidSpawnEvent
 import us.timinc.mc.cobblemon.timcore.event.EntityLoadEvent
 import us.timinc.mc.cobblemon.timcore.event.EntityUnloadEvent
 import us.timinc.mc.cobblemon.timcore.event.PokemonEntityTickedEvent
+import us.timinc.mc.cobblemon.timcore.event.SpawningInfluenceEvents
 
 object TimCoreEvents {
+    @JvmField
+    val SPAWNING_POSITION = EventObservable<SpawningInfluenceEvents.Position>()
+
+    @JvmField
+    val SPAWNING_SPAWNABLE = EventObservable<SpawningInfluenceEvents.Spawnable>()
+
+    @JvmField
+    val SPAWNING_WEIGHT = EventObservable<SpawningInfluenceEvents.Weight>()
+
+    @JvmField
+    val SPAWNING_ACTION = EventObservable<SpawningInfluenceEvents.Action>()
+
+    @JvmField
+    val SPAWNING_SPAWN = EventObservable<SpawningInfluenceEvents.Spawn>()
+
+    @JvmField
+    val SPAWNING_BUCKET_WEIGHTS = EventObservable<SpawningInfluenceEvents.BucketWeights>()
+
+    @JvmField
+    val SPAWNING_ALLOWED_POSITION = EventObservable<SpawningInfluenceEvents.AllowedPosition>()
+
+    @JvmField
+    val SPAWNING_INJECT_SPAWNS = EventObservable<SpawningInfluenceEvents.InjectSpawns>()
+
     @JvmField
     val POKEMON_CAPTURED_IN_BATTLE = POKEMON_CAPTURED.pipe(
         filter { it.player.isInBattle() }
