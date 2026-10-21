@@ -21,12 +21,13 @@ import us.timinc.mc.cobblemon.timcore.data.CustomPropertyExtractorWhitelistManag
 import us.timinc.mc.cobblemon.timcore.handler.AttachBucket
 import us.timinc.mc.cobblemon.timcore.handler.AttachSpawnCause
 import us.timinc.mc.cobblemon.timcore.handler.DisableEvGain
+import us.timinc.mc.cobblemon.timcore.handler.EntityDidSpawnHandler
 import us.timinc.mc.cobblemon.timcore.handler.ExpAllHandler
 import us.timinc.mc.cobblemon.timcore.handler.FishingWithoutATeamCanceller
 import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
 import us.timinc.mc.cobblemon.timcore.handler.PreventQuickBallSpam
-import us.timinc.mc.cobblemon.timcore.influence.EntityDidSpawn
-import us.timinc.mc.cobblemon.timcore.influence.PreventSpawnsInfluence
+import us.timinc.mc.cobblemon.timcore.handler.PreventSpawnsHandler
+import us.timinc.mc.cobblemon.timcore.influence.EventSpawningInfluence
 import us.timinc.mc.cobblemon.timcore.matcher.piece.BooleanPiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.CompoundTagFloatRangePiece
 import us.timinc.mc.cobblemon.timcore.matcher.piece.CompoundTagPiece
@@ -564,8 +565,9 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
         CobblemonEvents.EV_GAINED_EVENT_PRE.subscribe(Priority.NORMAL, DisableEvGain::handle)
 
-        registerGeneralSpawnerInfluence(PreventSpawnsInfluence())
-        registerGeneralSpawnerInfluence(EntityDidSpawn())
+        TimCoreEvents.SPAWNING_SPAWNABLE.subscribe(Priority.LOW, PreventSpawnsHandler()::handle)
+        TimCoreEvents.SPAWNING_ACTION.subscribe(Priority.LOWEST, EntityDidSpawnHandler::handle)
+        registerGeneralSpawnerInfluence(EventSpawningInfluence())
     }
 
     init {
