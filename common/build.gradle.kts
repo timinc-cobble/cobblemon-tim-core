@@ -12,7 +12,7 @@ loom {
 
     @Suppress("UnstableApiUsage")
     mixin {
-        defaultRefmapName.set("mixins.${project.name}.refmap.json")
+        defaultRefmapName.set("mixins.${rootProject.name}.refmap.json")
     }
 }
 
