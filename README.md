@@ -1,6 +1,6 @@
 # Tim Core
 
-v1.8.2-1.36
+v1.8.3-1.36
 
 [Modrinth](https://modrinth.com/mod/cobblemon-tim-core)
 
