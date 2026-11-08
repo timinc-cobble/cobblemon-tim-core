@@ -17,6 +17,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import us.timinc.mc.cobblemon.timcore.command.PokemonMatcherTestCommand
+import us.timinc.mc.cobblemon.timcore.config.OverridableOption
 import us.timinc.mc.cobblemon.timcore.data.CustomPropertyExtractorWhitelistManager
 import us.timinc.mc.cobblemon.timcore.handler.AttachBucket
 import us.timinc.mc.cobblemon.timcore.handler.AttachSpawnCause
@@ -24,6 +25,8 @@ import us.timinc.mc.cobblemon.timcore.handler.DisableEvGain
 import us.timinc.mc.cobblemon.timcore.handler.EntityDidSpawnHandler
 import us.timinc.mc.cobblemon.timcore.handler.ExpAllHandler
 import us.timinc.mc.cobblemon.timcore.handler.FishingWithoutATeamCanceller
+import us.timinc.mc.cobblemon.timcore.handler.NoCatchOutsideOfBattleHandler
+import us.timinc.mc.cobblemon.timcore.handler.NoDropsOutsideOfBattleHandler
 import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
 import us.timinc.mc.cobblemon.timcore.handler.PreventQuickBallSpam
 import us.timinc.mc.cobblemon.timcore.handler.PreventSpawnsHandler
@@ -50,9 +53,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
 
     fun isModInstalled(modId: String): Boolean {
         val lookup = modLookup
-        if (lookup == null) {
-            throw IllegalStateException("Cannot check whether '$modId' is installed: TimCore's loader entrypoint has not initialized the mod lookup.")
-        }
+            ?: throw IllegalStateException("Cannot check whether '$modId' is installed: TimCore's loader entrypoint has not initialized the mod lookup.")
 
         return lookup(modId)
     }
@@ -64,6 +65,10 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val addBucketToData: Boolean = true
         val addSpawnCauseToData: Boolean = true
         val preventQuickBallSpam: Boolean = true
+        val outOfBattleCaptures = OverridableOption.PokemonOption(true)
+        val outOfBattleCaptureBallBypass =
+            OverridableOption.PokemonOption(listOf("cobblemon:safari_ball", "cobblemon:master_ball"))
+        val onlyDropInBattle = OverridableOption.PokemonOption(false)
         val spawnBlacklist: List<String> = emptyList()
         val spawnWhitelist: List<String> = emptyList()
         val pokemonEntitiesAreInvulnerable: Boolean = false
@@ -82,6 +87,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val successKey: String = "tim_core.result.success"
         val failureKey: String = "tim_core.result.failure"
 
+        @Suppress("PropertyName")
         @Transient
         var _spawnBlacklistMatcher: Set<PokemonMatcher>? = null
         val spawnBlacklistMatcher: Set<PokemonMatcher>
@@ -91,6 +97,8 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
                     return _spawnBlacklistMatcher!!
                 }
             }
+
+        @Suppress("PropertyName")
         @Transient
         var _spawnWhitelistMatcher: Set<PokemonMatcher>? = null
         val spawnWhitelistMatcher: Set<PokemonMatcher>
@@ -574,7 +582,9 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         super.registerEventHandlers()
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.HIGHEST, ExpAllHandler::handle)
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
+        CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.HIGHEST, NoCatchOutsideOfBattleHandler::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
+        CobblemonEvents.LOOT_DROPPED.subscribe(Priority.HIGHEST, NoDropsOutsideOfBattleHandler::handle)
         CobblemonEvents.BOBBER_SPAWN_POKEMON_PRE.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachSpawnCause::handle)
