@@ -10,11 +10,13 @@ open class Debugger<T : AbstractConfig>(
 ) {
     private val logger: Logger = LogManager.getLogger(id)
 
+    @JvmOverloads
     open fun debug(msg: String, overrideConfig: Boolean = false) {
         if (!config.debug && !overrideConfig) return
         logger.info(msg)
     }
 
+    @JvmOverloads
     fun getCaseDebugger(caseUuid: String = UUID.randomUUID().toString()): Case<T> {
         return Case(caseUuid, id, config)
     }

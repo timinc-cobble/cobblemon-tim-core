@@ -1,7 +1,7 @@
 plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow")
 }
 
 architectury {
@@ -54,16 +54,25 @@ tasks.processResources {
     inputs.property("version", project.version)
 
     filesMatching("fabric.mod.json") {
+        @Suppress("DEPRECATION", "We'll figure it out when Gradle 10 releases")
         expand(project.properties)
     }
 
 }
 
 tasks {
-
     jar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveClassifier.set("dev-slim")
+    }
+
+    remapSourcesJar {
+        dependsOn(shadowJar)
+        inputFile.set(shadowJar.flatMap { it.archiveFile })
+    }
+    sourcesJar {
+        dependsOn(project(":common").tasks.named("sourcesJar"))
+        from(project(":common").tasks.named<Jar>("sourcesJar").get().archiveFile.map { zipTree(it) })
     }
 
     shadowJar {
