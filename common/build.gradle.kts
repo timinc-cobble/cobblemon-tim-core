@@ -35,7 +35,12 @@ tasks {
         useJUnitPlatform()
     }
 
-    sourcesJar {
+    remapJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
+
+    remapSourcesJar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")
     }

@@ -73,8 +73,6 @@ tasks {
     sourcesJar {
         dependsOn(project(":common").tasks.named("sourcesJar"))
         from(project(":common").tasks.named<Jar>("sourcesJar").get().archiveFile.map { zipTree(it) })
-        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
-        archiveVersion.set("${rootProject.version}")
     }
 
     shadowJar {
@@ -87,6 +85,11 @@ tasks {
     remapJar {
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
+
+    remapSourcesJar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")
     }
