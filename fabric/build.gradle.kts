@@ -70,11 +70,6 @@ tasks {
         archiveClassifier.set("dev-slim")
     }
 
-    remapSourcesJar {
-        dependsOn(shadowJar)
-        inputFile.set(shadowJar.flatMap { it.archiveFile })
-    }
-
     sourcesJar {
         dependsOn(project(":common").tasks.named("sourcesJar"))
         from(project(":common").tasks.named<Jar>("sourcesJar").get().archiveFile.map { zipTree(it) })
