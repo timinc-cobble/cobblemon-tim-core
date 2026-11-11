@@ -31,10 +31,6 @@ dependencies {
 }
 
 tasks {
-    test {
-        useJUnitPlatform()
-    }
-
     remapJar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")

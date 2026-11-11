@@ -51,20 +51,16 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-tasks.processResources {
-    inputs.property("version", project.version)
-
-    filesMatching("META-INF/neoforge.mods.toml") {
-        @Suppress("DEPRECATION", "We'll figure it out when Gradle 10 releases")
-        expand(project.properties)
-    }
-}
-
 tasks {
+    processResources {
+        inputs.property("version", project.version)
+
+        filesMatching("META-INF/neoforge.mods.toml") {
+            @Suppress("DEPRECATION", "We'll figure it out when Gradle 10 releases")
+            expand(project.properties)
+        }
+    }
+
     jar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveClassifier.set("dev-slim")

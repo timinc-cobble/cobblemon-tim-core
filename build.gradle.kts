@@ -21,10 +21,6 @@ allprojects {
         maven("https://maven.impactdev.net/repository/development/")
     }
 
-    tasks.getByName<Test>("test") {
-        useJUnitPlatform()
-    }
-
     java {
         withSourcesJar()
     }
@@ -64,6 +60,10 @@ subprojects {
     tasks {
         withType<GenerateModuleMetadata> {
             enabled = false
+        }
+
+        test {
+            useJUnitPlatform()
         }
     }
 }
