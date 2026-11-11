@@ -1,5 +1,3 @@
-import net.fabricmc.loom.configuration.mods.ArtifactMetadata
-
 plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
@@ -14,6 +12,7 @@ loom {
 
     @Suppress("UnstableApiUsage")
     mixin {
+        useLegacyMixinAp = true
         defaultRefmapName.set("mixins.${rootProject.name}.${project.name}.refmap.json")
     }
 }

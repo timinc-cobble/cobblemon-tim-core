@@ -10,7 +10,7 @@ import us.timinc.mc.cobblemon.timcore.mixin.helper.TickPokemonEntityHelper;
 
 @Mixin(PokemonEntity.class)
 public class TickPokemonEntity {
-    @Inject(method = "tick", at = @At("HEAD"), remap = false)
+    @Inject(method = "tick", at = @At("HEAD"))
     private void onPokemonEntityTick(CallbackInfo ci) {
         TimCore.INSTANCE.getDebugger().debug("test tick mixin for PokemonEntity");
         PokemonEntity self = (PokemonEntity) (Object) this;

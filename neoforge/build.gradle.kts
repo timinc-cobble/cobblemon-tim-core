@@ -12,6 +12,10 @@ architectury {
 loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
+
+    mixin {
+        useLegacyMixinAp = true
+    }
 }
 
 repositories {
