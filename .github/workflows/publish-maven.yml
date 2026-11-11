@@ -48,11 +48,9 @@ jobs:
       - name: Build
         env:
           LOADER: ${{ matrix.loader }}
-          IS_SNAPSHOT: ${{ github.event_name != 'release' && 1 || 0 }}
         run: ./gradlew :${{matrix.loader}}:build
 
       - name: Publish on Cobbled Creators Maven
         env:
           LOADER: ${{ matrix.loader }}
-          IS_SNAPSHOT: ${{ github.event_name != 'release' && 1 || 0 }}
         run: ./gradlew :${{ matrix.loader }}:publish
