@@ -9,14 +9,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import us.timinc.mc.cobblemon.timcore.TimCore;
 import us.timinc.mc.cobblemon.timcore.mixin.helper.FossilTweaksHelper;
 
 @Mixin(MultiblockEntity.class)
 public class FossilClientUpdate {
     @Inject(method = "getUpdateTag", at = @At("RETURN"))
     private void tim_core$scaleClientTimer(HolderLookup.Provider lookup, CallbackInfoReturnable<CompoundTag> cir) {
-        TimCore.INSTANCE.getDebugger().debug("test getUpdateTag mixin for MultiblockEntity");
         MultiblockEntity entity = (MultiblockEntity) (Object) this;
         if (entity.getLevel() == null || entity.getLevel().isClientSide) return;
         if (!(entity.getMultiblockStructure() instanceof FossilMultiblockStructure fossil)) return;
