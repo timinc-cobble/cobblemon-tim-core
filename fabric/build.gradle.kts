@@ -17,6 +17,7 @@ loom {
         useLegacyMixinAp = true
     }
 }
+
 val shadowCommon = configurations.create("shadowCommon")
 
 dependencies {
@@ -73,6 +74,8 @@ tasks {
     sourcesJar {
         dependsOn(project(":common").tasks.named("sourcesJar"))
         from(project(":common").tasks.named<Jar>("sourcesJar").get().archiveFile.map { zipTree(it) })
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
     }
 
     shadowJar {

@@ -19,12 +19,9 @@ loom {
 }
 
 repositories {
-    mavenCentral()
-    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-    maven("https://maven.impactdev.net/repository/development/")
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
     maven("https://thedarkcolour.github.io/KotlinForForge/")
-    maven("https://maven.neoforged.net")
+    maven("https://maven.neoforged.net/releases")
     maven("https://maven.su5ed.dev/releases")
 }
 
@@ -76,6 +73,8 @@ tasks {
     sourcesJar {
         dependsOn(project(":common").tasks.named("sourcesJar"))
         from(project(":common").tasks.named<Jar>("sourcesJar").get().archiveFile.map { zipTree(it) })
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
     }
 
     shadowJar {

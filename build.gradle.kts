@@ -19,9 +19,6 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://maven.impactdev.net/repository/development/")
-        maven("https://maven.neoforged.net/releases")
-        maven("https://thedarkcolour.github.io/KotlinForForge/")
-        maven("https://maven.wispforest.io/releases/")
     }
 
     tasks.getByName<Test>("test") {
@@ -43,7 +40,7 @@ subprojects {
             create<MavenPublication>("mavenJava") {
                 artifact(tasks.getByName("remapJar"))
                 artifact(tasks.getByName("remapSourcesJar"))
-                groupId = "${group}.${rootProject.name}"
+                groupId = "${group}.timcore"
                 artifactId = project.name
             }
         }
