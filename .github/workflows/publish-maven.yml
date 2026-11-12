@@ -16,6 +16,7 @@ jobs:
     permissions:
       contents: write
     env:
+      CCM_BUILD: true
       CCM_USER: ${{ secrets.CCM_USER }}
       CCM_PASS: ${{ secrets.CCM_PASS }}
     strategy:
