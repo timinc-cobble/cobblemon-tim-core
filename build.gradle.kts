@@ -28,31 +28,32 @@ allprojects {
     }
 }
 
+
 // Apply general publication configuration
 subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "dev.architectury.loom")
 
-    if (providers.environmentVariable("CCM_BUILD").orNull?.toBoolean() == true) {
-        publishing {
-            publications {
-                create<MavenPublication>("mavenJava") {
-                    artifact(tasks.getByName("remapJar"))
-                    artifact(tasks.getByName("remapSourcesJar"))
-                    groupId = "${group}.timcore"
-                    artifactId = project.name
+    publishing {
+        publications {
+            create<MavenPublication>("mavenJava") {
+                artifact(tasks.getByName("remapJar"))
+                artifact(tasks.getByName("remapSourcesJar"))
+                groupId = "${group}.timcore"
+                artifactId = project.name
 
-                    pom {
-                        withXml {
-                            val root: Node = asNode()
-                            (root.get("dependencies") as List<*>).forEach {
-                                root.remove(it as Node)
-                            }
+                pom {
+                    withXml {
+                        val root: Node = asNode()
+                        (root.get("dependencies") as List<*>).forEach {
+                            root.remove(it as Node)
                         }
                     }
                 }
             }
+        }
 
+        if (providers.environmentVariable("CI").orNull?.isNotEmpty() ?: false) {
             repositories {
                 maven {
                     // Set these variables in gh action secrets
