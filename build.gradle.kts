@@ -1,3 +1,5 @@
+import groovy.util.Node
+
 plugins {
     id("java")
     id("java-library")
@@ -38,6 +40,15 @@ subprojects {
                 artifact(tasks.getByName("remapSourcesJar"))
                 groupId = "${group}.timcore"
                 artifactId = project.name
+
+                pom {
+                    withXml {
+                        val root: Node = asNode()
+                        (root.get("dependencies") as List<*>).forEach {
+                            root.remove(it as Node)
+                        }
+                    }
+                }
             }
         }
 
@@ -58,10 +69,6 @@ subprojects {
     }
 
     tasks {
-        withType<GenerateModuleMetadata> {
-            enabled = false
-        }
-
         test {
             useJUnitPlatform()
         }

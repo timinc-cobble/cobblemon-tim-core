@@ -12,17 +12,12 @@ architectury {
 loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
-
-    mixin {
-        useLegacyMixinAp = true
-    }
 }
 
 repositories {
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
     maven("https://thedarkcolour.github.io/KotlinForForge/")
     maven("https://maven.neoforged.net/releases")
-    maven("https://maven.su5ed.dev/releases")
 }
 
 val shadowBundle = configurations.create("shadowBundle") {
@@ -72,6 +67,8 @@ tasks {
     }
 
     shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
         exclude("fabric.mod.json")
         archiveClassifier.set("dev-shadow")
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")

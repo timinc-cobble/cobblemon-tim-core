@@ -12,10 +12,6 @@ architectury {
 loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
-
-    mixin {
-        useLegacyMixinAp = true
-    }
 }
 
 val shadowCommon = configurations.create("shadowCommon")
@@ -73,6 +69,8 @@ tasks {
     }
 
     shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
         archiveClassifier.set("dev-shadow")
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         configurations = listOf(shadowCommon)
