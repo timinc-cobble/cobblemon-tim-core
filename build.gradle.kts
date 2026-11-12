@@ -28,7 +28,6 @@ allprojects {
     }
 }
 
-
 // Apply general publication configuration
 subprojects {
     apply(plugin = "maven-publish")
