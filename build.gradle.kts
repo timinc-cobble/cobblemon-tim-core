@@ -52,7 +52,7 @@ subprojects {
             }
         }
 
-        if (providers.environmentVariable("CI").orNull?.isNotEmpty() ?: false) {
+        if (providers.environmentVariable("CCM_BUILD").orNull?.toBoolean() == true) {
             repositories {
                 maven {
                     // Set these variables in gh action secrets
