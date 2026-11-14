@@ -1,7 +1,7 @@
 plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow")
 }
 
 architectury {
@@ -13,6 +13,7 @@ loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
 }
+
 val shadowCommon = configurations.create("shadowCommon")
 
 dependencies {
@@ -46,27 +47,30 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-tasks.processResources {
-    inputs.property("version", project.version)
-
-    filesMatching("fabric.mod.json") {
-        expand(project.properties)
-    }
-
-}
-
 tasks {
+    processResources {
+        inputs.property("version", project.version)
+
+        filesMatching("fabric.mod.json") {
+            @Suppress("DEPRECATION", "We'll figure it out when Gradle 10 releases")
+            expand(project.properties)
+        }
+
+    }
 
     jar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveClassifier.set("dev-slim")
     }
 
+    sourcesJar {
+        dependsOn(project(":common").tasks.named("sourcesJar"))
+        from(project(":common").tasks.named<Jar>("sourcesJar").get().archiveFile.map { zipTree(it) })
+    }
+
     shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
         archiveClassifier.set("dev-shadow")
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         configurations = listOf(shadowCommon)
@@ -75,6 +79,11 @@ tasks {
     remapJar {
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
+
+    remapSourcesJar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")
     }
