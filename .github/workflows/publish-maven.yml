@@ -46,11 +46,6 @@ jobs:
       - name: Setup gradle
         uses: gradle/actions/setup-gradle@v6
 
-      - name: Build
-        env:
-          LOADER: ${{ matrix.loader }}
-        run: ./gradlew :${{matrix.loader}}:build
-
       - name: Publish on Cobbled Creators Maven
         env:
           LOADER: ${{ matrix.loader }}
