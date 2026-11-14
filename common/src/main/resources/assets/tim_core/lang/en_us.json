@@ -8,5 +8,6 @@
   "tim_core.buckets.boss": "Boss",
   "tim_core.buckets.unknown": "Unknown Bucket",
   "tim_core.result.success": "Success",
-  "tim_core.result.failure": "Failure"
+  "tim_core.result.failure": "Failure",
+  "tim_core.pc_and_party_full": "Your PC and party are full."
 }
