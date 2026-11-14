@@ -25,6 +25,7 @@ import us.timinc.mc.cobblemon.timcore.handler.DisableEvGain
 import us.timinc.mc.cobblemon.timcore.handler.EntityDidSpawnHandler
 import us.timinc.mc.cobblemon.timcore.handler.ExpAllHandler
 import us.timinc.mc.cobblemon.timcore.handler.FishingWithoutATeamCanceller
+import us.timinc.mc.cobblemon.timcore.handler.NoCatchOnFull
 import us.timinc.mc.cobblemon.timcore.handler.NoCatchOutsideOfBattleHandler
 import us.timinc.mc.cobblemon.timcore.handler.NoDropsOutsideOfBattleHandler
 import us.timinc.mc.cobblemon.timcore.handler.PokeballHitReserved
@@ -68,6 +69,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val outOfBattleCaptures = OverridableOption.PokemonOption(true)
         val outOfBattleCaptureBallBypass =
             OverridableOption.PokemonOption(listOf("cobblemon:safari_ball", "cobblemon:master_ball"))
+        val noCatchOnFull = false
         val onlyDropInBattle = OverridableOption.PokemonOption(false)
         val spawnBlacklist: List<String> = emptyList()
         val spawnWhitelist: List<String> = emptyList()
@@ -584,6 +586,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         CobblemonEvents.POKEMON_CATCH_RATE.subscribe(Priority.LOWEST, PreventQuickBallSpam::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.HIGHEST, NoCatchOutsideOfBattleHandler::handle)
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.NORMAL, PokeballHitReserved::handle)
+        CobblemonEvents.THROWN_POKEBALL_HIT.subscribe(Priority.HIGHEST, NoCatchOnFull::handle)
         CobblemonEvents.LOOT_DROPPED.subscribe(Priority.HIGHEST, NoDropsOutsideOfBattleHandler::handle)
         CobblemonEvents.BOBBER_SPAWN_POKEMON_PRE.subscribe(Priority.HIGHEST, FishingWithoutATeamCanceller::handle)
         TimCoreEvents.POKEMON_ENTITY_DID_SPAWN.subscribe(Priority.HIGHEST, AttachBucket::handle)
