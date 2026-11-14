@@ -8,5 +8,6 @@
   "tim_core.buckets.boss": "Chefe",
   "tim_core.buckets.unknown": "Grupo Desconhecido",
   "tim_core.result.success": "Sucesso",
-  "tim_core.result.failure": "Falhou"
+  "tim_core.result.failure": "Falhou",
+  "tim_core.pc_and_party_full": "Seu PC e time estao cheios."
 }
