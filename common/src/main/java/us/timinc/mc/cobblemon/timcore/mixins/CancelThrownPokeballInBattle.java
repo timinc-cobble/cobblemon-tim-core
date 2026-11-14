@@ -26,9 +26,7 @@ public abstract class CancelThrownPokeballInBattle {
         tim_core$postedBattleHit = false;
     }
 
-    @Inject(method = "onHitEntity", at = @At(value = "INVOKE", target =
-            "Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;getCaptureActions()Ljava/util/List;",
-            remap = false), cancellable = true)
+    @Inject(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;getCaptureActions()Ljava/util/List;", remap = false), cancellable = true)
     private void tim_core$checkBattleHit(EntityHitResult hitResult, CallbackInfo ci) {
         PokemonEntity pokemonEntity = (PokemonEntity) hitResult.getEntity();
         tim_core$postedBattleHit = true;
@@ -38,9 +36,7 @@ public abstract class CancelThrownPokeballInBattle {
         }
     }
 
-    @WrapWithCondition(method = "onHitEntity", at = @At(value = "INVOKE", target =
-            "Lcom/cobblemon/mod/common/api/reactive/EventObservable;emit([Ljava/lang/Object;)V",
-            remap = false))
+    @WrapWithCondition(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lcom/cobblemon/mod/common/api/reactive/EventObservable;emit([Ljava/lang/Object;)V"))
     private boolean tim_core$emitHitOnce(EventObservable<?> observable, Object[] events) {
         return !tim_core$postedBattleHit;
     }

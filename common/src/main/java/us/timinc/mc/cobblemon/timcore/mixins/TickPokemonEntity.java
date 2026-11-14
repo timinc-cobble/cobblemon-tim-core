@@ -9,7 +9,6 @@ import us.timinc.mc.cobblemon.timcore.mixin.helper.TickPokemonEntityHelper;
 
 @Mixin(PokemonEntity.class)
 public class TickPokemonEntity {
-    @SuppressWarnings("ConstantConditions")
     @Inject(method = "tick", at = @At("HEAD"))
     private void onPokemonEntityTick(CallbackInfo ci) {
         PokemonEntity self = (PokemonEntity) (Object) this;

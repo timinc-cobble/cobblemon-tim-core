@@ -12,7 +12,8 @@ loom {
 
     @Suppress("UnstableApiUsage")
     mixin {
-        defaultRefmapName.set("mixins.${rootProject.name}.refmap.json")
+        useLegacyMixinAp = true
+        defaultRefmapName.set("mixins.${rootProject.name}.${project.name}.refmap.json")
     }
 }
 
@@ -26,9 +27,17 @@ dependencies {
 
     annotationProcessor("net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7")
     compileOnly("net.fabricmc:sponge-mixin:0.15.4+mixin.0.8.7")
-    compileOnly("io.github.llamalad7:mixinextras-common:0.4.1")
+    compileOnly("io.github.llamalad7:mixinextras-common:0.5.4")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+tasks {
+    remapJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
+
+    remapSourcesJar {
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
 }
