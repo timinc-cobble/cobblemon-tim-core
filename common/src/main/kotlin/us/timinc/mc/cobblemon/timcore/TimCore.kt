@@ -88,6 +88,7 @@ object TimCore : AbstractMod<TimCore.Config>(MOD_ID, Config::class.java) {
         val unknownBucketKey: String = "tim_core.buckets.unknown"
         val successKey: String = "tim_core.result.success"
         val failureKey: String = "tim_core.result.failure"
+        val notCatchOnFullKey: String = "tim_core.pc_and_party_full"
 
         @Suppress("PropertyName")
         @Transient
